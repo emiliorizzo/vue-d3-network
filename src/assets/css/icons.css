@@ -1,0 +1,95 @@
+@font-face {
+  font-family: 'vue-d3-icons';
+  src:  url('fonts/vue-d3-icons.eot?oa3tyj');
+  src:  url('fonts/vue-d3-icons.eot?oa3tyj#iefix') format('embedded-opentype'),
+    url('fonts/vue-d3-icons.ttf?oa3tyj') format('truetype'),
+    url('fonts/vue-d3-icons.woff?oa3tyj') format('woff'),
+    url('fonts/vue-d3-icons.svg?oa3tyj#vue-d3-icons') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'vue-d3-icons' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-reload-alt:before {
+  content: "\e904";
+}
+.icon-refresh:before {
+  content: "\e904";
+}
+.icon-reset:before {
+  content: "\e904";
+}
+.icon-arrow:before {
+  content: "\e904";
+}
+.icon-git-merge:before {
+  content: "\f023";
+}
+.icon-pulse:before {
+  content: "\f085";
+}
+.icon-pointer:before {
+  content: "\e900";
+}
+.icon-mouse:before {
+  content: "\e900";
+}
+.icon-move:before {
+  content: "\e901";
+}
+.icon-drag:before {
+  content: "\e901";
+}
+.icon-cubes:before {
+  content: "\e907";
+}
+.icon-cube:before {
+  content: "\e908";
+}
+.icon-pin:before {
+  content: "\e909";
+}
+.icon-menu:before {
+  content: "\e90a";
+}
+.icon-camera:before {
+  content: "\e90b";
+}
+.icon-delete_forever:before {
+  content: "\e90c";
+}
+.icon-delete:before {
+  content: "\e90d";
+}
+.icon-settings:before {
+  content: "\e90e";
+}
+.icon-pin2:before {
+  content: "\e902";
+}
+.icon-repo-forked:before {
+  content: "\e903";
+}
+.icon-equalizerh:before {
+  content: "\e992";
+}
+.icon-equalizerv:before {
+  content: "\e993";
+}
+.icon-github:before {
+  content: "\eab0";
+}

@@ -1,0 +1,59 @@
+  html, body 
+    margin: 0
+  body 
+    background-color: #e6ede9
+    font-size: 16px
+    &:focus 
+      outline: 0
+  label
+    font-size: .8em
+    display:block
+    margin-bottom: .5em
+  a
+   color: $color
+   &:hover
+    color:$color2
+   &:visited
+    color: $color
+
+  button, select, option
+    border: none
+    box-shadow: none 
+    background-color: white
+    outline: 0
+    &:focus
+      outline: 0
+  
+  select
+    -webkit-appearance: none
+    -moz-appearance: none
+    appereance: none
+    box-sizing: border-box
+    line-height: 1.5em
+    padding: 0.5em 3.5em 0.5em 1em
+    color: $color
+    background-image:
+      linear-gradient(45deg, transparent 50%, $color 50%),
+      linear-gradient(135deg, $color 50%, transparent 50%),
+      linear-gradient(to right, #ccc, #ccc)
+    background-position:
+      calc(100% - 20px) calc(1em + 2px),
+      calc(100% - 15px) calc(1em + 2px),
+      calc(100% - 2.5em) 0.5em
+    background-size:
+      5px 5px,
+      5px 5px,
+      1px 1.5em;
+    background-repeat: no-repeat
+  
+  button.btn 
+    padding: .5em 2em
+    font-size: 1em
+  
+  button.btn, select
+    border: lightness($color,35%) solid 1px
+    box-shadow: $sh
+    border-radius: 0.25em
+    color: $color
+    font-weight:bold
+    background-color: white

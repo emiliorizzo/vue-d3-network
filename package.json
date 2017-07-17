@@ -1,0 +1,46 @@
+{
+  "name": "vue-d3-network",
+  "version": "0.0.1",
+  "description": "Vue component to graph networks using d3-force",
+  "main": "dist/vue-d3-network.js",
+  "scripts": {
+    "build": "vue build src/vue-d3-network.vue --prod --lib vueD3Network",
+    "example": "vue build src/example/example.vue --dist example --prod -c config.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint --ext .js,.vue src",
+    "dev": "vue build src/example/example.vue -c config.js"
+  },
+  "author": "emi",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/emiliorizzo/vue-d3-network"
+  },
+  "bugs": {
+    "url": "https://github.com/emiliorizzo/vue-d3-network/issues"
+  },
+  "devDependencies": {
+    "babel-eslint": "^7.2.3",
+    "babel-preset-vue-app": "^1.2.0",
+    "css-loader": "^0.28.4",
+    "eslint": "^3.19.0",
+    "eslint-config-standard": "^6.2.1",
+    "eslint-friendly-formatter": "^2.0.7",
+    "eslint-loader": "^1.7.1",
+    "eslint-plugin-env": "0.0.3",
+    "eslint-plugin-html": "^2.0.0",
+    "eslint-plugin-promise": "^3.4.0",
+    "eslint-plugin-standard": "^2.0.1",
+    "pug": "^2.0.0-rc.2",
+    "raw-loader": "^0.5.1",
+    "source-map": "^0.5.6",
+    "stylus": "^0.54.5",
+    "stylus-loader": "^3.0.1",
+    "vue-cli": "^2.8.2",
+    "vue-style-loader": "^3.0.1",
+    "webpack": "^3.2.0"
+  },
+  "dependencies": {
+    "d3-force": "^1.0.6"
+  }
+}
