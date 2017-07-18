@@ -6,7 +6,7 @@
       class="graph" 
       @mousemove.capture="move"
       @mouseup="dragEnd")
-      // -> links
+      //-> links
       g( v-if='strLinks' id="links" class="links")
           line( v-for="link,index in links" 
             :x1='link.source.x' 
@@ -70,14 +70,6 @@ export default {
         return {
           nodes: {},
           links: {}
-        }
-      }
-    },
-    config: {
-      type: Object,
-      default: () => {
-        return {
-          canvas: false
         }
       }
     }
@@ -169,9 +161,10 @@ export default {
     onResize () {
       this.size.w = this.$el.clientWidth
       this.size.h = this.$el.clientHeight
-      let vm = this
       this.padding.x = 0
       this.padding.y = 0
+      // serach offsets of parents
+      let vm = this
       while (vm.$parent) {
         this.padding.x += vm.$el.offsetLeft
         this.padding.y += vm.$el.offsetTop
@@ -190,15 +183,19 @@ export default {
     buildNodes (nodes) {
       let vm = this
       this.nodes = nodes.map((node, index) => {
+        // index as default node id
         if (!node.id) vm.$set(node, 'id', index)
+        // initialize node coords
         if (!node.x) vm.$set(node, 'x', 0)
         if (!node.y) vm.$set(node, 'y', 0)
+        // node default name
         if (!node.name) vm.$set(node, 'name', 'node ' + node.id)
         return node
       })
     },
     buildLinks (links) {
       return links.concat().map((link) => {
+        // source and target for d3
         link.source = link.sid
         link.target = link.tid
         return link
@@ -247,6 +244,7 @@ export default {
     dragEnd () {
       let node = this.nodes[this.dragging]
       if (node && !node.pinned) {
+        // unfix node position
         node.fx = null
         node.fy = null
       }
@@ -329,6 +327,6 @@ export default {
 .curve
   fill: none
 .node-names
-  fill: $color
+  fill: $dark
 </style>  
 

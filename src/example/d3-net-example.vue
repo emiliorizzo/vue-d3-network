@@ -24,7 +24,7 @@
     //-> Menu
     .over
       .menu-net(v-if="showMenu")
-        .close(@click="showMenu=false")
+        .close(@click="setShowMenu(false)")
         d3-net-example-menu(
           :nodes="nodes" 
           :links="links" 
@@ -36,8 +36,11 @@
           )
       
       .options.menu(v-else)
-        button.menu(@click="showMenu=true")
+        button.menu(@click="setShowMenu(true)" :class='(showHint) ? "anim-button" :""')
           span(class="icon-equalizerh")
+        h2.hint(v-if='showHint') 
+          span.icon ☜
+          span menu  
         .title
           h1 {{app.name}}
         ul.inline
@@ -90,6 +93,7 @@ export default {
       maxLinks: 3,
       maxNodes: 150
     }
+    data.showHint = true
     return data
   },
   mounted () {
@@ -165,7 +169,7 @@ export default {
         node.fy = node.y
       }
       else {
-        node.pinned = false 
+        node.pinned = false
         node.fx = null
         node.fy = null
       }
@@ -254,6 +258,10 @@ export default {
       if (this.linksSelected[linkId]) {
         delete (this.linksSelected[linkId])
       }
+    },
+    setShowMenu (show) {
+      this.showMenu = show
+      this.showHint = false
     }
   }
 }
@@ -277,8 +285,10 @@ button.menu
   font-weight: bold  
   color: $color
   border: $border
+  box-shadow: $sh
   &:hover
     color:$color2
+    border-color: $color2
 .circle
   width: 4em
   height: 4em
@@ -391,12 +401,14 @@ ul.inline
   font-size: .8em
   color: white
 
- .menu-net
+.menu-net
   background-color: $bg-plus
   padding: .5em 1em
-  border: $dark solid 2px 
+  border: $dark solid 2px
+  border-width: 6px 2px 3px 
   position: relative
   margin-bottom: 2em
+  border-radius: .5em
   .close
     position: absolute
     top: 0
@@ -415,4 +427,68 @@ ul.inline
   h1
     color: $white
     text-shadow: $txt-sh
+
+ h2.hint 
+  display: inline
+  position: absolute
+  margin-left: 1em
+  color: $light
+  font-size: 1em
+  font-style: italic
+  letter-spacing: .125em
+  text-shadow:  1px 1px 5px rgba(0,0,0,.5), 2px 2px 15px $color2 
+  opacity: 0
+  animation-name: hint-anim
+  animation-delay: 1s
+  animation-duration: 3s
+  animation-iteration-count: infinite
+  animation-timing-function: ease-in-out
+  .icon
+    font-size: 3em
+    line-height .5em
+
+@keyframes hint-anim
+  0%
+    opacity: 0
+    transform: translateX(6em)
+    letter-spacing: .125em
+  40% 
+    opacity: 1
+    transform: translateX(-1.5em)
+    
+  50%
+    transform: translateX(-.1em)
+    letter-spacing: .5em
+  70%
+    opacity: 1
+    transform: translateX(-.5em)
+  100%
+    opacity: 0
+
+.anim-button
+  animation-name: button-anim
+  animation-duration: 3s
+  animation-delay: 2s
+  animation-iteration-count: infinite
+  animation-timing-function: ease-in-out
+
+@keyframes button-anim
+  0%
+    transform: rotate(0deg)
+  6%
+    transform: rotate(-30deg) 
+  15%    
+    transform: rotate(10deg) scale(.9, .9)  
+  20%    
+    transform: rotate(-5deg) 
+    
+  35%
+    transform: rotate(2deg) scale(1,1)
+    box-shadow: 2px 2px 10px alpha($color2,.8)
+    color: $color2
+    border-color: $color2
+  50%
+    transform: rotate(0deg)
+  100%
+    transform: rotate(0deg)
 </style>

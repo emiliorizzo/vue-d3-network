@@ -1,7 +1,7 @@
 <template lang="pug">
   #selection.notification
     .close(@click='emit("clearSelection")')
-    .title Selected 
+    h4 Selected 
     .mini-list
       table.mini
         tr
