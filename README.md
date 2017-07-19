@@ -14,31 +14,6 @@ npm install vue-d3-network --save
 
 ```
 ## Usage
- 
-Import and register component
-
-``` javascript
-import D3network from 'vue-d3-network'
-
-export default{
-  ...
-  components:{
-    D3network
-  }
-}
-```
-
-**include css**
- 
-``` html
-<style src='vue-d3-network/dist/vue-d3-network.css'></style>
-
-```
-Or: *import source component from:* 'vue-d3-network/src/vue-d3-network.vue'
-*And install devDependencies.* (d3-force, stylus and pug) 
-See: [package.json](https://github.com/emiliorizzo/vue-d3-network/blob/master/package.json))
-
-## Usage
 
 - [fiddle](https://jsfiddle.net/emii/ru24unsz/)
 - [codePen](https://codepen.io/emilio/pen/mwYpbj)
@@ -62,6 +37,10 @@ import D3Network from 'vue-d3-network'
 <style src="vue-d3-network/dist/vue-d3-network.css"></style>
 
 ```
+
+Or: *import source component from:* 'vue-d3-network/src/vue-d3-network.vue'
+*And install devDependencies.* (d3-force, stylus and pug) 
+See: [package.json](https://github.com/emiliorizzo/vue-d3-network/blob/master/package.json))
 
 ## Props
 
