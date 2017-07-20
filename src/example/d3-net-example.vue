@@ -2,19 +2,38 @@
   #example(@keyup.esc='setTool("pointer")')
     //-> Network
     d3-network(
+    ref='net'  
     :netNodes="nodes" 
     :netLinks="links"
     :selection="{nodes: selected, links: linksSelected}"
     :options="options"
     @node-click="nodeClick"
     @link-click="linkClick"
+    @screen-shot='screenShotDone'
     )
+    //-> toaster
+    .toaster(v-if='toaster')
+      p {{toaster}}
+    //-> Svg export dialog
+    .dialog-container(v-if='svgChoice')
+      .dialog
+        h5 Export as:
+        input(id='to-svg' type='radio' :value='true' v-model='toSvg')
+        label(for='to-svg') svg
+        input(id='to-png' type='radio' :value='false' v-model='toSvg')
+        label(for='to-png') png 
+        .buttons
+          button.btn(@click='takeScreenShot') Export
+          button.btn(@click='svgChoice=false') Cancel  
     //-> Tools
     .tools
       ul
         li(v-for='t,to in tools') 
           button.circle(@click='setTool(to)' :class='buttonClass(to)')
             span(:class='t.class' )
+        li
+          button.circle(@click='screenShot')
+            span.icon-camera
       .tip {{ tools[tool].tip }}
     
     //-> Selection
@@ -48,6 +67,7 @@
             small nodes: {{ nodes.length }}
           li
             small links: {{ links.length }}
+           
 </template>
 
 
@@ -94,6 +114,9 @@ export default {
       maxNodes: 150
     }
     data.showHint = true
+    data.toaster = null
+    data.svgChoice = false
+    data.toSvg = false
     return data
   },
   mounted () {
@@ -109,6 +132,22 @@ export default {
     }
   },
   methods: {
+    screenShot () {
+      if (this.options.canvas) this.takeScreenShot(false)
+      else this.svgChoice = true
+    },
+    takeScreenShot () {
+      this.svgChoice = false
+      this.toaster = 'Exporting image'
+      this.$refs.net.screenShot(null, null, this.toSvg)
+    },
+    screenShotDone (err) {
+      this.toaster = err || 'Saving Screenshot...'
+      let vm = this
+      window.setTimeout(() => {
+        vm.toaster = null
+      }, 3000)
+    },
     resetOptions () {
       this.$set(this.$data, 'options', defaultData.options)
       this.options.offset.x = 0
@@ -132,6 +171,8 @@ export default {
       this.showSelection = (Object.keys(this.selected).length | Object.keys(this.linksSelected).length)
     },
     reset () {
+      this.selected = {}
+      this.linksSelected = {}
       this.nodes = utils.makeRandomNodes(this.settings.maxNodes)
       this.lastNodeId = this.nodes.length + 1
       this.links = utils.makeRandomLinks(this.nodes, this.settings.maxLinks)
@@ -141,6 +182,7 @@ export default {
       this.options = Object.assign({}, options)
     },
     removeLink (link) {
+      this.unSelectLink(link.id)
       this.links.splice(link.index, 1)
     },
     rebuildLinks (nodes) {
@@ -167,8 +209,7 @@ export default {
         node.pinned = true
         node.fx = node.x
         node.fy = node.y
-      }
-      else {
+      } else {
         node.pinned = false
         node.fx = null
         node.fy = null
@@ -275,6 +316,11 @@ body
 button
   margin: 0
   padding: 0
+.net
+  background-color:$bg
+
+.net-svg
+  fill: $bg   // sets color to image export background  
 
 #example
     position: absolute
@@ -435,6 +481,51 @@ ul.inline
   h1
     color: $white
     text-shadow: $txt-sh
+
+.toaster, .dialog
+  position: absolute
+  bottom: .5em
+  right: 2em
+  z-index: 500
+  background-color: white
+  border: $border
+  border-radius: .25em
+  min-width: 20em 
+  box-shadow: $sh
+  animation-name: toaster-anim
+  animation-duration: .25s
+
+ .dialog-container
+    position: absolute
+    display: flex
+    top: 0
+    left: 0
+    min-height: 100%
+    min-width: 100%
+    border: red solid 1px
+    background-color: rgba(0,0,0,.3)
+    .dialog
+      width: 20em
+      min-height: 10em
+      position: relative
+      margin: auto
+      input[type='radio'], label
+        display: inline
+      label
+        font-weight: bold
+      .buttons
+        margin-top: 1em
+      .btn
+        margin-left: 1em
+
+
+@keyframes toaster-anim
+  0%
+    opacity: 0
+    transform: scaleY(0) translateY(5em) 
+  100%
+    opacity: 1
+    transform: scaleY(1)  translateY(0) 
 
  h2.hint 
   display: inline

@@ -4,19 +4,26 @@
       li
         label Nodes: 
           span {{ setts.maxNodes }}
-        input(type="range" v-model.number="setts.maxNodes" @input="change" min="1" max="1000" step="10")
+        input(type="range" v-model.number="setts.maxNodes" @input="change" min="1" :max='(opts.canvas) ? 3000: 1010' step="10")
       li
         label Max Links per Node: 
           span {{ setts.maxLinks }}
         input(type="range" v-model.number="setts.maxLinks" @input="change" min="1" max="10" step="1") 
       li
+        label Render type
+      li  
+        input(type='radio' :value='false' v-model='opts.canvas' id='svg-rad' @change="change")
+        label(for='svg-rad') svg
+        input(type='radio' :value='true' v-model='opts.canvas' id='canvas-rad' @change="change") 
+        label(for='canvas-rad') canvas
+      li
         button.btn(@click="$emit('simulate')") Simulate
     
     ul.test-menu
       li
-        label Nodes spread: 
+        label Force:
           span {{ opts.force }}
-        input(type="range" v-model.number="opts.force" @input="change" min="1" max="5000" step="10")  
+        input(type="range" v-model.number="opts.force" @input="change" min="1" max="5000" step="1")  
       li
         label Offset X: 
           span {{ opts.offset.x }}

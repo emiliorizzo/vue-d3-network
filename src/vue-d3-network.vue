@@ -1,59 +1,50 @@
 <template lang="pug">
   div.net
-    svg( ref="svg" 
-      :width="size.w" 
-      :height="size.h"
-      class="graph" 
-      @mousemove.capture="move"
-      @mouseup="dragEnd")
-      //-> links
-      g( v-if='strLinks' id="links" class="links")
-          line( v-for="link,index in links" 
-            :x1='link.source.x' 
-            :y1='link.source.y' 
-            :x2='link.target.x' 
-            :y2='link.target.y' 
-            @click="clickLink($event,link)"
-            :stroke-width='linkWidth'
-            :class='linkClass(link.id)')
-      
-      g( v-else id="links" class="links" )
-          path(v-for="link in links" 
-            :d="curve(link)"
-            @click="clickLink($event,link)"
-            :stroke-width='linkWidth'
-            :class='linkClass(link.id) + " curve"')
-      //- -> nodes
-      g( id="nodes" class="nodes" )
-        circle(v-for='(node,key) in nodes'
-        :key='key'
-        :r="nodeSize" 
-        @click='clickNode($event,node)'
-        @mousedown.prevent="dragStart($event,key)"
-        :cx="node.x" 
-        :cy="node.y" 
-        :style='nodeStyle(node)'
-        :title="node.name"
-        :class="nodeClass(node)"
-        )
-      //- -> Labels  
-      g( v-if="nodeLabels" id="names")
-        text(v-for="node in nodes"
-          :x='node.x + nodeSize + fontSize /2'
-          :y='node.y + nodeSize  - fontSize /2'
-          font-family="Arial"
-          :font-size="fontSize"
-          class="node-names"
-          :stroke-width='fontSize / 8'  
-        ) {{ node.name }}
+    svg-renderer(v-if='!canvas' 
+      @action='methodCall'
+      ref='svg'
+      :size='size' 
+      :nodes='nodes' 
+      :links='links' 
+      :selected='selected' 
+      :linksSelected='linksSelected' 
+      :strLinks='strLinks'
+      :linkWidth='linkWidth'
+      :nodeLabels='nodeLabels'
+      :nodeSize='nodeSize',
+      :fontSize='fontSize'
+      )
+    canvas-renderer(v-else 
+      @action='methodCall'
+      ref='canvas'
+      :size='size'
+      :offset='offset' 
+      :nodes='nodes' 
+      :links='links' 
+      :selected='selected' 
+      :linksSelected='linksSelected' 
+      :strLinks='strLinks'
+      :linkWidth='linkWidth'
+      :nodeLabels='nodeLabels'
+      :nodeSize='nodeSize',
+      :fontSize='fontSize',
+      :canvasStyles='options.canvasStyles'
+      )
 
 </template> 
 <script>
 import * as forceSimulation from 'd3-force'
 const d3 = Object.assign({}, forceSimulation)
+import svgRenderer from './components/svgRenderer.vue'
+import canvasRenderer from './components/canvasRenderer.vue'
+import saveImage from './lib/saveImage.js'
 
 export default {
   name: 'd3-network',
+  components: {
+    canvasRenderer,
+    svgRenderer
+  },
   props: {
     netNodes: {
       type: Array
@@ -76,35 +67,34 @@ export default {
   },
   data () {
     return {
+      canvas: false,
       nodes: [],
       links: [],
-      simulation: null,
-      force: 500,
-      size: { w: 500, h: 500 },
+      size: {
+        w: 500,
+        h: 500
+      },
       offset: {
         x: 0,
         y: 0
       },
-      maxLinks: 3,
-      maxNodes: 20,
+      force: 500,
       strLinks: true,
-      linkStyle: 'line',
       fontSize: 10,
       dragging: false,
+      linkWidth: 1,
+      nodeLabels: false,
+      nodeSize: 5,
       mouseOfst: {
         x: 0,
         y: 0
       },
-      conf: {
-        allEventsAs: false
-      },
-      linkWidth: 1,
-      nodeLabels: false,
-      nodeSize: 5,
       padding: {
         x: 0,
         y: 0
-      }
+      },
+      simulation: null,
+      shapes: {}
     }
   },
   created () {
@@ -113,8 +103,6 @@ export default {
     this.links = this.buildLinks(this.netLinks)
   },
   mounted () {
-    this.size.w = this.$el.clientWidth
-    this.size.h = this.$el.clientHeight
     this.onResize()
     this.$nextTick(() => {
       this.animate()
@@ -158,9 +146,18 @@ export default {
     }
   },
   methods: {
+    methodCall (action, args) {
+      let method = this[action]
+      if (method && typeof (method) === 'function') {
+        if (args) method(...args)
+        else method()
+      } else {
+        console.error('Call to undefined method:', action)
+      }
+    },
     onResize () {
-      this.size.w = this.$el.clientWidth
-      this.size.h = this.$el.clientHeight
+      if (!this.options.size.w) this.size.w = this.$el.clientWidth
+      if (!this.options.size.h) this.size.h = this.$el.clientHeight
       this.padding.x = 0
       this.padding.y = 0
       // serach offsets of parents
@@ -203,18 +200,22 @@ export default {
     },
     // -- Animation
     simulate (nodes, links) {
-      return d3.forceSimulation()
-        .alpha(0.6)
+      let sim = d3.forceSimulation()
+        .stop()
+        .alpha(0.5)
+        // .alphaMin(0.05)
         .nodes(nodes)
-        .force('center', d3.forceCenter(this.center.x, this.center.y))
+        // .force('center', d3.forceCenter(this.center.x, this.center.y))
         .force('X', d3.forceX(this.center.x).strength(0.5))
         .force('Y', d3.forceY(this.center.y).strength(0.5))
         .force('charge', d3.forceManyBody().strength(-this.force))
         .force('link', d3.forceLink(links).id(function (d) { return d.id }))
+      return sim
     },
     animate () {
       if (this.simulation) this.simulation.stop()
       this.simulation = this.simulate(this.nodes, this.links)
+      this.simulation.restart()
     },
     reset () {
       this.animate()
@@ -223,12 +224,14 @@ export default {
     },
     // -- Mouse Interaction
     move (event) {
+      let x = (event.touches) ? event.touches[0].clientX : event.clientX
+      let y = (event.touches) ? event.touches[0].clientY : event.clientY
       if (this.dragging !== false) {
         if (this.nodes[this.dragging]) {
           this.simulation.restart()
           this.simulation.alpha(0.5)
-          this.nodes[this.dragging].fx = event.clientX - this.padding.x - this.offset.x
-          this.nodes[this.dragging].fy = event.clientY - this.padding.y - this.offset.y
+          this.nodes[this.dragging].fx = x - this.padding.x - this.offset.x
+          this.nodes[this.dragging].fy = y - this.padding.y - this.offset.y
         }
       }
     },
@@ -251,37 +254,11 @@ export default {
       this.dragStart(false)
     },
     // -- Render helpers
-    linkClass (linkId) {
-      let cssClass = 'link '
-      if (this.linksSelected.hasOwnProperty(linkId)) {
-        cssClass += 'selected'
-      }
-      return cssClass
-    },
-    clickNode (event, node) {
+    nodeClick (event, node) {
       this.$emit('node-click', event, node)
     },
-    clickLink (event, link) {
+    linkClick (event, link) {
       this.$emit('link-click', event, link)
-    },
-    curve (link) {
-      let d = {
-        M: [link.source.x, link.source.y],
-        Q: [link.source.x, link.target.y],
-        X: [link.target.x, link.target.y]
-      }
-      return 'M ' + d.M + ' Q ' + d.Q.join(' ') + ' ' + d.X
-    },
-    nodeStyle (node) {
-      let style = ''
-      if (node.color) style += 'fill: ' + node.color
-      return style
-    },
-    nodeClass (node) {
-      let cssClass = 'node'
-      if (this.selected[node.id]) cssClass += ' selected'
-      if (node.fx || node.fy) cssClass += ' pinned'
-      return cssClass
     },
     setMouseOffset (event, node) {
       let x = 0
@@ -291,6 +268,27 @@ export default {
         y = event.clientY - node.y
       }
       this.mouseOfst = { x, y }
+    },
+    screenShot (name, bgColor, toSVG, svgAllCss) {
+      let exportFunc
+      let args = []
+      if (this.canvas) {
+        toSVG = false
+        exportFunc = this.$refs.canvas.canvasScreenShot
+        args = [bgColor]
+      } else {
+        exportFunc = this.$refs.svg.svgScreenShot
+        args = [toSVG, bgColor, svgAllCss]
+      }
+      if (toSVG) name = name || 'export.svg'
+
+      exportFunc((err, url) => {
+        if (!err) {
+          if (!toSVG) saveImage.save(url, name)
+          else saveImage.download(url, name)
+        }
+        this.$emit('screen-shot', err)
+      }, ...args)
     }
   }
 }
@@ -301,6 +299,8 @@ export default {
 .net
   height: 100%
   margin: 0
+.net-svg 
+  // fill: white // background color to export as image
 .node 
   stroke: alpha($dark,0.7)
   stroke-width: 3px
@@ -327,6 +327,7 @@ export default {
 
 .curve
   fill: none
+
 .node-names
   fill: $dark
 </style>  

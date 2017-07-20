@@ -6,6 +6,7 @@ export default {
   showSelection: false,
   linksSelected: {},
   options: {
+    canvas: false,
     size: {
       w: 500,
       h: 500

@@ -7,6 +7,16 @@
 
 [Demo](https://emiliorizzo.github.io/vue-d3-network/)
 
+## Features
+
+- **SVG** render
+- **Canvas** render
+- Links and nodes selection
+- **svg <-> canvas** shared styles via css
+- Screenshots, *export as svg or png (svg renderer), export as png (canvas renderer)* 
+- Touch support
+
+
 ## Installation
 
 ``` bash
@@ -44,12 +54,11 @@ See: [package.json](https://github.com/emiliorizzo/vue-d3-network/blob/master/pa
 
 ## Props
 
- **net-nodes**: Array *of nodes objects*.
-  - Node Object:
+ **net-nodes**: Array *of nodes objects*:
    
-    - **id**: node id. *If not provided uses array index*
-    -  **name**: node name. *If not provided uses: 'node [node_id]'*
-    - **color**: node color, e.g. *red*, *#aa00bb* 
+  - **id**: node id. *If not provided uses array index*
+  -  **name**: node name. *If not provided uses: 'node [node_id]'*
+  - **color**: node color, e.g. *red*, *#aa00bb* 
       
 
  **net-links**: Array *of links objects*: 
@@ -57,10 +66,15 @@ See: [package.json](https://github.com/emiliorizzo/vue-d3-network/blob/master/pa
   - **id**: link id. *If not provided uses array index*
   - **tid**: id of target node
   - **sid**: id of source node
-     
 
-**options**:
+ **selected** : Object, *links and nodes selected*
+  
+  - **links**: Object with node.ids as keys, node objects as values
+  - **nodes**: Object  with link.ids as keys, links objects as values
 
+ **options**:
+  
+  - **canvas**: Boolean, *render as canvas*, false = svg
   - **size**: Object, *graph size*. **Default:** container size
       - **w**: Number
       - **h**: Number
@@ -75,15 +89,46 @@ See: [package.json](https://github.com/emiliorizzo/vue-d3-network/blob/master/pa
   - **nodeLabels**: Boolean, *show nodes names*
   - **fontSize**: Number, *for node labels, px*
   - **strLinks**: Boolean, *draw links as rect lines* 
-    
+  
+- **canvasStyles**: Object
 
 
 ## Events
 
 - **node-click**:  *fired when click on node*, emits **(event,node-object)**
 - **link-click**:  *fired when click on link*, emits **(event, link-id)**
+- **screen-shot**: *fired when screenshot creation is done*, emits **(error)**
+
+## Methods
+
+  - **screenShot** (name, bgColor, toSVG, svgAllCss), all arguments are optional
+    - **name:** file name
+    -** bgColor:** *CSS color*, png background color
+    - **toSVG:** *Boolean*, (svg renderer) true: export as svg, false : export as png
+    - **svgAllCss:** *Boolean* (svg renderer) true: include all styles in svg false: include only matched styles.
+      *This option is useful, for example to include hover actions on exported svg file* 
+
+
+## Css style and canvas style
+
+SVG css classes:
+
+- **.node**: nodes symbol
+- **.link**: link line
+- **.node-label**: nodes names
+- **.node .selected**: node selected
+- **.link .selected** link selected
+- **node pinned**: node pinned
+
+To use this css styles in canvas we create 'ghosts' svg elements to pick up values from computed css properties.
+If you want, you can stylize the canvas elements directly, setting: options.canvasStyles, but these styles will not be applied to the svg graph.
+
+see: [src/canvasStyles.js](https://github.com/emiliorizzo/vue-d3-network/blob/master/src/canvasStyles.js)
 
 ## TODO
-  - Touch support  
 
-
+  - []  Touch support
+  - []  Optimization
+  - []  Zoom
+  - [x] Canvas Render
+  - []  Nodes sprites
