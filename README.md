@@ -61,11 +61,11 @@ See: [package.json](https://github.com/emiliorizzo/vue-d3-network/blob/master/pa
 
 **options**:
 
-  - **size**: Object, *graph size*
+  - **size**: Object, *graph size*. **Default:** container size
       - **w**: Number
       - **h**: Number
  
- - **center**: Object, *graph center* 
+ - **offset**: Object, *graph center offset* 
       - **x**: Number
       - **y**: Number
 

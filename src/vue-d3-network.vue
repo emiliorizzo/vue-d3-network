@@ -300,6 +300,7 @@ export default {
  @import 'vars.styl'
 .net
   height: 100%
+  margin: 0
 .node 
   stroke: alpha($dark,0.7)
   stroke-width: 3px

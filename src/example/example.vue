@@ -41,12 +41,14 @@ export default {
   body 
     font-family: 'Asap', sans-serif
     color: $darkness
-    // background-color: $darkness !important
     background-color: $bg !important
-  #example, #app
+ #app
     position: absolute
-    min-width: 100%
-    min-height: 100%
+    max-width: 100%
+    width: 100%
+    top: 0
+    left: 0
+    bottom:0
   .menu-container
     position:fixed
     bottom: 0

@@ -268,15 +268,23 @@ export default {
 </script>
 <style lang="stylus">
 @import '../vars.styl'
-@import 'html.styl'
-html, body 
-  display: inline-block
-#app
+body 
+  overflow-x: hidden
+#example
 .net
 button
   margin: 0
   padding: 0
 
+#example
+    position: absolute
+    max-width: 100%
+    width: 100%
+    height: calc(100% - 4px)
+    top: 0
+    left: 0
+    bottom:0
+    box-sizing: content-box  
 button.menu
   width: 1.5em
   height: 1.5em
