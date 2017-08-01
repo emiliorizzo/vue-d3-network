@@ -123,11 +123,11 @@ SVG css classes:
 To use this css styles in canvas we create 'ghosts' svg elements to pick up values from computed css properties.
 If you want, you can stylize the canvas elements directly, setting: options.canvasStyles, but these styles will not be applied to the svg graph.
 
-see: [src/canvasStyles.js](https://github.com/emiliorizzo/vue-d3-network/blob/master/src/canvasStyles.js)
+see: [src/canvasStyles.js](https://github.com/emiliorizzo/vue-d3-network/blob/master/src/lib/canvasStyles.js)
 
 ## TODO
 
-  - []  Touch support
+  - [x]  Touch support
   - []  Optimization
   - []  Zoom
   - [x] Canvas Render
