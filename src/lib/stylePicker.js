@@ -50,7 +50,14 @@ export default {
     attrs.id = id
     return this.svgCreate(element, attrs)
   },
-
+  compColor (color) {
+    let el = document.createElement('div')
+    el.style.backgroundColor = color
+    document.body.appendChild(el)
+    let nColor = window.getComputedStyle(el, null).getPropertyValue('background-color')
+    document.body.removeChild(el)
+    return nColor
+  },
   // creates svg element
   svgCreate (element, attrs) {
     let el = document.createElementNS('http://www.w3.org/2000/svg', element)

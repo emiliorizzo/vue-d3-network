@@ -1,6 +1,6 @@
 {
   "name": "vue-d3-network",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Vue component to graph networks using d3-force",
   "main": "dist/vue-d3-network.js",
   "scripts": {
@@ -20,13 +20,20 @@
     "url": "https://github.com/emiliorizzo/vue-d3-network/issues"
   },
   "keywords": [
-    "vue","vuejs","d3","network","d3-force","graph","component"
+    "vue",
+    "vuejs",
+    "d3",
+    "network",
+    "d3-force",
+    "graph",
+    "component"
   ],
   "devDependencies": {
     "babel-eslint": "^7.2.3",
     "babel-preset-vue-app": "^1.2.0",
     "css-loader": "^0.28.4",
     "eslint": "^3.19.0",
+    "eslint-config-postcss": "^2.0.2",
     "eslint-config-standard": "^6.2.1",
     "eslint-friendly-formatter": "^2.0.7",
     "eslint-loader": "^1.7.1",

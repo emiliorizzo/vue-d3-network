@@ -69,15 +69,13 @@
             small links: {{ links.length }}
            
 </template>
-
-
 <script>
 import * as utils from './utils.js'
 import defaultData from './data.js'
 import D3Network from '../vue-d3-network.vue'
 import D3NetExampleMenu from './Menu.vue'
 import Selection from './Selection.vue'
-
+import nodeIcon from '!!raw-loader!../assets/node.svg'
 export default {
   name: 'd3-net-example',
   components: {
@@ -105,6 +103,7 @@ export default {
         class: 'icon-pin'
       }
     }
+
     data.app = APP
     data.tool = 'pointer'
     data.lastNodeId = 0
@@ -117,6 +116,7 @@ export default {
     data.toaster = null
     data.svgChoice = false
     data.toSvg = false
+    data.options.icon = false
     return data
   },
   mounted () {
@@ -180,6 +180,7 @@ export default {
     },
     changeOptions (options) {
       this.options = Object.assign({}, options)
+      if (options.icon) this.options.nodeSym = nodeIcon
     },
     removeLink (link) {
       this.unSelectLink(link.id)
@@ -309,6 +310,7 @@ export default {
 </script>
 <style lang="stylus">
 @import '../vars.styl'
+@import '../lib/node-style.styl'
 body 
   overflow-x: hidden
 #example

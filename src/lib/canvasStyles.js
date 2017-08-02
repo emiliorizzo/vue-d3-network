@@ -47,5 +47,10 @@ export default {
     _cssClass: 'node pinned',
     fillStyle: 'green',
     strokeStyle: 'red'
+  },
+  nodeSelectedPinned: {
+    _cssClass: 'node selected pinned',
+    fillStyle: 'green',
+    strokeStyle: 'red'
   }
 }

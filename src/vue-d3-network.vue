@@ -11,8 +11,9 @@
       :strLinks='strLinks'
       :linkWidth='linkWidth'
       :nodeLabels='nodeLabels'
-      :nodeSize='nodeSize',
+      :nodeSize='nSize',
       :fontSize='fontSize'
+      :nodeSym='nodeSvg'
       )
     canvas-renderer(v-else 
       @action='methodCall'
@@ -26,9 +27,10 @@
       :strLinks='strLinks'
       :linkWidth='linkWidth'
       :nodeLabels='nodeLabels'
-      :nodeSize='nodeSize',
+      :nodeSize='nSize',
       :fontSize='fontSize',
       :canvasStyles='options.canvasStyles'
+      :nodeSym='nodeSvg'
       )
 
 </template> 
@@ -38,6 +40,7 @@ const d3 = Object.assign({}, forceSimulation)
 import svgRenderer from './components/svgRenderer.vue'
 import canvasRenderer from './components/canvasRenderer.vue'
 import saveImage from './lib/saveImage.js'
+import svgExport from './lib/svgExport.js'
 
 export default {
   name: 'd3-network',
@@ -94,13 +97,14 @@ export default {
         y: 0
       },
       simulation: null,
-      shapes: {}
+      nodeSvg: null
     }
   },
   created () {
     this.updateOptions(this.options)
     this.buildNodes(this.netNodes)
     this.links = this.buildLinks(this.netLinks)
+    this.updateNodeSvg()
   },
   mounted () {
     this.onResize()
@@ -124,6 +128,11 @@ export default {
         x: this.size.w / 2 + (this.size.w / 200) * this.offset.x,
         y: this.size.h / 2 + (this.size.h / 200) * this.offset.y
       }
+    },
+    nSize () {
+      let size = this.nodeSize
+      if (!this.nodeSvg) size = size / 2
+      return size
     }
   },
   watch: {
@@ -142,10 +151,20 @@ export default {
           this.onResize()
         }
       }
+      if (oldValue.nodeSym !== newValue.nodeSym) {
+        this.updateNodeSvg()
+      }
       this.animate()
     }
   },
   methods: {
+    updateNodeSvg () {
+      let svg = null
+      if (this.options.nodeSym) {
+        svg = svgExport.svgElFromString(this.options.nodeSym)
+      }
+      this.nodeSvg = svg
+    },
     methodCall (action, args) {
       let method = this[action]
       if (method && typeof (method) === 'function') {

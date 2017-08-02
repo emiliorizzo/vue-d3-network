@@ -8,7 +8,7 @@
       li
         label Max Links per Node: 
           span {{ setts.maxLinks }}
-        input(type="range" v-model.number="setts.maxLinks" @input="change" min="1" max="10" step="1") 
+        input(type="range" v-model.number="setts.maxLinks" @input="change" min="1" max="10" step="1")  
       li
         label Render type
       li  
@@ -32,11 +32,15 @@
         label Offset Y: 
           span {{ opts.offset.y }}
         input(type="range" v-model.number="opts.offset.y" @input="change" min="-100" max="100" step="1") 
+      li
+        input(type="checkbox" v-model="opts.icon" @change="change")
+        label Node Sprite 
+
     ul.test-menu
       li
         label Node Size: 
           span {{ opts.nodeSize }}
-        input(type="range" v-model.number="opts.nodeSize" @input="change" min="1" max="20" step="1")
+        input(type="range" v-model.number="opts.nodeSize" @input="change" min="3" max="100" step="1")
       li
         label Link Thickness: 
           span {{ opts.linkWidth }} 
@@ -51,6 +55,7 @@
       li
         input(type="checkbox" v-model="opts.strLinks" @change="change")
         label Straight Links
+    
       li  
         button.btn(@click="reset" title="reset options")
           span(class="icon-reset")

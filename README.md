@@ -89,6 +89,7 @@ See: [package.json](https://github.com/emiliorizzo/vue-d3-network/blob/master/pa
   - **nodeLabels**: Boolean, *show nodes names*
   - **fontSize**: Number, *for node labels, px*
   - **strLinks**: Boolean, *draw links as rect lines* 
+  - **nodeSym**: String, *node sprite svg doc*
   
 - **canvasStyles**: Object
 
@@ -128,7 +129,7 @@ see: [src/canvasStyles.js](https://github.com/emiliorizzo/vue-d3-network/blob/ma
 ## TODO
 
   - [x]  Touch support
-  - []  Optimization
-  - []  Zoom
-  - [x] Canvas Render
-  - []  Nodes sprites
+  - []   Optimization
+  - []   Zoom
+  - [x]  Canvas Render
+  - [x]  Nodes sprites

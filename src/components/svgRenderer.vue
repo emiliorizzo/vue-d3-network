@@ -9,7 +9,8 @@
     @touchend.prevent='emit("dragEnd",[$event])'
     @touchstart.prevent=''
     )
-    //-> links
+   
+    //-> links  
     g( v-if='strLinks' id="links" class="links")
         line( v-for="link,index in links" 
           :x1='link.source.x' 
@@ -29,7 +30,7 @@
           :stroke-width='linkWidth'
           :class='linkClass(link.id) + " curve"')
     //- -> nodes
-    g( id="nodes" class="nodes" )
+    g( v-if='!nodeSvg' id="nodes" class="nodes" )
       circle(v-for='(node,key) in nodes'
       :key='key'
       :r="nodeSize" 
@@ -43,11 +44,29 @@
       :title="node.name"
       :class="nodeClass(node)"
       )
+    //- -> nodes
+    g( v-if='nodeSvg' id="nodes" class="nodes" )
+      svg(v-for='(node,key) in nodes'
+      :key='key'
+      :viewBox='nodeSvg.attrs.viewBox'
+      :width="nodeSize"
+      :height="nodeSize" 
+      @click='emit("nodeClick",[$event,node])'
+      @touchend.prevent='emit("nodeClick",[$event,node])'
+      @mousedown.prevent='emit("dragStart",[$event,key])'
+      @touchstart.prevent='emit("dragStart",[$event,key])'
+      :x='node.x - nodeSize / 2'
+      :y='node.y - nodeSize / 2' 
+      :style='nodeStyle(node)'
+      :title="node.name"
+      :class='"node-svg " + nodeClass(node)'
+      v-html='nodeSvg.content'
+      )
     //- -> Labels  
     g( v-if="nodeLabels" id="names")
       text(v-for="node in nodes"
-        :x='node.x + nodeSize + fontSize /2'
-        :y='node.y + nodeSize  - fontSize /2'
+        :x='node.x + nodeSize + fontSize / 2'
+        :y='node.y + nodeSize / 2 '
         :font-size="fontSize"
         class="node-names"
         :stroke-width='fontSize / 8'  
@@ -55,6 +74,7 @@
 </template>
 <script>
 import svgExport from '../lib/svgExport.js'
+
 export default {
   name: 'svg-renderer',
   props: ['size',
@@ -66,7 +86,17 @@ export default {
     'fontSize',
     'strLinks',
     'linkWidth',
-    'nodeLabels'],
+    'nodeLabels',
+    'nodeSym'],
+
+  computed: {
+    nodeSvg () {
+      if (this.nodeSym) {
+        return svgExport.toObject(this.nodeSym)
+      }
+      return null
+    }
+  },
   methods: {
     emit (e, args) {
       this.$emit('action', e, args)
@@ -121,6 +151,12 @@ export default {
         vm = vm.$parent
       }
       return 'white'
+    },
+    spriteSymbol () {
+      let svg = this.nodeSym
+      if (svg) {
+        return svgExport.toSymbol(svg)
+      }
     }
   }
 }
