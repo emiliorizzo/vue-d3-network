@@ -11,8 +11,9 @@
       :strLinks='strLinks'
       :linkWidth='linkWidth'
       :nodeLabels='nodeLabels'
-      :nodeSize='nSize',
+      :nodeSize='nSize'
       :fontSize='fontSize'
+      :labelOffset='labelOffset'
       :nodeSym='nodeSvg'
       )
     canvas-renderer(v-else 
@@ -27,8 +28,9 @@
       :strLinks='strLinks'
       :linkWidth='linkWidth'
       :nodeLabels='nodeLabels'
-      :nodeSize='nSize',
-      :fontSize='fontSize',
+      :nodeSize='nSize'
+      :fontSize='fontSize'
+      :labelOffset='labelOffset'
       :canvasStyles='options.canvasStyles'
       :nodeSym='nodeSvg'
       )
@@ -133,6 +135,12 @@ export default {
       let size = this.nodeSize
       if (!this.nodeSvg) size = size / 2
       return size
+    },
+    labelOffset () {
+      return {
+        x: (this.nodeSize / 2) + (this.fontSize / 2),
+        y: this.fontSize / 2
+      }
     }
   },
   watch: {

@@ -65,8 +65,8 @@
     //- -> Labels  
     g( v-if="nodeLabels" id="names")
       text(v-for="node in nodes"
-        :x='node.x + nodeSize + fontSize / 2'
-        :y='node.y + nodeSize / 2 '
+        :x='node.x + labelOffset.x'
+        :y='node.y + labelOffset.y'
         :font-size="fontSize"
         class="node-names"
         :stroke-width='fontSize / 8'  
@@ -87,6 +87,7 @@ export default {
     'strLinks',
     'linkWidth',
     'nodeLabels',
+    'labelOffset',
     'nodeSym'],
 
   computed: {

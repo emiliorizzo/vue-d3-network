@@ -29,6 +29,7 @@ export default {
     'strLinks',
     'linkWidth',
     'nodeLabels',
+    'labelOffset',
     'canvasStyles',
     'nodeSym'
   ],
@@ -173,9 +174,11 @@ export default {
       ctx = this.setCtx(ctx, style)
       if (this.fontSize) ctx.font = this.fontSize + 'px ' + style.fontFamily
       let text = (key) ? item[key] : item.name
-      let x = (item.size) ? item.x + item.size : item.x
-      let y = (item.size) ? item.y + (item.size / 2) : item.y
-      ctx.fillText(text, x + this.fontSize / 2, y)
+      // let x = (item.size) ? item.x + item.size : item.x
+      // let y = (item.size) ? item.y + (item.size / 2) : item.y
+      let x = item.x + this.labelOffset.x
+      let y = item.y + this.labelOffset.y
+      ctx.fillText(text, x, y)
     },
     // render canvas
     draw (nodes, links, canvas) {
