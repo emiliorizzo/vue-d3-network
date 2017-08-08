@@ -1,4 +1,10 @@
-# vue-d3-network
+
+
+[![GitHub issues](https://img.shields.io/github/issues/emiliorizzo/vue-d3-network.svg)](https://github.com/emiliorizzo/vue-d3-network/issues) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/emiliorizzo/vue-d3-network/master/LICENSE) [![npm](https://img.shields.io/npm/v/vue-d3-network.svg)](https://www.npmjs.com/package/vue-d3-network)
+
+
+
+## vue-d3-network
  > Vue component to graph networks using d3-force
 
 ![vue d3 network](vue-d3-network.png)
@@ -13,8 +19,8 @@
 - **Canvas** render
 - Links and nodes selection
 - **svg <-> canvas** shared styles via css
-- Screenshots, *export as svg or png (svg renderer), export as png (canvas renderer)* 
-- Touch support
+- **Screenshots**, *export as svg or png (svg renderer), export as png (canvas renderer)* 
+- **Touch support**
 
 
 ## Installation
