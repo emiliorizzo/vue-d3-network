@@ -73,7 +73,7 @@ See: [package.json](https://github.com/emiliorizzo/vue-d3-network/blob/master/pa
   - **tid**: id of target node
   - **sid**: id of source node
 
- **selected** : Object, *links and nodes selected*
+ **selection** : Object, *links and nodes selected*
   
   - **links**: Object with node.ids as keys, node objects as values
   - **nodes**: Object  with link.ids as keys, links objects as values
