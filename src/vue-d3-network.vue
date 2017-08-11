@@ -60,6 +60,9 @@ export default {
     options: {
       type: Object
     },
+    nodeSym: {
+      type: String
+    },
     selection: {
       type: Object,
       default: () => {
@@ -152,6 +155,9 @@ export default {
       this.links = this.buildLinks(newValue)
       this.reset()
     },
+    nodeSym () {
+      this.updateNodeSvg()
+    },
     options (newValue, oldValue) {
       this.updateOptions(newValue)
       if (oldValue.size && newValue.size) {
@@ -159,17 +165,14 @@ export default {
           this.onResize()
         }
       }
-      if (oldValue.nodeSym !== newValue.nodeSym) {
-        this.updateNodeSvg()
-      }
       this.animate()
     }
   },
   methods: {
     updateNodeSvg () {
       let svg = null
-      if (this.options.nodeSym) {
-        svg = svgExport.svgElFromString(this.options.nodeSym)
+      if (this.nodeSym) {
+        svg = svgExport.svgElFromString(this.nodeSym)
       }
       this.nodeSvg = svg
     },

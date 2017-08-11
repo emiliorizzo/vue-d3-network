@@ -3,10 +3,11 @@
     //-> Network
     d3-network(
     ref='net'  
-    :netNodes="nodes" 
-    :netLinks="links"
+    :net-nodes="nodes" 
+    :net-links="links"
     :selection="{nodes: selected, links: linksSelected}"
     :options="options"
+    :node-sym='nodeSym'
     @node-click="nodeClick"
     @link-click="linkClick"
     @screen-shot='screenShotDone'
@@ -117,6 +118,7 @@ export default {
     data.svgChoice = false
     data.toSvg = false
     data.options.icon = false
+    data.nodeSym = null
     return data
   },
   mounted () {
@@ -180,7 +182,7 @@ export default {
     },
     changeOptions (options) {
       this.options = Object.assign({}, options)
-      if (options.icon) this.options.nodeSym = nodeIcon
+      if (options.icon) this.nodeSym = nodeIcon
     },
     removeLink (link) {
       this.unSelectLink(link.id)

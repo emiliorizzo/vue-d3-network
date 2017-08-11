@@ -78,6 +78,8 @@ See: [package.json](https://github.com/emiliorizzo/vue-d3-network/blob/master/pa
   - **links**: Object with node.ids as keys, node objects as values
   - **nodes**: Object  with link.ids as keys, links objects as values
 
+ **nodeSym**: String, *node sprite svg doc*
+
  **options**:
   
   - **canvas**: Boolean, *render as canvas*, false = svg
@@ -95,7 +97,7 @@ See: [package.json](https://github.com/emiliorizzo/vue-d3-network/blob/master/pa
   - **nodeLabels**: Boolean, *show nodes names*
   - **fontSize**: Number, *for node labels, px*
   - **strLinks**: Boolean, *draw links as rect lines* 
-  - **nodeSym**: String, *node sprite svg doc*
+ 
   
 - **canvasStyles**: Object
 
