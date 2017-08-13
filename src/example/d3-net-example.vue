@@ -183,6 +183,7 @@ export default {
     changeOptions (options) {
       this.options = Object.assign({}, options)
       if (options.icon) this.nodeSym = nodeIcon
+      else this.nodeSym = null
     },
     removeLink (link) {
       this.unSelectLink(link.id)
