@@ -97,7 +97,8 @@ See: [package.json](https://github.com/emiliorizzo/vue-d3-network/blob/master/pa
   - **nodeLabels**: Boolean, *show nodes names*
   - **fontSize**: Number, *for node labels, px*
   - **strLinks**: Boolean, *draw links as rect lines* 
- 
+  - **nodeCb**: Function(node), *node formatter*,
+  - **linkCb**: Function(link), *node link formatter*
   
 - **canvasStyles**: Object
 

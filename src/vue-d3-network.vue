@@ -210,6 +210,8 @@ export default {
     buildNodes (nodes) {
       let vm = this
       this.nodes = nodes.map((node, index) => {
+        // node formatter option
+        node = this.itemCb(this.options.nodeCb, node)
         // index as default node id
         if (!node.id) vm.$set(node, 'id', index)
         // initialize node coords
@@ -220,13 +222,20 @@ export default {
         return node
       })
     },
+
     buildLinks (links) {
       return links.concat().map((link) => {
+        // link formatter option
+        link = this.itemCb(this.options.linkCb, link)
         // source and target for d3
         link.source = link.sid
         link.target = link.tid
         return link
       })
+    },
+    itemCb (cb, item) {
+      if (cb && typeof (cb) === 'function') item = cb(item)
+      return item
     },
     // -- Animation
     simulate (nodes, links) {
