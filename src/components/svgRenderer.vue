@@ -136,7 +136,8 @@ export default {
       return style
     },
     nodeClass (node) {
-      let cssClass = 'node'
+      let cssClass = node.cssClass || ''
+      cssClass += ' node'
       if (this.selected[node.id]) cssClass += ' selected'
       if (node.fx || node.fy) cssClass += ' pinned'
       return cssClass

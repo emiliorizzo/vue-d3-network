@@ -234,7 +234,8 @@ export default {
         let node = this.selected[nid]
         if (this.isOnView(node)) {
           // this.drawNode(node, ctx)
-          let sprite = this.sprites.nodeSelected
+          // let sprite = this.sprites.nodeSelected
+          let sprite = this.getNodeSprite(node)
           ctx.drawImage(sprite, node.x - sprite.width / 2, node.y - sprite.height / 2)
         }
       }
@@ -242,17 +243,8 @@ export default {
     getNodeSprite (node) {
       let name = this.nodeSpriteName(node)
       let sprite = this.sprites[name]
-      if (!sprite) {
-        let styleName = 'node'
-        let selected = this.selected[node.id]
-        if (selected) styleName = 'nodeSelected'
-        if (node.pinned) styleName = 'nodePinned'
-        if (selected && node.pinned) styleName = 'nodeSelectedPinned'
-        let style = Object.assign({}, this.styles[styleName])
-        if (node.color) {
-          style.fillStyle = node.color
-          style._cssStyle = 'fill:' + node.color
-        }
+      if (!sprite) { // set style and create sprite
+        let style = this.loadNodeStyle(node)
         sprite = this.nodeSprite(style)
         this.sprites[name] = sprite
       }
@@ -260,9 +252,10 @@ export default {
     },
     nodeSpriteName (node) {
       let name = 'node'
+      if (this.selected[node.id]) name += 'Selected'
+      if (node.pinned) name += 'Pinned'
+      if (node.cssClass) name += '-' + node.cssClass
       if (node.color) name += '-' + stylePicker.compColor(node.color)
-      if (node.pinned) name += '-pinned'
-      if (this.selected[node.nid]) name += 'selected'
       return name
     },
     nodeSprite (style) {
@@ -271,7 +264,7 @@ export default {
       let canvas = this.spriteCanvas(canvasSize)
       let ctx = canvas.getContext('2d')
       if (this.nodeSvg) {
-        let attrs = { width: size, height: size, class: style._cssClass, style: style._cssStyle }
+        let attrs = { width: size, height: size, class: style._cssClass || '', style: style._cssStyle || '' }
         let url = svgExport.svgDataToUrl(this.nodeSvg, attrs)
         if (url) {
           let img = new Image()
@@ -373,11 +366,46 @@ export default {
     getCssStyles () {
       let svg = stylePicker.create('svg', 'css-picker')
       for (let styleName in this.styles) {
-        let style = this.styles[styleName]
+        let style = this.styles[styleName] || {}
         style = stylePicker.fillStyle(style, svg)
       }
       document.body.removeChild(svg)
       this.stylesReady = true
+    },
+    loadNodeStyle (node) {
+      let styleName = 'node'
+      let selected = this.selected[node.id]
+      if (selected) styleName = 'nodeSelected'
+      if (node.pinned) styleName = 'nodePinned'
+      if (selected && node.pinned) styleName = 'nodeSelectedPinned'
+      // merge styles and update
+      if (node.cssClass) {
+        let name = styleName + '-' + node.cssClass
+        if (!this.styles[name]) {
+          let cStyle = Object.assign({}, this.styles[styleName] || {})
+          cStyle._cssClass = cStyle._cssClass || ''
+          cStyle._cssClass += ' ' + node.cssClass
+          this.updateStyle(name, cStyle)
+        }
+        styleName = name
+      }
+      let style = Object.assign({}, this.styles[styleName] || this.updateStyle(styleName))
+      if (node.color) {
+        style.fillStyle = node.color
+        style._cssStyle = 'fill:' + node.color
+      }
+      if (node.cssClass) {
+        style._cssClass += ' ' + node.cssClass
+      }
+      return style
+    },
+    updateStyle (styleName, style) {
+      style = style || this.styles[styleName] || {}
+      let svg = stylePicker.create('svg', 'css-picker')
+      style = stylePicker.fillStyle(style, svg)
+      this.styles[styleName] = style
+      document.body.removeChild(svg)
+      return style
     },
     getCssColor (color) {
       let el = stylePicker.create('div', 'color-picker')
@@ -392,7 +420,7 @@ export default {
 </script>
 <style lang="stylus">
   canvas
-    position:absolute
+    position: absolute
     top: 0
     left: 0
 </style>

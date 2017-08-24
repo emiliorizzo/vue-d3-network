@@ -64,7 +64,8 @@ See: [package.json](https://github.com/emiliorizzo/vue-d3-network/blob/master/pa
    
   - **id**: node id. *If not provided uses array index*
   -  **name**: node name. *If not provided uses: 'node [node_id]'*
-  - **color**: node color, e.g. *red*, *#aa00bb* 
+  - **color**: node color, e.g. *red*, *#aa00bb*,
+  - **cssClass**: node css class name
       
 
  **net-links**: Array *of links objects*: 
