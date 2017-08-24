@@ -63,6 +63,12 @@ export default {
     nodeSym: {
       type: String
     },
+    nodeCb: {
+      type: Function
+    },
+    linkCb: {
+      type: Function
+    },
     selection: {
       type: Object,
       default: () => {
@@ -211,7 +217,7 @@ export default {
       let vm = this
       this.nodes = nodes.map((node, index) => {
         // node formatter option
-        node = this.itemCb(this.options.nodeCb, node)
+        node = this.itemCb(this.nodeCb, node)
         // index as default node id
         if (!node.id) vm.$set(node, 'id', index)
         // initialize node coords
@@ -226,7 +232,7 @@ export default {
     buildLinks (links) {
       return links.concat().map((link) => {
         // link formatter option
-        link = this.itemCb(this.options.linkCb, link)
+        link = this.itemCb(this.linkCb, link)
         // source and target for d3
         link.source = link.sid
         link.target = link.tid

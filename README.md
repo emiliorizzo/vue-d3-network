@@ -80,6 +80,10 @@ See: [package.json](https://github.com/emiliorizzo/vue-d3-network/blob/master/pa
   - **nodes**: Object  with link.ids as keys, links objects as values
 
  **nodeSym**: String, *node sprite svg doc*
+ 
+ **nodeCb**: Function(node), *node formatter*
+ 
+ **linkCb**: Function(link), *node link formatter*
 
  **options**:
   
@@ -98,8 +102,6 @@ See: [package.json](https://github.com/emiliorizzo/vue-d3-network/blob/master/pa
   - **nodeLabels**: Boolean, *show nodes names*
   - **fontSize**: Number, *for node labels, px*
   - **strLinks**: Boolean, *draw links as rect lines* 
-  - **nodeCb**: Function(node), *node formatter*,
-  - **linkCb**: Function(link), *node link formatter*
   
 - **canvasStyles**: Object
 
