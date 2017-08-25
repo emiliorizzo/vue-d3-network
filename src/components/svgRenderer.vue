@@ -68,7 +68,7 @@
         :x='node.x + labelOffset.x'
         :y='node.y + labelOffset.y'
         :font-size="fontSize"
-        :class='(node.labelClass) ? node.labelClass : ""'
+        :class='(node._labelClass) ? node._labelClass : ""'
         :stroke-width='fontSize / 8'  
       ) {{ node.name }}
 </template>
@@ -131,12 +131,10 @@ export default {
       return 'M ' + d.M + ' Q ' + d.Q.join(' ') + ' ' + d.X
     },
     nodeStyle (node) {
-      let style = ''
-      if (node.color) style += 'fill: ' + node.color
-      return style
+      return (node._color) ? 'fill: ' + node._color : ''
     },
     nodeClass (node) {
-      let cssClass = node.cssClass || ''
+      let cssClass = node._cssClass || ''
       cssClass += ' node'
       if (this.selected[node.id]) cssClass += ' selected'
       if (node.fx || node.fy) cssClass += ' pinned'

@@ -152,8 +152,8 @@ export default {
       ctx.arc(node.x, node.y, this.nodeSize, 0, 2 * Math.PI, false)
       let fillStyle = ctx.fillStyle
       let strokeStyle = ctx.strokeStyle
-      if (node.color) ctx.fillStyle = node.color
-      if (node.borderColor) ctx.strokeStyle = node.borderColor
+      if (node._color) ctx.fillStyle = node._color
+      if (node._borderColor) ctx.strokeStyle = node._borderColor
       ctx.fill()
       ctx.stroke()
       ctx.closePath()
@@ -254,8 +254,8 @@ export default {
       let name = 'node'
       if (this.selected[node.id]) name += 'Selected'
       if (node.pinned) name += 'Pinned'
-      if (node.cssClass) name += '-' + node.cssClass
-      if (node.color) name += '-' + stylePicker.compColor(node.color)
+      if (node._cssClass) name += '-' + node._cssClass
+      if (node._color) name += '-' + stylePicker.compColor(node._color)
       return name
     },
     nodeSprite (style) {
@@ -379,23 +379,23 @@ export default {
       if (node.pinned) styleName = 'nodePinned'
       if (selected && node.pinned) styleName = 'nodeSelectedPinned'
       // merge styles and update
-      if (node.cssClass) {
-        let name = styleName + '-' + node.cssClass
+      if (node._cssClass) {
+        let name = styleName + '-' + node._cssClass
         if (!this.styles[name]) {
           let cStyle = Object.assign({}, this.styles[styleName] || {})
           cStyle._cssClass = cStyle._cssClass || ''
-          cStyle._cssClass += ' ' + node.cssClass
+          cStyle._cssClass += ' ' + node._cssClass
           this.updateStyle(name, cStyle)
         }
         styleName = name
       }
       let style = Object.assign({}, this.styles[styleName] || this.updateStyle(styleName))
-      if (node.color) {
-        style.fillStyle = node.color
-        style._cssStyle = 'fill:' + node.color
+      if (node._color) {
+        style.fillStyle = node._color
+        style._cssStyle = 'fill:' + node._color
       }
-      if (node.cssClass) {
-        style._cssClass += ' ' + node.cssClass
+      if (node._cssClass) {
+        style._cssClass += ' ' + node._cssClass
       }
       return style
     },
@@ -417,12 +417,13 @@ export default {
     },
     labelStyle (node) {
       let style = this.styles.labels
-      if (node.labelClass) {
-        let styleName = 'labels-' + node.labelClass
+      let labelClass = node._labelClass
+      if (labelClass) {
+        let styleName = 'labels-' + labelClass
         let labelStyle = this.styles[styleName]
         if (!labelStyle) {
           labelStyle = Object.assign({}, style)
-          labelStyle._cssClass += ' ' + node.labelClass
+          labelStyle._cssClass += ' ' + labelClass
           labelStyle = this.updateStyle(styleName, labelStyle)
         }
         style = labelStyle

@@ -12,6 +12,7 @@
     @link-click="linkClick"
     @screen-shot='screenShotDone'
     )
+     //- :node-cb='nodeCb'
     //-> toaster
     .toaster(v-if='toaster')
       p {{toaster}}
@@ -119,6 +120,19 @@ export default {
     data.toSvg = false
     data.options.icon = false
     data.nodeSym = null
+    // to test
+    data.nodeCb = function (node) {
+      if (undefined !== node.index) {
+        if (node.index % 2) {
+          node._cssClass = 'nodeodd'
+          node._labelClass = 'odd'
+        } else {
+          console.log(node.index)
+          node._color = 'blue'
+        }
+      }
+      return node
+    }
     return data
   },
   mounted () {
@@ -360,6 +374,10 @@ button.menu
 .disconnected
   color: $warn
 
+.node.nodeodd #fill, .node.nodeodd
+  fill: red 
+.node-label.odd 
+  fill: red
 .over
   position: absolute
   bottom: 0
