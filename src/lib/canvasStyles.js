@@ -27,7 +27,7 @@ export default {
     lineWidth: 1
   },
   labels: {
-    _cssClass: 'node-names',
+    _cssClass: 'node-label',
     _svgElement: 'text', // svg element to pick properties
     fillStyle: 'black',
     fontFamily: 'Arial'

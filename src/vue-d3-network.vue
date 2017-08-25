@@ -373,7 +373,7 @@ export default {
 .curve
   fill: none
 
-.node-names
+.node-label
   fill: $dark
 </style>  
 

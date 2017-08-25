@@ -66,6 +66,7 @@ See: [package.json](https://github.com/emiliorizzo/vue-d3-network/blob/master/pa
   -  **name**: node name. *If not provided uses: 'node [node_id]'*
   - **color**: node color, e.g. *red*, *#aa00bb*,
   - **cssClass**: node css class name
+  - **labelClass**: node label css class name
       
 
  **net-links**: Array *of links objects*: 
@@ -81,9 +82,11 @@ See: [package.json](https://github.com/emiliorizzo/vue-d3-network/blob/master/pa
 
  **nodeSym**: String, *node sprite svg doc*
  
- **nodeCb**: Function(node), *node formatter*
+ **nodeCb**: Function(node) -> node, *node formatter*
  
- **linkCb**: Function(link), *node link formatter*
+ **linkCb**: Function(link) -> link, *node link formatter*
+
+
 
  **options**:
   
@@ -97,8 +100,8 @@ See: [package.json](https://github.com/emiliorizzo/vue-d3-network/blob/master/pa
       - **y**: Number
 
   - **force**: Number
-  - **nodeSize**: Number, *node radius | size in px*
-  - **linkWidth**: Number, *link thickness in px*
+- **nodeSize**: Number, *node radius | size in px* 
+- **linkWidth**: Number, *link thickness in px*
   - **nodeLabels**: Boolean, *show nodes names*
   - **fontSize**: Number, *for node labels, px*
   - **strLinks**: Boolean, *draw links as rect lines* 

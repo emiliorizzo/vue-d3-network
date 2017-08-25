@@ -63,12 +63,12 @@
       v-html='nodeSvg.content'
       )
     //- -> Labels  
-    g( v-if="nodeLabels" id="names")
-      text(v-for="node in nodes"
+    g.labels( v-if="nodeLabels" id="node-labels")
+      text.node-label(v-for="node in nodes"
         :x='node.x + labelOffset.x'
         :y='node.y + labelOffset.y'
         :font-size="fontSize"
-        class="node-names"
+        :class='(node.labelClass) ? node.labelClass : ""'
         :stroke-width='fontSize / 8'  
       ) {{ node.name }}
 </template>

@@ -223,7 +223,7 @@ export default {
           // draw  node labels
           if (this.nodeLabels) {
             node.size = this.nodeSize
-            this.drawText(node, ctx, this.styles.labels)
+            this.drawText(node, ctx, this.labelStyle(node))
             // ctx = this.setCtx(ctx, this.styles.node)
           }
         }
@@ -413,6 +413,20 @@ export default {
       el.setAttribute('style', 'background-color:' + color)
       let style = stylePicker.mapStyle(id, { fillStyle: 'background-color' }, [])
       document.body.removeChild(el)
+      return style
+    },
+    labelStyle (node) {
+      let style = this.styles.labels
+      if (node.labelClass) {
+        let styleName = 'labels-' + node.labelClass
+        let labelStyle = this.styles[styleName]
+        if (!labelStyle) {
+          labelStyle = Object.assign({}, style)
+          labelStyle._cssClass += ' ' + node.labelClass
+          labelStyle = this.updateStyle(styleName, labelStyle)
+        }
+        style = labelStyle
+      }
       return style
     }
   }
