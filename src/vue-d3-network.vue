@@ -223,7 +223,7 @@ export default {
         if (!node.name) vm.$set(node, 'name', 'node ' + node.id)
         if (node.svgSym) {
           node.svgIcon = svgExport.svgElFromString(node.svgSym)
-          if (!this.canvas && node.svgIcon) node.svgObj = svgExport.toObject(node.svgIcon)
+          if (!this.canvas && node.svgIcon && !node.svgObj) node.svgObj = svgExport.toObject(node.svgIcon)
         }
         return node
       })
