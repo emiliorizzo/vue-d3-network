@@ -31,9 +31,9 @@
           :class='linkClass(link.id) + " curve"')
     //- -> nodes
     g.nodes#nodes(v-for='(node,key) in nodes')
-        svg(v-if='node.svgObj || nodeSvg' 
+        svg(v-if='svgIcon(node)' 
           :key='key'
-          :viewBox='node.svgObj.attrs.viewBox || nodeSvg.attrs.viewBox'
+          :viewBox='svgIcon(node).attrs.viewBox'
           :width="nodeSize"
           :height="nodeSize" 
           @click='emit("nodeClick",[$event,node])'
@@ -45,8 +45,9 @@
           :style='nodeStyle(node)'
           :title="node.name"
           :class='"node-svg " + nodeClass(node)'
-          v-html='node.svgObj.content || nodeSvg.content'
+          v-html='svgIcon(node).data'
           )
+
         //- default circle nodes
         circle(v-else
         :key='key'
@@ -99,6 +100,9 @@ export default {
     }
   },
   methods: {
+    svgIcon(node){
+      return node.svgObj || this.nodeSvg
+    },
     emit (e, args) {
       this.$emit('action', e, args)
     },
