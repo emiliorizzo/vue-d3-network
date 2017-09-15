@@ -192,8 +192,9 @@ export default {
       }
     },
     onResize () {
-      if (!this.options.size.w) this.size.w = this.$el.clientWidth
-      if (!this.options.size.h) this.size.h = this.$el.clientHeight
+      let size = this.options.size
+      if (!size || !size.w) this.size.w = this.$el.clientWidth
+      if (!size || !size.h) this.size.h = this.$el.clientHeight
       this.padding.x = 0
       this.padding.y = 0
       // serach offsets of parents
