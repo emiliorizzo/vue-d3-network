@@ -1,41 +1,3 @@
-<template lang="pug">
-  div.net
-    svg-renderer(v-if='!canvas' 
-      @action='methodCall'
-      ref='svg'
-      :size='size' 
-      :nodes='nodes' 
-      :links='links' 
-      :selected='selected' 
-      :linksSelected='linksSelected' 
-      :strLinks='strLinks'
-      :linkWidth='linkWidth'
-      :nodeLabels='nodeLabels'
-      :nodeSize='nSize'
-      :fontSize='fontSize'
-      :labelOffset='labelOffset'
-      :nodeSym='nodeSvg'
-      )
-    canvas-renderer(v-else 
-      @action='methodCall'
-      ref='canvas'
-      :size='size'
-      :offset='offset' 
-      :nodes='nodes' 
-      :links='links' 
-      :selected='selected' 
-      :linksSelected='linksSelected' 
-      :strLinks='strLinks'
-      :linkWidth='linkWidth'
-      :nodeLabels='nodeLabels'
-      :nodeSize='nSize'
-      :fontSize='fontSize'
-      :labelOffset='labelOffset'
-      :canvasStyles='options.canvasStyles'
-      :nodeSym='nodeSvg'
-      )
-
-</template> 
 <script>
 import * as forceSimulation from 'd3-force'
 const d3 = Object.assign({}, forceSimulation)
@@ -110,6 +72,39 @@ export default {
       simulation: null,
       nodeSvg: null
     }
+  },
+  render (createElement) {
+    let ref = 'svg'
+    let props = {}
+    let renderer = 'svg-renderer'
+    let bindProps = [
+      'size',
+      'nodes',
+      'links',
+      'selected',
+      'linksSelected',
+      'strLinks',
+      'linkWidth',
+      'nodeLabels',
+      'fontSize',
+      'labelOffset',
+      'offset']
+
+    for (let prop of bindProps) {
+      props[prop] = this[prop]
+    }
+    props.nodeSize = this.nSize
+    props.nodeSym = this.nodeSvg
+
+    if (this.canvas) {
+      renderer = 'canvas-renderer'
+      ref = 'canvas'
+      props.canvasStyles = this.options.canvasStyles
+    }
+
+    return createElement('div', { attrs: { class: 'net' } }, [
+      createElement(renderer, { props, ref, on: { action: this.methodCall } })
+    ])
   },
   created () {
     this.updateOptions(this.options)
@@ -200,8 +195,8 @@ export default {
       // serach offsets of parents
       let vm = this
       while (vm.$parent) {
-        this.padding.x += vm.$el.offsetLeft
-        this.padding.y += vm.$el.offsetTop
+        this.padding.x += vm.$el.offsetLeft || 0
+        this.padding.y += vm.$el.offsetTop || 0
         vm = vm.$parent
       }
       this.animate()
