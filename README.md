@@ -67,6 +67,7 @@ See: [package.json](https://github.com/emiliorizzo/vue-d3-network/blob/master/pa
   - **_color**: node color, e.g. *red*, *#aa00bb*,
   - **_cssClass**: node css class name
   - **_labelClass**: node label css class name
+  - **svgSym **: node icon, svg document (only works in svg renderer)
       
 
  **net-links**: Array *of links objects*: 

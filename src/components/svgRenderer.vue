@@ -30,38 +30,38 @@
           :stroke-width='linkWidth'
           :class='linkClass(link.id) + " curve"')
     //- -> nodes
-    g( v-if='!nodeSvg' id="nodes" class="nodes" )
-      circle(v-for='(node,key) in nodes'
-      :key='key'
-      :r="nodeSize" 
-      @click='emit("nodeClick",[$event,node])'
-      @touchend.prevent='emit("nodeClick",[$event,node])'
-      @mousedown.prevent='emit("dragStart",[$event,key])'
-      @touchstart.prevent='emit("dragStart",[$event,key])'
-      :cx="node.x" 
-      :cy="node.y" 
-      :style='nodeStyle(node)'
-      :title="node.name"
-      :class="nodeClass(node)"
-      )
-    //- -> nodes
-    g( v-if='nodeSvg' id="nodes" class="nodes" )
-      svg(v-for='(node,key) in nodes'
-      :key='key'
-      :viewBox='nodeSvg.attrs.viewBox'
-      :width="nodeSize"
-      :height="nodeSize" 
-      @click='emit("nodeClick",[$event,node])'
-      @touchend.prevent='emit("nodeClick",[$event,node])'
-      @mousedown.prevent='emit("dragStart",[$event,key])'
-      @touchstart.prevent='emit("dragStart",[$event,key])'
-      :x='node.x - nodeSize / 2'
-      :y='node.y - nodeSize / 2' 
-      :style='nodeStyle(node)'
-      :title="node.name"
-      :class='"node-svg " + nodeClass(node)'
-      v-html='nodeSvg.content'
-      )
+    g.nodes#nodes(v-for='(node,key) in nodes')
+        svg(v-if='node.svgObj || nodeSvg' 
+          :key='key'
+          :viewBox='node.svgObj.attrs.viewBox || nodeSvg.attrs.viewBox'
+          :width="nodeSize"
+          :height="nodeSize" 
+          @click='emit("nodeClick",[$event,node])'
+          @touchend.prevent='emit("nodeClick",[$event,node])'
+          @mousedown.prevent='emit("dragStart",[$event,key])'
+          @touchstart.prevent='emit("dragStart",[$event,key])'
+          :x='node.x - nodeSize / 2'
+          :y='node.y - nodeSize / 2' 
+          :style='nodeStyle(node)'
+          :title="node.name"
+          :class='"node-svg " + nodeClass(node)'
+          v-html='node.svgObj.content || nodeSvg.content'
+          )
+        //- default circle nodes
+        circle(v-else
+        :key='key'
+        :r="nodeSize" 
+        @click='emit("nodeClick",[$event,node])'
+        @touchend.prevent='emit("nodeClick",[$event,node])'
+        @mousedown.prevent='emit("dragStart",[$event,key])'
+        @touchstart.prevent='emit("dragStart",[$event,key])'
+        :cx="node.x" 
+        :cy="node.y" 
+        :style='nodeStyle(node)'
+        :title="node.name"
+        :class="nodeClass(node)"
+        )
+
     //- -> Labels  
     g.labels( v-if="nodeLabels" id="node-labels")
       text.node-label(v-for="node in nodes"

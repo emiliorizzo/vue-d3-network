@@ -221,6 +221,10 @@ export default {
         if (!node.y) vm.$set(node, 'y', 0)
         // node default name
         if (!node.name) vm.$set(node, 'name', 'node ' + node.id)
+        if (node.svgSym) {
+          node.svgIcon = svgExport.svgElFromString(node.svgSym)
+          if (!this.canvas && node.svgIcon) node.svgObj = svgExport.toObject(node.svgIcon)
+        }
         return node
       })
     },
@@ -271,8 +275,8 @@ export default {
         if (this.nodes[this.dragging]) {
           this.simulation.restart()
           this.simulation.alpha(0.5)
-          this.nodes[this.dragging].fx = x - this.padding.x 
-          this.nodes[this.dragging].fy = y - this.padding.y 
+          this.nodes[this.dragging].fx = x - this.padding.x
+          this.nodes[this.dragging].fy = y - this.padding.y
         }
       }
     },
