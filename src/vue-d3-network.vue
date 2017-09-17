@@ -131,8 +131,8 @@ export default {
     },
     center () {
       return {
-        x: this.size.w / 2 + (this.size.w / 200) * this.offset.x,
-        y: this.size.h / 2 + (this.size.h / 200) * this.offset.y
+        x: this.size.w / 2 + (this.size.w / 200) + this.offset.x,
+        y: this.size.h / 2 + (this.size.h / 200) + this.offset.y
       }
     },
     nSize () {
@@ -271,8 +271,8 @@ export default {
         if (this.nodes[this.dragging]) {
           this.simulation.restart()
           this.simulation.alpha(0.5)
-          this.nodes[this.dragging].fx = x - this.padding.x - this.offset.x
-          this.nodes[this.dragging].fy = y - this.padding.y - this.offset.y
+          this.nodes[this.dragging].fx = x - this.padding.x 
+          this.nodes[this.dragging].fy = y - this.padding.y 
         }
       }
     },

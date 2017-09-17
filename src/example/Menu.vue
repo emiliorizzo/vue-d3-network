@@ -27,11 +27,11 @@
       li
         label Offset X: 
           span {{ opts.offset.x }}
-        input(type="range" v-model.number="opts.offset.x" @input="change" min="-100" max="100" step="1") 
+        input(type="range" v-model.number="opts.offset.x" @input="change" min="-1000" max="1000" step="1") 
       li
         label Offset Y: 
           span {{ opts.offset.y }}
-        input(type="range" v-model.number="opts.offset.y" @input="change" min="-100" max="100" step="1") 
+        input(type="range" v-model.number="opts.offset.y" @input="change" min="-1000" max="1000" step="1") 
       li
         input(type="checkbox" v-model="opts.icon" @change="change")
         label Node Sprite 
