@@ -38,8 +38,8 @@
           @touchend.prevent='emit("nodeClick",[$event,node])'
           @mousedown.prevent='emit("dragStart",[$event,key])'
           @touchstart.prevent='emit("dragStart",[$event,key])'
-          :x='node.x - nodeSize / 2'
-          :y='node.y - nodeSize / 2' 
+          :x='node.x - getNodeSize(node, "width") / 2'
+          :y='node.y - getNodeSize(node, "height") / 2' 
           :style='nodeStyle(node)'
           :title="node.name"
           :class='"node-svg " + nodeClass(node)'
@@ -64,7 +64,7 @@
     //- -> Labels  
     g.labels( v-if="nodeLabels" id="node-labels")
       text.node-label(v-for="node in nodes"
-        :x='node.x + labelOffset.x'
+        :x='node.x + (getNodeSize(node) / 2) + (fontSize / 2)'
         :y='node.y + labelOffset.y'
         :font-size="fontSize"
         :class='(node._labelClass) ? node._labelClass : ""'
