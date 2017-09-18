@@ -3,9 +3,7 @@
     :width="size.w" 
     :height="size.h"
     class="net-svg" 
-    @mousemove.capture='emit("move",[$event])'
     @mouseup='emit("dragEnd",[$event])'
-    @touchmove.capture='emit("move",[$event])'
     @touchend.prevent='emit("dragEnd",[$event])'
     @touchstart.prevent=''
     )
