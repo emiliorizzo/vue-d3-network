@@ -54,6 +54,10 @@ export default {
         x: 0,
         y: 0
       },
+      clientOffset: {
+        x: 0,
+        y: 0
+      },
       force: 500,
       strLinks: true,
       fontSize: 10,
@@ -88,7 +92,9 @@ export default {
       'nodeLabels',
       'fontSize',
       'labelOffset',
-      'offset']
+      'offset',
+      'padding'
+    ]
 
     for (let prop of bindProps) {
       props[prop] = this[prop]
@@ -275,15 +281,15 @@ export default {
         if (this.nodes[this.dragging]) {
           this.simulation.restart()
           this.simulation.alpha(0.5)
-          this.nodes[this.dragging].fx = x - this.padding.x
-          this.nodes[this.dragging].fy = y - this.padding.y
+          this.nodes[this.dragging].fx = x - this.mouseOfst.x
+          this.nodes[this.dragging].fy = y - this.mouseOfst.y
         }
       }
     },
     dragStart (event, nodeKey) {
       this.dragging = (nodeKey === false) ? false : nodeKey
       this.setMouseOffset(event, this.nodes[nodeKey])
-      if (!this.dragging) {
+      if (this.dragging === false) {
         this.simulation.alpha(0.1)
         this.simulation.restart()
         this.setMouseOffset()

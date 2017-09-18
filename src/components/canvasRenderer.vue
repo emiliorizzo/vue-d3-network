@@ -2,6 +2,7 @@
   canvas(id='canvas' ref='canvas' 
     :width='size.w' 
     :height='size.h'
+    :style='canvasStyle'
     @mousemove.capture='emit("move",[$event])'
     @mouseup.prevent='canvasClick'
     @mousedown.prevent='canvasClick'
@@ -20,6 +21,7 @@ export default {
   props: [
     'size',
     'offset',
+    'padding',
     'nodes',
     'selected',
     'linksSelected',
@@ -48,6 +50,11 @@ export default {
   computed: {
     nodeSvg () {
       return this.nodeSym
+    },
+    canvasStyle () {
+      let left = this.padding.x + 'px'
+      let top = this.padding.y + 'px'
+      return { left, top }
     }
   },
   directives: {
@@ -123,8 +130,10 @@ export default {
     canvasClick (event) {
       let hitCtx = this.hitCanvas.getContext('2d')
       let e = (event.touches) ? event.touches[0] || event.changedTouches[0] : event
-      let x = e.clientX - this.offset.x
-      let y = e.clientY - this.offset.y
+      let scrollTop = document.body.scrollTop
+      let scrollLeft = document.body.scrollLeft
+      let x = e.clientX + scrollLeft - this.padding.x
+      let y = e.clientY + scrollTop - this.padding.y
 
       let pixel = hitCtx.getImageData(x, y, 1, 1).data
       let color = `rgb(${pixel[0]},${pixel[1]},${pixel[2]})`

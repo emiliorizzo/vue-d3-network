@@ -84,6 +84,7 @@ export default {
     'linksSelected',
     'links',
     'nodeSize',
+    'padding',
     'fontSize',
     'strLinks',
     'linkWidth',
@@ -100,7 +101,7 @@ export default {
     }
   },
   methods: {
-    svgIcon(node){
+    svgIcon (node) {
       return node.svgObj || this.nodeSvg
     },
     emit (e, args) {

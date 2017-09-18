@@ -297,7 +297,7 @@ export default {
       this.lastLinkId++
     },
     selectLink (link) {
-      this.linksSelected[link.id] = link
+      this.$set(this.linksSelected, link.id, link)
     },
     selectionEvent (action, args) {
       utils.methodCall(this, action, args)
