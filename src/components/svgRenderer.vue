@@ -32,8 +32,8 @@
         svg(v-if='svgIcon(node)' 
           :key='key'
           :viewBox='svgIcon(node).attrs.viewBox'
-          :width="nodeSize"
-          :height="nodeSize" 
+          :width='getNodeSize(node, "width")'
+          :height='getNodeSize(node, "height")' 
           @click='emit("nodeClick",[$event,node])'
           @touchend.prevent='emit("nodeClick",[$event,node])'
           @mousedown.prevent='emit("dragStart",[$event,key])'
@@ -49,7 +49,7 @@
         //- default circle nodes
         circle(v-else
         :key='key'
-        :r="nodeSize" 
+        :r="getNodeSize(node) / 2" 
         @click='emit("nodeClick",[$event,node])'
         @touchend.prevent='emit("nodeClick",[$event,node])'
         @mousedown.prevent='emit("dragStart",[$event,key])'
@@ -99,6 +99,11 @@ export default {
     }
   },
   methods: {
+    getNodeSize (node, side) {
+      let size = node._size || this.nodeSize
+      if (side) size = node['_' + side] || size
+      return size
+    },
     svgIcon (node) {
       return node.svgObj || this.nodeSvg
     },

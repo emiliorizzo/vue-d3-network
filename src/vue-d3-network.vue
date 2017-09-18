@@ -93,13 +93,13 @@ export default {
       'fontSize',
       'labelOffset',
       'offset',
-      'padding'
+      'padding',
+      'nodeSize'
     ]
 
     for (let prop of bindProps) {
       props[prop] = this[prop]
     }
-    props.nodeSize = this.nSize
     props.nodeSym = this.nodeSvg
 
     if (this.canvas) {
@@ -145,11 +145,6 @@ export default {
         x: this.size.w / 2 + (this.size.w / 200) + this.offset.x,
         y: this.size.h / 2 + (this.size.h / 200) + this.offset.y
       }
-    },
-    nSize () {
-      let size = this.nodeSize
-      if (!this.nodeSvg) size = size / 2
-      return size
     },
     labelOffset () {
       return {

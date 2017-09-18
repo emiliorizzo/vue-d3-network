@@ -156,7 +156,7 @@ export default {
     // draw circ node to canvas
     drawNode (ctx, node) {
       ctx.beginPath()
-      ctx.arc(node.x, node.y, this.nodeSize, 0, 2 * Math.PI, false)
+      ctx.arc(node.x, node.y, this.nodeSize / 2, 0, 2 * Math.PI, false)
       let fillStyle = ctx.fillStyle
       let strokeStyle = ctx.strokeStyle
       if (node._color) ctx.fillStyle = node._color
