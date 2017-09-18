@@ -275,16 +275,22 @@ export default {
     },
     // -- Mouse Interaction
     move (event) {
-      let x = (event.touches) ? event.touches[0].clientX : event.clientX
-      let y = (event.touches) ? event.touches[0].clientY : event.clientY
+      let pos = this.clientPos(event)
       if (this.dragging !== false) {
         if (this.nodes[this.dragging]) {
           this.simulation.restart()
           this.simulation.alpha(0.5)
-          this.nodes[this.dragging].fx = x - this.mouseOfst.x
-          this.nodes[this.dragging].fy = y - this.mouseOfst.y
+          this.nodes[this.dragging].fx = pos.x - this.mouseOfst.x
+          this.nodes[this.dragging].fy = pos.y - this.mouseOfst.y
         }
       }
+    },
+    clientPos (event) {
+      let x = (event.touches) ? event.touches[0].clientX : event.clientX
+      let y = (event.touches) ? event.touches[0].clientY : event.clientY
+      x = x || 0
+      y = y || 0
+      return { x, y }
     },
     dragStart (event, nodeKey) {
       this.dragging = (nodeKey === false) ? false : nodeKey
@@ -315,8 +321,9 @@ export default {
       let x = 0
       let y = 0
       if (event && node) {
-        x = event.clientX - node.x
-        y = event.clientY - node.y
+        let pos = this.clientPos(event)
+        x = (pos.x) ? pos.x - node.x : node.x
+        y = (pos.y) ? pos.y - node.y : node.y
       }
       this.mouseOfst = { x, y }
     },
