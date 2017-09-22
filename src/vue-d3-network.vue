@@ -59,6 +59,13 @@ export default {
         y: 0
       },
       force: 500,
+      forces: {
+        center: false,
+        X: 0.5,
+        Y: 0.5,
+        manyBody: true,
+        link: true
+      },
       strLinks: true,
       fontSize: 10,
       dragging: false,
@@ -251,16 +258,18 @@ export default {
     },
     // -- Animation
     simulate (nodes, links) {
+      let forces = this.forces
       let sim = d3.forceSimulation()
         .stop()
         .alpha(0.5)
         // .alphaMin(0.05)
         .nodes(nodes)
-        // .force('center', d3.forceCenter(this.center.x, this.center.y))
-        .force('X', d3.forceX(this.center.x).strength(0.5))
-        .force('Y', d3.forceY(this.center.y).strength(0.5))
-        .force('charge', d3.forceManyBody().strength(-this.force))
-        .force('link', d3.forceLink(links).id(function (d) { return d.id }))
+
+      if (forces.center) sim.force('center', d3.forceCenter(this.center.x, this.center.y))
+      if (forces.X) sim.force('X', d3.forceX(this.center.x).strength(forces.X))
+      if (forces.Y) sim.force('Y', d3.forceY(this.center.y).strength(forces.Y))
+      if (forces.manyBody) sim.force('charge', d3.forceManyBody().strength(-this.force))
+      if (forces.link) sim.force('link', d3.forceLink(links).id(function (d) { return d.id }))
       return sim
     },
     animate () {

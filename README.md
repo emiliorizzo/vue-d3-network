@@ -104,6 +104,13 @@ See: [package.json](https://github.com/emiliorizzo/vue-d3-network/blob/master/pa
       - **y**: Number
 
   - **force**: Number
+  - **forces** Object:
+      - **center**: *Boolean*, use d3.forceCenter
+      - **X**: *strength*, use d3.forceX
+      - **Y**: *strength*, use d3.forceY
+      - **manyBody**: *Boolean*, use d3.forceManyBody, *takes the negative value of 'force'  option*
+      - **link**: *Boolean*, use  d3.forceLink
+  - 
 - **nodeSize**: Number, *node radius | size in px* 
 - **linkWidth**: Number, *link thickness in px*
   - **nodeLabels**: Boolean, *show nodes names*
