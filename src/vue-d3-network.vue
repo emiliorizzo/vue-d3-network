@@ -81,7 +81,8 @@ export default {
         y: 0
       },
       simulation: null,
-      nodeSvg: null
+      nodeSvg: null,
+      resizeListener: true
     }
   },
   render (createElement) {
@@ -135,10 +136,10 @@ export default {
     this.$nextTick(() => {
       this.animate()
     })
-    window.addEventListener('resize', this.onResize)
+    if (this.resizeListener) window.addEventListener('resize', this.onResize)
   },
   beforeDestroy () {
-    window.removeEventListener('resize', this.onResize)
+    if (this.resizeListener) window.removeEventListener('resize', this.onResize)
   },
   computed: {
     selected () {
