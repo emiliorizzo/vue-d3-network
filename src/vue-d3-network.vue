@@ -31,6 +31,9 @@ export default {
     linkCb: {
       type: Function
     },
+    customForces: {
+      type: Object
+    },
     selection: {
       type: Object,
       default: () => {
@@ -60,11 +63,11 @@ export default {
       },
       force: 500,
       forces: {
-        center: false,
+        Center: false,
         X: 0.5,
         Y: 0.5,
-        manyBody: true,
-        link: true
+        ManyBody: true,
+        Link: true
       },
       strLinks: true,
       fontSize: 10,
@@ -266,22 +269,50 @@ export default {
         // .alphaMin(0.05)
         .nodes(nodes)
 
-      if (forces.center) sim.force('center', d3.forceCenter(this.center.x, this.center.y))
-      if (forces.X) sim.force('X', d3.forceX(this.center.x).strength(forces.X))
-      if (forces.Y) sim.force('Y', d3.forceY(this.center.y).strength(forces.Y))
-      if (forces.manyBody) sim.force('charge', d3.forceManyBody().strength(-this.force))
-      if (forces.link) sim.force('link', d3.forceLink(links).id(function (d) { return d.id }))
+      if (forces.Center !== false) sim.force('center', d3.forceCenter(this.center.x, this.center.y))
+      if (forces.X !== false) {
+        sim.force('X', d3.forceX(this.center.x).strength(forces.X))
+      }
+      if (forces.Y !== false) {
+        sim.force('Y', d3.forceY(this.center.y).strength(forces.Y))
+      }
+      if (forces.ManyBody !== false) {
+        sim.force('charge', d3.forceManyBody().strength(-this.force))
+      }
+      if (forces.Link !== false) {
+        sim.force('link', d3.forceLink(links).id(function (d) { return d.id }))
+      }
+      sim = this.setCustomForces(sim)
       return sim
+    },
+    setCustomForces (sim) {
+      let forces = this.customForces
+      if (forces) {
+        for (let f in forces) {
+          let d3Func = this.getD3Func('force' + f)
+          if (d3Func) {
+            let args = forces[f]
+            sim.force('custom' + f, d3Func(...args))
+          }
+        }
+      }
+      return sim
+    },
+    getD3Func (name) {
+      let func = d3[name]
+      if (func && typeof (func) === 'function') return func
+      return null
     },
     animate () {
       if (this.simulation) this.simulation.stop()
-      this.simulation = this.simulate(this.nodes, this.links)
+      if (this.forces.Link !== false) this.simulation = this.simulate(this.nodes, this.links)
+      else this.simulation = this.simulate(this.nodes)
       this.simulation.restart()
     },
     reset () {
       this.animate()
       this.nodes = this.simulation.nodes()
-      this.links = this.simulation.force('link').links()
+      if (this.forces.links) this.links = this.simulation.force('link').links()
     },
     // -- Mouse Interaction
     move (event) {

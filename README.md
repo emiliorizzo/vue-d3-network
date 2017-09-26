@@ -89,6 +89,7 @@ See: [package.json](https://github.com/emiliorizzo/vue-d3-network/blob/master/pa
  **nodeCb**: Function(node) -> node, *node formatter*
  
  **linkCb**: Function(link) -> link, *node link formatter*
+ **customForces**: Object: { [d3Function]:args }
 
 
 
@@ -105,11 +106,11 @@ See: [package.json](https://github.com/emiliorizzo/vue-d3-network/blob/master/pa
 
   - **force**: Number
   - **forces** Object:
-      - **center**: *Boolean*, use d3.forceCenter
+      - **Center**: *Boolean*, use d3.forceCenter
       - **X**: *strength*, use d3.forceX
       - **Y**: *strength*, use d3.forceY
-      - **manyBody**: *Boolean*, use d3.forceManyBody, *takes the negative value of 'force'  option*
-      - **link**: *Boolean*, use  d3.forceLink
+      - **ManyBody**: *Boolean*, use d3.forceManyBody, *takes the negative value of 'force'  option*
+      - **Link**: *Boolean*, use  d3.forceLink
   - 
 - **nodeSize**: Number, *node radius | size in px* 
 - **linkWidth**: Number, *link thickness in px*
