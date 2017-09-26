@@ -69,6 +69,7 @@ export default {
         ManyBody: true,
         Link: true
       },
+      noNodes: false,
       strLinks: true,
       fontSize: 10,
       dragging: false,
@@ -105,7 +106,8 @@ export default {
       'labelOffset',
       'offset',
       'padding',
-      'nodeSize'
+      'nodeSize',
+      'noNodes'
     ]
 
     for (let prop of bindProps) {

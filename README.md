@@ -89,6 +89,7 @@ See: [package.json](https://github.com/emiliorizzo/vue-d3-network/blob/master/pa
  **nodeCb**: Function(node) -> node, *node formatter*
  
  **linkCb**: Function(link) -> link, *node link formatter*
+ 
  **customForces**: Object: { [d3Function]:args }
 
 
@@ -118,7 +119,7 @@ See: [package.json](https://github.com/emiliorizzo/vue-d3-network/blob/master/pa
   - **fontSize**: Number, *for node labels, px*
   - **strLinks**: Boolean, *draw links as rect lines* 
   - **resizeListener**:Boolean, defaults: true ,add listener to window.resize event
-  
+  - **noNodes**: Boolean, *no render nodes*
 - **canvasStyles**: Object
 
 

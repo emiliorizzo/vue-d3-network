@@ -31,7 +31,8 @@ export default {
     'nodeLabels',
     'labelOffset',
     'canvasStyles',
-    'nodeSym'
+    'nodeSym',
+    'noNodes'
   ],
   data () {
     return {
@@ -222,11 +223,12 @@ export default {
       ctx = this.setCtx(ctx, this.styles.node)
       for (let node of nodes) {
         if (this.isOnView(node)) {
-          let sprite = this.getNodeSprite(node)
-          ctx.drawImage(sprite, node.x - sprite.width / 2, node.y - sprite.height / 2)
-          // map node shape
-          this.mapShape(node, 'node', this.drawNode, hitCtx)
-
+          if (!this.noNodes) {
+            let sprite = this.getNodeSprite(node)
+            ctx.drawImage(sprite, node.x - sprite.width / 2, node.y - sprite.height / 2)
+            // map node shape
+            this.mapShape(node, 'node', this.drawNode, hitCtx)
+          }
           // draw  node labels
           if (this.nodeLabels) {
             node.size = this.nodeSize

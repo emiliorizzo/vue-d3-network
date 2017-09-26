@@ -28,7 +28,7 @@
           :stroke-width='linkWidth'
           :class='linkClass(link.id) + " curve"')
     //- -> nodes
-    g.nodes#l-nodes
+    g.nodes#l-nodes(v-if='!noNodes')
       template(v-for='(node,key) in nodes')
         svg(v-if='svgIcon(node)' 
           :key='key'
@@ -79,6 +79,7 @@ export default {
   name: 'svg-renderer',
   props: ['size',
     'nodes',
+    'noNodes',
     'selected',
     'linksSelected',
     'links',
