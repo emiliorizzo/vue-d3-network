@@ -4,8 +4,8 @@
     :height="size.h"
     class="net-svg" 
     @mouseup='emit("dragEnd",[$event])'
-    @touchend.prevent='emit("dragEnd",[$event])'
-    @touchstart.prevent=''
+    @touchend.passive='emit("dragEnd",[$event])'
+    @touchstart.passive=''
     )
    
     //-> links  
@@ -16,15 +16,15 @@
           :x2='link.target.x' 
           :y2='link.target.y' 
           @click='emit("linkClick",[$event,link])'
-          @touchstart='emit("linkClick",[$event,link])'
+          @touchstart.passive='emit("linkClick",[$event,link])'
           :stroke-width='linkWidth'
           :class='linkClass(link.id)')
     
     g.links#l-links(v-else)
-        path(v-for="link in links" 
+        path(v-for="link in links" ouch
           :d="curve(link)"
           @click='emit("linkClick",[$event,link])'
-          @touchstart='emit("linkClick",[$event,link])'
+          @touchstart.passive='emit("linkClick",[$event,link])'
           :stroke-width='linkWidth'
           :class='linkClass(link.id) + " curve"')
     //- -> nodes
@@ -36,9 +36,9 @@
           :width='getNodeSize(node, "width")'
           :height='getNodeSize(node, "height")' 
           @click='emit("nodeClick",[$event,node])'
-          @touchend.prevent='emit("nodeClick",[$event,node])'
+          @touchend.passive='emit("nodeClick",[$event,node])'
           @mousedown.prevent='emit("dragStart",[$event,key])'
-          @touchstart.prevent='emit("dragStart",[$event,key])'
+          @touchstart.passive='emit("dragStart",[$event,key])'
           :x='node.x - getNodeSize(node, "width") / 2'
           :y='node.y - getNodeSize(node, "height") / 2' 
           :style='nodeStyle(node)'
@@ -52,9 +52,9 @@
         :key='key'
         :r="getNodeSize(node) / 2" 
         @click='emit("nodeClick",[$event,node])'
-        @touchend.prevent='emit("nodeClick",[$event,node])'
+        @touchend.passive='emit("nodeClick",[$event,node])'
         @mousedown.prevent='emit("dragStart",[$event,key])'
-        @touchstart.prevent='emit("dragStart",[$event,key])'
+        @touchstart.passive='emit("dragStart",[$event,key])'
         :cx="node.x" 
         :cy="node.y" 
         :style='nodeStyle(node)'
