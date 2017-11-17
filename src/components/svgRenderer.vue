@@ -18,7 +18,7 @@
           @click='emit("linkClick",[$event,link])'
           @touchstart.passive='emit("linkClick",[$event,link])'
           :stroke-width='linkWidth'
-          :class='linkClass(link.id)')
+          :style='linkStyle(link)'
     
     g.links#l-links(v-else)
         path(v-for="link in links" ouch
@@ -26,7 +26,7 @@
           @click='emit("linkClick",[$event,link])'
           @touchstart.passive='emit("linkClick",[$event,link])'
           :stroke-width='linkWidth'
-          :class='linkClass(link.id) + " curve"')
+          :style='linkStyle(link)'
     //- -> nodes
     g.nodes#l-nodes(v-if='!noNodes')
       template(v-for='(node,key) in nodes')
@@ -142,6 +142,9 @@ export default {
     },
     nodeStyle (node) {
       return (node._color) ? 'fill: ' + node._color : ''
+    },
+    linkStyle (link) {
+      return (link._color) ? 'stroke: ' + link._color : ''
     },
     nodeClass (node) {
       let cssClass = node._cssClass || ''

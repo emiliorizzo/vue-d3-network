@@ -78,6 +78,7 @@ See: [package.json](https://github.com/emiliorizzo/vue-d3-network/blob/master/pa
   - **id**: link id. *If not provided uses array index*
   - **tid**: id of target node
   - **sid**: id of source node
+  - **_color**: link color, e.g. *red*, *#aa00bb*,
 
  **selection** : Object, *links and nodes selected*
   

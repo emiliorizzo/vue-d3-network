@@ -174,7 +174,7 @@ export default {
       ctx.moveTo(link.source.x, link.source.y)
       ctx.lineTo(link.target.x, link.target.y)
       ctx.lineWidth = this.linkWidth
-      ctx.strokeStyle = link.color
+      ctx.strokeStyle = (link._color) ? link._color : link.color
       ctx.stroke()
     },
     // draw text to canvas
@@ -444,7 +444,7 @@ export default {
 </script>
 <style lang="stylus">
   canvas
-    position: absolute
-    top: 0
-    left: 0
+    position absolute
+    top 0
+    left 0
 </style>
