@@ -18,15 +18,20 @@
           @click='emit("linkClick",[$event,link])'
           @touchstart.passive='emit("linkClick",[$event,link])'
           :stroke-width='linkWidth'
+          :class='linkClass(link.id)'
           :style='linkStyle(link)'
+          v-bind='link._svgAttrs'
+          )
     
     g.links#l-links(v-else)
-        path(v-for="link in links" ouch
+        path(v-for="link in links"
           :d="curve(link)"
           @click='emit("linkClick",[$event,link])'
           @touchstart.passive='emit("linkClick",[$event,link])'
           :stroke-width='linkWidth'
+          :class='linkClass(link.id) + " curve"'
           :style='linkStyle(link)'
+          v-bind='link._svgAttrs')
     //- -> nodes
     g.nodes#l-nodes(v-if='!noNodes')
       template(v-for='(node,key) in nodes')
@@ -45,6 +50,7 @@
           :title="node.name"
           :class='"node-svg " + nodeClass(node)'
           v-html='svgIcon(node).data'
+          v-bind='node._svgAttrs'
           )
 
         //- default circle nodes
@@ -60,6 +66,7 @@
         :style='nodeStyle(node)'
         :title="node.name"
         :class="nodeClass(node)"
+        v-bind='node._svgAttrs'
         )
 
     //- -> Labels  

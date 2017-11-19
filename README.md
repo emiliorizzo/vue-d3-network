@@ -69,8 +69,9 @@ See: [package.json](https://github.com/emiliorizzo/vue-d3-network/blob/master/pa
   - **_labelClass**: node label css class name
   - **svgSym**: node icon, svg document (only works in svg renderer)
   - -**_size** : node size *(svg renderer only)*
-  - **_whidth**: node width *(svg renderer only)*
+  - **_width**: node width *(svg renderer only)*
   - **_height**: node height *(svg renderer only)*
+  - **_svgAttrs**: Object, svg node attributes
       
 
  **net-links**: Array *of links objects*: 
@@ -79,6 +80,7 @@ See: [package.json](https://github.com/emiliorizzo/vue-d3-network/blob/master/pa
   - **tid**: id of target node
   - **sid**: id of source node
   - **_color**: link color, e.g. *red*, *#aa00bb*,
+  - **_svgAttrs**: Object, svg line attributes
 
  **selection** : Object, *links and nodes selected*
   
@@ -127,7 +129,7 @@ See: [package.json](https://github.com/emiliorizzo/vue-d3-network/blob/master/pa
 ## Events
 
 - **node-click**:  *fired when click on node*, emits **(event,node-object)**
-- **link-click**:  *fired when click on link*, emits **(event, link-id)**
+- **link-click**:  *fired when click on link*, emits **(event, link-object)**
 - **screen-shot**: *fired when screenshot creation is done*, emits **(error)**
 
 ## Methods
