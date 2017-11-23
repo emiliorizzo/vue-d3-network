@@ -84,6 +84,7 @@ export default {
         x: 0,
         y: 0
       },
+      simStart: false,
       simulation: null,
       nodeSvg: null,
       resizeListener: true
@@ -238,6 +239,7 @@ export default {
         // initialize node coords
         if (!node.x) vm.$set(node, 'x', 0)
         if (!node.y) vm.$set(node, 'y', 0)
+
         // node default name
         if (!node.name) vm.$set(node, 'name', 'node ' + node.id)
         if (node.svgSym) {
@@ -285,8 +287,27 @@ export default {
         sim.force('link', d3.forceLink(links).id(function (d) { return d.id }))
       }
       sim = this.setCustomForces(sim)
+      sim.on('tick', this.simTick);
+      sim.on('end', this.simEnd);
       return sim
     },
+
+    simTick() {
+      if(this.simStart) {
+        this.$emit('sim-tick');
+      }
+      else {
+        this.$emit('sim-start');
+      }
+
+      this.simStart = true;
+    },
+
+    simEnd() {
+      this.simStart = false;
+      this.$emit('sim-end');
+    },
+
     setCustomForces (sim) {
       let forces = this.customForces
       if (forces) {
@@ -360,6 +381,23 @@ export default {
     linkClick (event, link) {
       this.$emit('link-click', event, link)
     },
+
+    mouseEnterNode(event, node) {
+      this.$emit('node-mouse-enter', event, node);
+    },
+
+    mouseLeaveNode(event, node) {
+      this.$emit('node-mouse-leave', event, node);
+    },
+
+    mouseEnterLink(event, link) {
+      this.$emit('link-mouse-enter', event, link);
+    },
+
+    mouseLeaveLink(event, link) {
+      this.$emit('link-mouse-leave', event, link);
+    },
+
     setMouseOffset (event, node) {
       let x = 0
       let y = 0
@@ -400,14 +438,14 @@ export default {
 .net
   height: 100%
   margin: 0
-.net-svg 
+.net-svg
   // fill: white // background color to export as image
-.node 
+.node
   stroke: alpha($dark,0.7)
   stroke-width: 3px
   transition: fill 0.5s ease
   fill: $white
- 
+
 .node.selected
   stroke: $color2
 
@@ -416,7 +454,7 @@ export default {
 
 .link
   stroke: alpha($dark,0.3)
-   
+
 .node
 .link
   stroke-linecap: round
@@ -431,5 +469,5 @@ export default {
 
 .node-label
   fill: $dark
-</style>  
+</style>
 

@@ -2,17 +2,26 @@
   #example(@keyup.esc='setTool("pointer")')
     //-> Network
     d3-network(
-    ref='net'  
-    :net-nodes="nodes" 
+    ref='net'
+    :net-nodes="nodes"
     :net-links="links"
     :selection="{nodes: selected, links: linksSelected}"
     :options="options"
     :node-sym='nodeSym'
+    @sim-start='simStart'
+    @sim-end='simEnd'
+    @sim-tick='simTick'
+    @node-mouse-enter='mouseEnterNode'
+    @node-mouse-leave='mouseLeaveNode'
+    @link-mouse-enter='mouseEnterLink'
+    @link-mouse-leave='mouseLeaveLink'
     @node-click="nodeClick"
     @link-click="linkClick"
     @screen-shot='screenShotDone'
     )
-     //- :node-cb='nodeCb'
+
+
+    //- :node-cb='nodeCb'
     //-> toaster
     .toaster(v-if='toaster')
       p {{toaster}}
@@ -23,45 +32,48 @@
         input(id='to-svg' type='radio' :value='true' v-model='toSvg')
         label(for='to-svg') svg
         input(id='to-png' type='radio' :value='false' v-model='toSvg')
-        label(for='to-png') png 
+        label(for='to-png') png
         .buttons
           button.btn(@click='takeScreenShot') Export
-          button.btn(@click='svgChoice=false') Cancel  
+          button.btn(@click='svgChoice=false') Cancel
     //-> Tools
     .tools
       ul
-        li(v-for='t,to in tools') 
+        li(v-for='t,to in tools')
           button.circle(@click='setTool(to)' :class='buttonClass(to)')
             span(:class='t.class' )
         li
           button.circle(@click='screenShot')
             span.icon-camera
+
       .tip {{ tools[tool].tip }}
-    
+
     //-> Selection
     selection( v-if='showSelection'
-      @action="selectionEvent" 
+      @action="selectionEvent"
       :data="selection()")
     //-> Menu
     .over
       .menu-net(v-if="showMenu")
         .close(@click="setShowMenu(false)")
         d3-net-example-menu(
-          :nodes="nodes" 
-          :links="links" 
+          :nodes="nodes"
+          :links="links"
           :settings="settings"
-          :options="options" 
-          @options="changeOptions" 
+          :options="options"
+          :status='simStatus'
+          :mouseStatus='mouseStatus'
+          @options="changeOptions"
           @simulate="reset"
           @reset="resetOptions"
           )
-      
+
       .options.menu(v-else)
         button.menu(@click="setShowMenu(true)" :class='(showHint) ? "anim-button" :""')
           span(class="icon-equalizerh")
-        h2.hint(v-if='showHint') 
+        h2.hint(v-if='showHint')
           span.icon ☜
-          span menu  
+          span menu
         .title
           h1 {{app.name}}
         ul.inline
@@ -69,7 +81,7 @@
             small nodes: {{ nodes.length }}
           li
             small links: {{ links.length }}
-           
+
 </template>
 <script>
 import * as utils from './utils.js'
@@ -133,6 +145,10 @@ export default {
       }
       return node
     }
+
+    data.simStatus = "";
+    data.mouseStatus = "";
+
     return data
   },
   mounted () {
@@ -148,6 +164,35 @@ export default {
     }
   },
   methods: {
+
+    simStart() {
+      this.simStatus = "Start";
+    },
+
+    simEnd(){
+      this.simStatus = "Finish";
+    },
+
+    simTick() {
+      this.simStatus = "Running";
+    },
+
+    mouseEnterNode(event, node) {
+      this.mouseStatus = 'Enter Node: '+node.id;
+    },
+
+    mouseLeaveNode(event, node) {
+      this.mouseStatus = 'Leave Node: '+node.id;
+    },
+
+    mouseEnterLink(event, link) {
+      this.mouseStatus = 'Enter Link:'+link.id;
+    },
+
+    mouseLeaveLink(event, link) {
+      this.mouseStatus = 'Leave Link:'+link.id;
+    },
+
     screenShot () {
       if (this.options.canvas) this.takeScreenShot(false)
       else this.svgChoice = true
@@ -328,7 +373,7 @@ export default {
 <style lang="stylus">
 @import '../vars.styl'
 @import '../lib/node-style.styl'
-body 
+body
   overflow-x: hidden
 #example
 .net
@@ -339,7 +384,7 @@ button
   background-color:$bg
 
 .net-svg
-  fill: $bg   // sets color to image export background  
+  fill: $bg   // sets color to image export background
 
 #example
     position: absolute
@@ -349,13 +394,13 @@ button
     top: 0
     left: 0
     bottom:0
-    box-sizing: content-box  
+    box-sizing: content-box
 button.menu
   width: 1.5em
   height: 1.5em
   padding: 0
   font-size 2em
-  font-weight: bold  
+  font-weight: bold
   color: $color
   border: $border
   box-shadow: $sh
@@ -367,7 +412,7 @@ button.menu
   height: 4em
   font-weight: bold
   border-radius: 50%
-  border:$border  
+  border:$border
 .connected
   color: $color
 
@@ -375,8 +420,8 @@ button.menu
   color: $warn
 
 .node.nodeodd #fill, .node.nodeodd
-  fill: red 
-.node-label.odd 
+  fill: red
+.node-label.odd
   fill: red
 .over
   position: absolute
@@ -414,7 +459,7 @@ button.menu
       color: $dark
 
 ul.inline
-  display: inline 
+  display: inline
   margin:0
   padding:0
   color: white
@@ -426,7 +471,7 @@ ul.inline
     &:after
       content: '/'
       margin: 0 0.5em
- 
+
 .sym-pointer
   &:after
     content: $sym-pointer
@@ -438,7 +483,7 @@ ul.inline
 .sym-parent
   &:after
     content: $sym-parent
-    
+
 .cross-cursor
   cursor: crosshair
 
@@ -459,7 +504,7 @@ ul.inline
       width: 3em
       height: 3em
       padding: 0
-      &:hover 
+      &:hover
         border-color: $color2
       span
         font-size: 2.5em
@@ -467,11 +512,11 @@ ul.inline
         color: $color
         &:hover
           color:$color2
-  .selected 
+  .selected
     border-color: $color2
     span
       color: $color2
-        
+
 .tip
   margin-right: 1em
   font-style: italic
@@ -482,7 +527,7 @@ ul.inline
   background-color: $bg-plus
   padding: .5em 1em
   border: $dark solid 2px
-  border-width: 6px 2px 3px 
+  border-width: 6px 2px 3px
   position: relative
   margin-bottom: 2em
   border-radius: .5em
@@ -494,12 +539,12 @@ ul.inline
       color: $dark
     &:hover
       &::after
-        color:$color   
+        color:$color
 
 .title
   border: 1.5px $white
   border-style: dotted none
-  padding: .5em 0 
+  padding: .5em 0
   margin: 1.5em 1em .5em .5em
   h1
     color: $white
@@ -513,7 +558,7 @@ ul.inline
   background-color: white
   border: $border
   border-radius: .25em
-  min-width: 20em 
+  min-width: 20em
   box-shadow: $sh
   animation-name: toaster-anim
   animation-duration: .25s
@@ -545,12 +590,12 @@ ul.inline
 @keyframes toaster-anim
   0%
     opacity: 0
-    transform: scaleY(0) translateY(5em) 
+    transform: scaleY(0) translateY(5em)
   100%
     opacity: 1
-    transform: scaleY(1)  translateY(0) 
+    transform: scaleY(1)  translateY(0)
 
- h2.hint 
+ h2.hint
   display: inline
   position: absolute
   margin-left: 1em
@@ -558,7 +603,7 @@ ul.inline
   font-size: 1em
   font-style: italic
   letter-spacing: .125em
-  text-shadow:  1px 1px 5px rgba(0,0,0,.5), 2px 2px 15px $color2 
+  text-shadow:  1px 1px 5px rgba(0,0,0,.5), 2px 2px 15px $color2
   opacity: 0
   animation-name: hint-anim
   animation-delay: 1s
@@ -574,10 +619,10 @@ ul.inline
     opacity: 0
     transform: translateX(6em)
     letter-spacing: .125em
-  40% 
+  40%
     opacity: 1
     transform: translateX(-1.5em)
-    
+
   50%
     transform: translateX(-.1em)
     letter-spacing: .5em
@@ -598,12 +643,12 @@ ul.inline
   0%
     transform: rotate(0deg)
   6%
-    transform: rotate(-30deg) 
-  15%    
-    transform: rotate(10deg) scale(.9, .9)  
-  20%    
-    transform: rotate(-5deg) 
-    
+    transform: rotate(-30deg)
+  15%
+    transform: rotate(10deg) scale(.9, .9)
+  20%
+    transform: rotate(-5deg)
+
   35%
     transform: rotate(2deg) scale(1,1)
     box-shadow: 2px 2px 10px alpha($color2,.8)
