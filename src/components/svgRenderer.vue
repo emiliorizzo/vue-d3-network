@@ -69,6 +69,7 @@
         @touchend.passive='emit("nodeClick",[$event,node])'
         @mousedown.prevent='emit("dragStart",[$event,key])'
         @touchstart.passive='emit("dragStart",[$event,key])'
+        :id='"node"+node.id'
         :cx="node.x"
         :cy="node.y"
         :style='nodeStyle(node)'
