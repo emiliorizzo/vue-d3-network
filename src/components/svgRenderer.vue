@@ -64,7 +64,7 @@
     //-> Links Labels
     g.labels#link-labels(v-if='linkLabels')
       text.link-label(v-for="link in links")
-        textPath(v-bind:xlink:href="'#' + linkId(link)" startOffset= "50%") {{ link.name || link.id }}
+        textPath(v-bind:xlink:href="'#' + linkId(link)" startOffset= "50%") {{ link.name }}
     
     //- -> Node Labels  
     g.labels#node-labels( v-if="nodeLabels")
