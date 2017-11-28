@@ -251,6 +251,7 @@ export default {
     },
 
     buildLinks (links) {
+      let vm = this
       return links.concat().map((link) => {
         // link formatter option
         link = this.itemCb(this.linkCb, link)
