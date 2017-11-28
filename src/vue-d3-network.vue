@@ -251,7 +251,8 @@ export default {
     },
 
     buildLinks (links) {
-      return links.concat().map((link) => {
+      let vm = this
+      return links.concat().map((link, index) => {
         // link formatter option
         link = this.itemCb(this.linkCb, link)
         // source and target for d3
