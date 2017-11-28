@@ -75,6 +75,7 @@ export default {
       dragging: false,
       linkWidth: 1,
       nodeLabels: false,
+      linkLabels: false,
       nodeSize: 5,
       mouseOfst: {
         x: 0,
@@ -102,6 +103,7 @@ export default {
       'strLinks',
       'linkWidth',
       'nodeLabels',
+      'linkLabels',
       'fontSize',
       'labelOffset',
       'offset',
@@ -396,40 +398,49 @@ export default {
 </script>
 
 <style lang="stylus">
- @import 'vars.styl'
-.net
-  height: 100%
-  margin: 0
-.net-svg 
-  // fill: white // background color to export as image
-.node 
-  stroke: alpha($dark,0.7)
-  stroke-width: 3px
-  transition: fill 0.5s ease
-  fill: $white
- 
-.node.selected
-  stroke: $color2
+  @import 'vars.styl'
 
-.node.pinned
-  stroke: alpha($warn,.6)
+  .net
+    height 100%
+    margin 0
 
-.link
-  stroke: alpha($dark,0.3)
-   
-.node
-.link
-  stroke-linecap: round
-  &:hover
-      stroke: $warn
-      stroke-width: 5px
- .link.selected
-    stroke: alpha($color2,0.6)
+  .net-svg
+    // fill: white // background color to export as image
 
-.curve
-  fill: none
+  .node
+    stroke alpha($dark, 0.7)
+    stroke-width 3px
+    transition fill 0.5s ease
+    fill $white
 
-.node-label
-  fill: $dark
+  .node.selected
+    stroke $color2
+
+  .node.pinned
+    stroke alpha($warn, 0.6)
+
+  .link
+    stroke alpha($dark, 0.3)
+
+  .node, .link
+    stroke-linecap round
+
+    &:hover
+      stroke $warn
+      stroke-width 5px
+
+  .link.selected
+    stroke alpha($color2, 0.6)
+
+  .curve
+    fill none
+
+  .node-label
+    fill $dark
+
+  .link-label
+    fill $dark
+    transform translate(0, -0.5em)
+    text-anchor middle
 </style>  
 

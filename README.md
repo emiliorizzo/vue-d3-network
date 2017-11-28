@@ -77,6 +77,7 @@ See: [package.json](https://github.com/emiliorizzo/vue-d3-network/blob/master/pa
  **net-links**: Array *of links objects*: 
     
   - **id**: link id. *If not provided uses array index*
+  - **name**: node name. *If not provided uses: 'link [link_id]'*
   - **tid**: id of target node
   - **sid**: id of source node
   - **_color**: link color, e.g. *red*, *#aa00bb*,
@@ -119,6 +120,7 @@ See: [package.json](https://github.com/emiliorizzo/vue-d3-network/blob/master/pa
 - **nodeSize**: Number, *node radius | size in px* 
 - **linkWidth**: Number, *link thickness in px*
   - **nodeLabels**: Boolean, *show nodes names*
+  - **linkLabels**: Boolean, *show links names*
   - **fontSize**: Number, *for node labels, px*
   - **strLinks**: Boolean, *draw links as rect lines* 
   - **resizeListener**:Boolean, defaults: true ,add listener to window.resize event

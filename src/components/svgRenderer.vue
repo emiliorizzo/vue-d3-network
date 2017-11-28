@@ -1,5 +1,8 @@
 <template lang="pug">
-  svg(ref="svg" 
+  svg(
+    xmlns="http://www.w3.org/2000/svg" 
+    xmlns:xlink= "http://www.w3.org/1999/xlink"
+    ref="svg" 
     :width="size.w" 
     :height="size.h"
     class="net-svg" 
@@ -9,29 +12,17 @@
     )
    
     //-> links  
-    g.links#l-links( v-if='strLinks')
-        line( v-for="link,index in links" 
-          :x1='link.source.x' 
-          :y1='link.source.y' 
-          :x2='link.target.x' 
-          :y2='link.target.y' 
-          @click='emit("linkClick",[$event,link])'
-          @touchstart.passive='emit("linkClick",[$event,link])'
-          :stroke-width='linkWidth'
-          :class='linkClass(link.id)'
-          :style='linkStyle(link)'
-          v-bind='link._svgAttrs'
-          )
-    
-    g.links#l-links(v-else)
+    g.links#l-links
         path(v-for="link in links"
-          :d="curve(link)"
+          :d="linkPath(link)"
+          :id="linkId(link)"
           @click='emit("linkClick",[$event,link])'
           @touchstart.passive='emit("linkClick",[$event,link])'
           :stroke-width='linkWidth'
           :class='linkClass(link.id) + " curve"'
           :style='linkStyle(link)'
           v-bind='link._svgAttrs')
+            
     //- -> nodes
     g.nodes#l-nodes(v-if='!noNodes')
       template(v-for='(node,key) in nodes')
@@ -69,7 +60,13 @@
         v-bind='node._svgAttrs'
         )
 
-    //- -> Labels  
+
+    //-> Links Labels
+    g.labels#link-labels(v-if='linkLabels')
+      text.link-label(v-for="link in links")
+        textPath(v-bind:xlink:href="'#' + linkId(link)" startOffset= "50%") {{ link.name || link.id }}
+    
+    //- -> Node Labels  
     g.labels#node-labels( v-if="nodeLabels")
       text.node-label(v-for="node in nodes"
         :x='node.x + (getNodeSize(node) / 2) + (fontSize / 2)'
@@ -96,6 +93,7 @@ export default {
     'strLinks',
     'linkWidth',
     'nodeLabels',
+    'linkLabels',
     'labelOffset',
     'nodeSym'],
 
@@ -132,6 +130,9 @@ export default {
         cb(null, svgExport.save(svg))
       }
     },
+    linkId (link) {
+      return 'link-' + link.id
+    },
     linkClass (linkId) {
       let cssClass = 'link '
       if (this.linksSelected.hasOwnProperty(linkId)) {
@@ -139,13 +140,18 @@ export default {
       }
       return cssClass
     },
-    curve (link) {
+    linkPath (link) {
       let d = {
-        M: [link.source.x, link.source.y],
-        Q: [link.source.x, link.target.y],
-        X: [link.target.x, link.target.y]
+        M: [link.source.x | 0, link.source.y | 0],
+        X: [link.target.x | 0, link.target.y | 0]
       }
-      return 'M ' + d.M + ' Q ' + d.Q.join(' ') + ' ' + d.X
+      if (this.strLinks) {
+        return 'M ' + d.M.join(' ') + ' L' + d.X.join(' ')
+      }
+      else {
+        d.Q = [link.source.x, link.target.y]
+        return 'M ' + d.M + ' Q ' + d.Q.join(' ') + ' ' + d.X
+      }
     },
     nodeStyle (node) {
       return (node._color) ? 'fill: ' + node._color : ''
