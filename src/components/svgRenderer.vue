@@ -90,7 +90,8 @@ export default {
   components: {
     panZoom
   },
-  props: ['size',
+  props: [
+    'size',
     'nodes',
     'noNodes',
     'selected',
@@ -166,8 +167,7 @@ export default {
       }
       if (this.strLinks) {
         return 'M ' + d.M.join(' ') + ' L' + d.X.join(' ')
-      }
-      else {
+      } else {
         d.Q = [left.x, right.y]
         return 'M ' + d.M + ' Q ' + d.Q.join(' ') + ' ' + d.X
       }
