@@ -15,11 +15,11 @@
     g.links#l-links
         path(v-for="link in links"
           :d="linkPath(link)"
-          :id="linkId(link)"
+          :id="link.id"
           @click='emit("linkClick",[$event,link])'
           @touchstart.passive='emit("linkClick",[$event,link])'
           :stroke-width='linkWidth'
-          :class='linkClass(link.id) + " curve"'
+          :class='linkClass(link.id)'
           :style='linkStyle(link)'
           v-bind='link._svgAttrs')
             
@@ -63,8 +63,8 @@
 
     //-> Links Labels
     g.labels#link-labels(v-if='linkLabels')
-      text.link-label(v-for="link in links")
-        textPath(v-bind:xlink:href="'#' + linkId(link)" startOffset= "50%") {{ link.name }}
+      text.link-label(v-for="link in links" )
+        textPath(v-bind:xlink:href="'#' + link.id" startOffset= "50%") {{ link.name }}
     
     //- -> Node Labels  
     g.labels#node-labels( v-if="nodeLabels")
@@ -130,13 +130,13 @@ export default {
         cb(null, svgExport.save(svg))
       }
     },
-    linkId (link) {
-      return 'link-' + link.id
-    },
     linkClass (linkId) {
       let cssClass = 'link '
       if (this.linksSelected.hasOwnProperty(linkId)) {
         cssClass += 'selected'
+      }
+      if (!this.strLinks) {
+        cssClass += 'curve'
       }
       return cssClass
     },
