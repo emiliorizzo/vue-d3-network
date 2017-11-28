@@ -81,7 +81,8 @@ import svgExport from '../lib/svgExport.js'
 
 export default {
   name: 'svg-renderer',
-  props: ['size',
+  props: [
+    'size',
     'nodes',
     'noNodes',
     'selected',
@@ -95,7 +96,8 @@ export default {
     'nodeLabels',
     'linkLabels',
     'labelOffset',
-    'nodeSym'],
+    'nodeSym'
+  ],
 
   computed: {
     nodeSvg () {
@@ -147,8 +149,7 @@ export default {
       }
       if (this.strLinks) {
         return 'M ' + d.M.join(' ') + ' L' + d.X.join(' ')
-      }
-      else {
+      } else {
         d.Q = [link.source.x, link.target.y]
         return 'M ' + d.M + ' Q ' + d.Q.join(' ') + ' ' + d.X
       }

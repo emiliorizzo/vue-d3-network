@@ -129,11 +129,9 @@ export default {
     return createElement('div', {
       attrs: { class: 'net' },
       on: { 'mousemove': this.move, '&touchmove': this.move }
-    }, [
-        createElement(renderer, {
-          props, ref, on: { action: this.methodCall }
-        })
-      ])
+    }, [createElement(renderer, {
+      props, ref, on: { action: this.methodCall }
+    })])
   },
   created () {
     this.updateOptions(this.options)
