@@ -48,6 +48,9 @@
       li
         input(type="checkbox" v-model="opts.nodeLabels" @change="change")
         label Show node names
+      li
+        input(type="checkbox" v-model="opts.linkLabels" @change="change")
+        label Show link names
       li(v-if="opts.nodeLabels")
         label Font Size:
           span {{ opts.fontSize }}
@@ -64,10 +67,10 @@
     ul.test-menu
       li
         label Simulation Status
-        span {{ status }}
+        label {{ status }}
       li
         label Mouse Status
-        span {{ mouseStatus }}
+        label {{ mouseStatus }}
 
 
 

@@ -69,7 +69,6 @@
         @touchend.passive='emit("nodeClick",[$event,node])'
         @mousedown.prevent='emit("dragStart",[$event,key])'
         @touchstart.passive='emit("dragStart",[$event,key])'
-        :id='"node-"+node.id'
         :cx="node.x"
         :cy="node.y"
         :style='nodeStyle(node)'
@@ -84,9 +83,18 @@
         :x='node.x + (getNodeSize(node) / 2) + (fontSize / 2)'
         :y='node.y + labelOffset.y'
         :font-size="fontSize"
-        :class='(node._labelClass) ? node._labelClass : ""'
+        :class='(node._labelClass) ? node._labelClass : "node-label"'
         :stroke-width='fontSize / 8'
       ) {{ node.name }}
+
+    g.labels#link-labels(v-if="linkLabels")
+      text.link-label(v-for="link in links"
+        :x='xCoordForLink(link)'
+        :y='yCoordForLink(link)'
+        :class='(link._labelClass) ? link._labelClass : "link-label"'
+        :font-size="fontSize"
+        :stroke-width='fontSize / 8'
+      ) {{ link.name }}
 </template>
 <script>
 import svgExport from '../lib/svgExport.js'
@@ -105,6 +113,7 @@ export default {
     'strLinks',
     'linkWidth',
     'nodeLabels',
+    'linkLabels',
     'labelOffset',
     'nodeSym'],
 
@@ -186,8 +195,28 @@ export default {
       if (svg) {
         return svgExport.toSymbol(svg)
       }
-    }
+    },
+
+    xCoordForLink(d) {
+      if (d.target.x > d.source.x) {
+        return (d.source.x + (d.target.x - d.source.x)/2); 
+      }
+      else {
+        return (d.target.x + (d.source.x - d.target.x)/2); 
+      }
+    },
+
+    yCoordForLink(d) {
+      if (d.target.y > d.source.y) {
+        return (d.source.y + (d.target.y - d.source.y)/2); 
+      }
+      else {
+        return (d.target.y + (d.source.y - d.target.y)/2); 
+      }
+    },
   }
 }
 </script>
+<style>
 
+</style>

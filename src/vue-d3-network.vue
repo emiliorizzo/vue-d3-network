@@ -75,6 +75,7 @@ export default {
       dragging: false,
       linkWidth: 1,
       nodeLabels: false,
+      linkLabels: false,
       nodeSize: 5,
       mouseOfst: {
         x: 0,
@@ -103,6 +104,7 @@ export default {
       'strLinks',
       'linkWidth',
       'nodeLabels',
+      'linkLabels',
       'fontSize',
       'labelOffset',
       'offset',
@@ -467,7 +469,7 @@ export default {
 .curve
   fill: none
 
-.node-label
+.node-label, .link-label
   fill: $dark
 </style>
 

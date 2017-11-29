@@ -68,8 +68,8 @@ const isLinked = (nodeId, links) => {
 }
 
 // link formatter
-export const newLink = (id, sid, tid) => {
-  return { id, sid, tid }
+export const newLink = (id, sid, tid, name) => {
+  return { id, sid, tid, name }
 }
 
 // generates random links => [ links ]
@@ -82,7 +82,7 @@ export const makeRandomLinks = (nodes, maxLinks) => {
       let target = Math.floor(Math.random() * nodes.length)
       let source = node.id
       id++
-      links.push(newLink(id, source, target))
+      links.push(newLink(id, source, target, 'link-'+id))
     }
   }
   return links
