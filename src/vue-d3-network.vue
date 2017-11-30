@@ -440,40 +440,37 @@ export default {
 </script>
 
 <style lang="stylus">
- @import 'vars.styl'
-.net
-  height: 100%
-  margin: 0
-.net-svg
-  // fill: white // background color to export as image
-.node
-  stroke: alpha($dark,0.7)
-  stroke-width: 3px
-  transition: fill 0.5s ease
-  fill: $white
-
-.node.selected
-  stroke: $color2
-
-.node.pinned
-  stroke: alpha($warn,.6)
-
-.link
-  stroke: alpha($dark,0.3)
-
-.node
-.link
-  stroke-linecap: round
-  &:hover
-      stroke: $warn
-      stroke-width: 5px
- .link.selected
-    stroke: alpha($color2,0.6)
-
-.curve
-  fill: none
-
-.node-label, .link-label
-  fill: $dark
-</style>
+  @import 'vars.styl'
+  .net
+    height 100%
+    margin 0
+  .net-svg
+    // fill: white // background color to export as image
+  .node
+    stroke alpha($dark, 0.7)
+    stroke-width 3px
+    transition fill 0.5s ease
+    fill $white
+  .node.selected
+    stroke $color2
+  .node.pinned
+    stroke alpha($warn, 0.6)
+  .link
+    stroke alpha($dark, 0.3)
+  .node, .link
+    stroke-linecap round
+    &:hover
+      stroke $warn
+      stroke-width 5px
+  .link.selected
+    stroke alpha($color2, 0.6)
+  .curve
+    fill none
+  .node-label
+    fill $dark
+  .link-label
+    fill $dark
+    transform translate(0, -0.5em)
+    text-anchor middle
+</style>  
 

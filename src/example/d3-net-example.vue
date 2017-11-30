@@ -374,291 +374,261 @@ export default {
 }
 </script>
 <style lang="stylus">
-@import '../vars.styl'
-@import '../lib/node-style.styl'
-body
-  overflow-x: hidden
-#example
-.net
-button
-  margin: 0
-  padding: 0
-.net
-  background-color:$bg
-
-.net-svg
-  fill: $bg   // sets color to image export background
-
-#example
-    position: absolute
-    max-width: 100%
-    width: 100%
-    height: calc(100% - 4px)
-    top: 0
-    left: 0
-    bottom:0
-    box-sizing: content-box
-button.menu
-  width: 1.5em
-  height: 1.5em
-  padding: 0
-  font-size 2em
-  font-weight: bold
-  color: $color
-  border: $border
-  box-shadow: $sh
-  &:hover
-    color:$color2
-    border-color: $color2
-.circle
-  width: 4em
-  height: 4em
-  font-weight: bold
-  border-radius: 50%
-  border:$border
-.connected
-  color: $color
-
-.disconnected
-  color: $warn
-
-.node.nodeodd #fill, .node.nodeodd
-  fill: red
-.node-label.odd
-  fill: red
-.over
-  position: absolute
-  bottom: 0
-  left: 0
-  z-index: 100
-  padding: 1em
-
-.menu
-  position: relative
-  display: inline-block
-  padding-right: 3em
-  border-radius: .25em
-
-
-.options
-  padding: .5em 2em
-  border-radius: .5em
-  text-align: center
-  margin-bottom: 2em
-
-.close
-  display: block
-  &:after
-    content: $sym-close
-    position: absolute
-    right: 1em
-    top: .5em
-    font-size: 1.25em
-    color: $color
-    font-family: sans-serif
-    text-shadow: $txt-sh
-  &:hover
-    &:after
-      color: $dark
-
-ul.inline
-  display: inline
-  margin:0
-  padding:0
-  color: white
-
-.inline
-  list-style: none
-  li
-    display: inline-block
-    &:after
-      content: '/'
-      margin: 0 0.5em
-
-.sym-pointer
-  &:after
-    content: $sym-pointer
-
-.sym-kill
-  &:after
-    content: $sym-kill
-
-.sym-parent
-  &:after
-    content: $sym-parent
-
-.cross-cursor
-  cursor: crosshair
-
-.tools
-  position: absolute
-  bottom: 3em
-  right:4em
-  z-index: 101
-  text-align: center
-  ul
-    list-style: none
-    margin: 0 3em .5em  0
-    padding:0
-    li
-      display: inline
-      margin-left: .5em
-    button
-      width: 3em
-      height: 3em
-      padding: 0
-      &:hover
-        border-color: $color2
-      span
-        font-size: 2.5em
-        line-height: 1em
-        color: $color
-        &:hover
-          color:$color2
-  .selected
-    border-color: $color2
-    span
-      color: $color2
-
-.tip
-  margin-right: 1em
-  font-style: italic
-  font-size: .8em
-  color: white
-
-.menu-net
-  background-color: $bg-plus
-  padding: .5em 1em
-  border: $dark solid 2px
-  border-width: 6px 2px 3px
-  position: relative
-  margin-bottom: 2em
-  border-radius: .5em
-  .close
-    position: absolute
-    top: 0
-    right: 0
-    &:after
-      color: $dark
+  @import '../vars.styl'
+  @import '../lib/node-style.styl'
+  body
+    overflow-x hidden
+  #example, .net, button
+    margin 0
+    padding 0
+  .net
+    background-color $bg
+  .net-svg
+    fill $bg // sets color to image export background
+  #example
+    position absolute
+    max-width 100%
+    width 100%
+    height calc(100% - 4px)
+    top 0
+    left 0
+    bottom 0
+    box-sizing content-box
+  button.menu
+    width 1.5em
+    height 1.5em
+    padding 0
+    font-size 2em
+    font-weight bold
+    color $color
+    border $border
+    box-shadow $sh
     &:hover
-      &::after
-        color:$color
-
-.title
-  border: 1.5px $white
-  border-style: dotted none
-  padding: .5em 0
-  margin: 1.5em 1em .5em .5em
-  h1
-    color: $white
-    text-shadow: $txt-sh
-
-.toaster, .dialog
-  position: absolute
-  bottom: .5em
-  right: 2em
-  z-index: 500
-  background-color: white
-  border: $border
-  border-radius: .25em
-  min-width: 20em
-  box-shadow: $sh
-  animation-name: toaster-anim
-  animation-duration: .25s
-
- .dialog-container
-    position: absolute
-    display: flex
-    top: 0
-    left: 0
-    min-height: 100%
-    min-width: 100%
-    border: red solid 1px
-    background-color: rgba(0,0,0,.3)
+      color $color2
+      border-color $color2
+  .circle
+    width 4em
+    height 4em
+    font-weight bold
+    border-radius 50%
+    border $border
+  .connected
+    color $color
+  .disconnected
+    color $warn
+  .node.nodeodd #fill, .node.nodeodd
+    fill red
+  .node-label.odd
+    fill red
+  .over
+    position absolute
+    bottom 0
+    left 0
+    z-index 100
+    padding 1em
+  .menu
+    position relative
+    display inline-block
+    padding-right 3em
+    border-radius 0.25em
+  .options
+    padding 0.5em 2em
+    border-radius 0.5em
+    text-align center
+    margin-bottom 2em
+  .close
+    display block
+    &:after
+      content $sym-close
+      position absolute
+      right 1em
+      top 0.5em
+      font-size 1.25em
+      color $color
+      font-family sans-serif
+      text-shadow $txt-sh
+    &:hover
+      &:after
+        color $dark
+  ul.inline
+    display inline
+    margin 0
+    padding 0
+    color white
+  .inline
+    list-style none
+    li
+      display inline-block
+      &:after
+        content '/'
+        margin 0 0.5em
+  .sym-pointer
+    &:after
+      content $sym-pointer
+  .sym-kill
+    &:after
+      content $sym-kill
+  .sym-parent
+    &:after
+      content $sym-parent
+  .cross-cursor
+    cursor crosshair
+  .tools
+    position absolute
+    bottom 3em
+    right 4em
+    z-index 101
+    text-align center
+    ul
+      list-style none
+      margin 0 3em 0.5em 0
+      padding 0
+      li
+        display inline
+        margin-left 0.5em
+      button
+        width 3em
+        height 3em
+        padding 0
+        &:hover
+          border-color $color2
+        span
+          font-size 2.5em
+          line-height 1em
+          color $color
+          &:hover
+            color $color2
+    .selected
+      border-color $color2
+      span
+        color $color2
+  .tip
+    margin-right 1em
+    font-style italic
+    font-size 0.8em
+    color white
+  .menu-net
+    background-color $bg-plus
+    padding 0.5em 1em
+    border $dark solid 2px
+    border-width 6px 2px 3px
+    position relative
+    margin-bottom 2em
+    border-radius 0.5em
+    .close
+      position absolute
+      top 0
+      right 0
+      &:after
+        color $dark
+      &:hover
+        &::after
+          color $color
+  .title
+    border 1.5px $white
+    border-style dotted none
+    padding 0.5em 0
+    margin 1.5em 1em 0.5em 0.5em
+    h1
+      color $white
+      text-shadow $txt-sh
+  .toaster, .dialog
+    position absolute
+    bottom 0.5em
+    right 2em
+    z-index 500
+    background-color white
+    border $border
+    border-radius 0.25em
+    min-width 20em
+    box-shadow $sh
+    animation-name toaster-anim
+    animation-duration 0.25s
+  .dialog-container
+    position absolute
+    display flex
+    top 0
+    left 0
+    min-height 100%
+    min-width 100%
+    border red solid 1px
+    background-color rgba(0, 0, 0, 0.3)
     .dialog
-      width: 20em
-      min-height: 10em
-      position: relative
-      margin: auto
+      width 20em
+      min-height 10em
+      position relative
+      margin auto
       input[type='radio'], label
-        display: inline
+        display inline
       label
-        font-weight: bold
+        font-weight bold
       .buttons
-        margin-top: 1em
+        margin-top 1em
       .btn
-        margin-left: 1em
-
-
-@keyframes toaster-anim
-  0%
-    opacity: 0
-    transform: scaleY(0) translateY(5em)
-  100%
-    opacity: 1
-    transform: scaleY(1)  translateY(0)
-
- h2.hint
-  display: inline
-  position: absolute
-  margin-left: 1em
-  color: $light
-  font-size: 1em
-  font-style: italic
-  letter-spacing: .125em
-  text-shadow:  1px 1px 5px rgba(0,0,0,.5), 2px 2px 15px $color2
-  opacity: 0
-  animation-name: hint-anim
-  animation-delay: 1s
-  animation-duration: 3s
-  animation-iteration-count: infinite
-  animation-timing-function: ease-in-out
-  .icon
-    font-size: 3em
-    line-height .5em
-
-@keyframes hint-anim
-  0%
-    opacity: 0
-    transform: translateX(6em)
-    letter-spacing: .125em
-  40%
-    opacity: 1
-    transform: translateX(-1.5em)
-
-  50%
-    transform: translateX(-.1em)
-    letter-spacing: .5em
-  70%
-    opacity: 1
-    transform: translateX(-.5em)
-  100%
-    opacity: 0
-
-.anim-button
-  animation-name: button-anim
-  animation-duration: 3s
-  animation-delay: 2s
-  animation-iteration-count: infinite
-  animation-timing-function: ease-in-out
-
-@keyframes button-anim
-  0%
-    transform: rotate(0deg)
-  6%
-    transform: rotate(-30deg)
-  15%
-    transform: rotate(10deg) scale(.9, .9)
-  20%
-    transform: rotate(-5deg)
-
-  35%
-    transform: rotate(2deg) scale(1,1)
-    box-shadow: 2px 2px 10px alpha($color2,.8)
-    color: $color2
-    border-color: $color2
-  50%
-    transform: rotate(0deg)
-  100%
-    transform: rotate(0deg)
+        margin-left 1em
+  @keyframes toaster-anim
+    0%
+      opacity 0
+      transform scaleY(0) translateY(5em)
+    100%
+      opacity 1
+      transform scaleY(1) translateY(0)
+  h2.hint
+    display inline
+    position absolute
+    margin-left 1em
+    color $light
+    font-size 1em
+    font-style italic
+    letter-spacing 0.125em
+    text-shadow 1px 1px 5px rgba(0, 0, 0, 0.5), 2px 2px 15px $color2
+    opacity 0
+    animation-name hint-anim
+    animation-delay 1s
+    animation-duration 3s
+    animation-iteration-count infinite
+    animation-timing-function ease-in-out
+    .icon
+      font-size 3em
+      line-height 0.5em
+  @keyframes hint-anim
+    0%
+      opacity 0
+      transform translateX(6em)
+      letter-spacing 0.125em
+    40%
+      opacity 1
+      transform translateX(-1.5em)
+    50%
+      transform translateX(-0.1em)
+      letter-spacing 0.5em
+    70%
+      opacity 1
+      transform translateX(-0.5em)
+    100%
+      opacity 0
+  .anim-button
+    animation-name button-anim
+    animation-duration 3s
+    animation-delay 2s
+    animation-iteration-count infinite
+    animation-timing-function ease-in-out
+  @keyframes button-anim
+    0%
+      transform rotate(0deg)
+    6%
+      transform rotate(-30deg)
+    15%
+      transform rotate(10deg) scale(0.9, 0.9)
+    20%
+      transform rotate(-5deg)
+    35%
+      transform rotate(2deg) scale(1, 1)
+      box-shadow 2px 2px 10px alpha($color2, 0.8)
+      color $color2
+      border-color $color2
+    50%
+      transform rotate(0deg)
+    100%
+      transform rotate(0deg)
 </style>
