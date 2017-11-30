@@ -224,7 +224,11 @@ export default {
     },
 
     line (link) {
-      return 'M ' + link.source.x + '  '+ link.source.y + ' L ' + link.target.x + ' '+ link.target.y;
+      let d = {
+        M:  [link.source.x ? link.source.x : 0, link.source.y ? link.source.y : 0],
+        L:  [link.target.x ? link.target.x : 0, link.target.y ? link.target.y : 0]
+      }
+      return 'M ' + d.M.join(' ') + ' L ' + d.L.join(' ');
     },
 
     nodeStyle (node) {
