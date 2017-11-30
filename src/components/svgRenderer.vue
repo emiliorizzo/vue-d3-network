@@ -10,15 +10,13 @@
 
     //-> links
     g.links#l-links( v-if='strLinks')
-        line( v-for="link,index in links"
-          :x1='link.source.x'
-          :y1='link.source.y'
-          :x2='link.target.x'
-          :y2='link.target.y'
+        path( v-for="link,index in links"          
           @click='emit("linkClick",[$event,link])'
           @touchstart.passive='emit("linkClick",[$event,link])'
           @mouseenter='emit("mouseEnterLink",[$event,link])'
           @mouseleave='emit("mouseLeaveLink",[$event,link])'
+          :id='"link-"+link.id'
+          :d='line(link)'
           :stroke-width='linkWidth'
           :class='linkClass(link.id)'
           :style='linkStyle(link)'
@@ -27,15 +25,19 @@
 
     g.links#l-links(v-else)
         path(v-for="link in links"
-          :d="curve(link)"
           @click='emit("linkClick",[$event,link])'
           @touchstart.passive='emit("linkClick",[$event,link])'
           @mouseenter='emit("mouseEnterLink",[$event,link])'
           @mouseleave='emit("mouseLeaveLink",[$event,link])'
+          :id='"link-"+link.id'
+          :d="curve(link)"
           :stroke-width='linkWidth'
           :class='linkClass(link.id) + " curve"'
           :style='linkStyle(link)'
           v-bind='link._svgAttrs')
+
+
+          
     //- -> nodes
     g.nodes#l-nodes(v-if='!noNodes')
       template(v-for='(node,key) in nodes')
@@ -88,13 +90,66 @@
       ) {{ node.name }}
 
     g.labels#link-labels(v-if="linkLabels")
-      text.link-label(v-for="link in links"
-        :x='xCoordForLink(link)'
-        :y='yCoordForLink(link)'
-        :class='(link._labelClass) ? link._labelClass : "link-label"'
-        :font-size="fontSize"
-        :stroke-width='fontSize / 8'
-      ) {{ link.name }}
+      template(v-for="link,index in links")
+        template(v-if='!Array.isArray(link.name)')
+          text.link-label(
+            :key='index'
+            :class='(link._labelClass) ? link._labelClass : "link-label"'
+            :font-size="fontSize"
+            :stroke-width='fontSize / 8'
+            text-anchor="middle"
+          ) 
+            textPath(:xlink:href='"#link-"+link.id' startOffset="50%") {{ link.name }}
+        template(v-else)
+          text.link-label(
+            v-if='link.name[0] && link.name.length > 1'
+            :key='index'
+            :class='(link._labelClass) ? link._labelClass : "link-label"'
+            :font-size="fontSize"
+            :stroke-width='fontSize / 8'
+            text-anchor="start"
+          ) 
+            textPath(:xlink:href='"#link-"+link.id' startOffset="10%") {{ link.name[0] }}
+          text.link-label(
+            v-else-if='link.name[0] && link.name.length == 1'
+            :key='index'
+            :class='(link._labelClass) ? link._labelClass : "link-label"'
+            :font-size="fontSize"
+            :stroke-width='fontSize / 8'
+            text-anchor="middle"
+          ) 
+            textPath(:xlink:href='"#link-"+link.id' startOffset="50%") {{ link.name[0] }}
+            
+          text.link-label(
+            v-if='link.name[1] && link.name.length == 2'
+            :key='index'
+            :class='(link._labelClass) ? link._labelClass : "link-label"'
+            :font-size="fontSize"
+            :stroke-width='fontSize / 8'
+            text-anchor="end"
+          ) 
+            textPath(:xlink:href='"#link-"+link.id' startOffset="90%") {{ link.name[1] }}
+          text.link-label(
+            v-else-if='link.name[1] && link.name.length == 3'
+            :key='index'
+            :class='(link._labelClass) ? link._labelClass : "link-label"'
+            :font-size="fontSize"
+            :stroke-width='fontSize / 8'
+            text-anchor="middle"
+          ) 
+            textPath(:xlink:href='"#link-"+link.id' startOffset="50%") {{ link.name[1] }}
+          
+          text.link-label(
+            v-if='link.name[2]'
+            :key='index'
+            :class='(link._labelClass) ? link._labelClass : "link-label"'
+            :font-size="fontSize"
+            :stroke-width='fontSize / 8'
+            text-anchor="end"
+          ) 
+            textPath(:xlink:href='"#link-"+link.id' startOffset="90%") {{ link.name[2] }}
+      
+        
 </template>
 <script>
 import svgExport from '../lib/svgExport.js'
@@ -150,6 +205,7 @@ export default {
         cb(null, svgExport.save(svg))
       }
     },
+
     linkClass (linkId) {
       let cssClass = 'link '
       if (this.linksSelected.hasOwnProperty(linkId)) {
@@ -157,6 +213,7 @@ export default {
       }
       return cssClass
     },
+
     curve (link) {
       let d = {
         M: [link.source.x, link.source.y],
@@ -165,6 +222,11 @@ export default {
       }
       return 'M ' + d.M + ' Q ' + d.Q.join(' ') + ' ' + d.X
     },
+
+    line (link) {
+      return 'M ' + link.source.x + '  '+ link.source.y + ' L ' + link.target.x + ' '+ link.target.y;
+    },
+
     nodeStyle (node) {
       return (node._color) ? 'fill: ' + node._color : ''
     },

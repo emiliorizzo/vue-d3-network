@@ -69,7 +69,7 @@ const isLinked = (nodeId, links) => {
 
 // link formatter
 export const newLink = (id, sid, tid, name) => {
-  return { id, sid, tid, name }
+  return { id, sid, tid, name: ["source", "middle", "end"] }
 }
 
 // generates random links => [ links ]
