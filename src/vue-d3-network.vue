@@ -31,6 +31,9 @@ export default {
     linkCb: {
       type: Function
     },
+    simCb: {
+      type: Function
+    },
     customForces: {
       type: Object
     },
@@ -289,6 +292,7 @@ export default {
         sim.force('link', d3.forceLink(links).id(function (d) { return d.id }))
       }
       sim = this.setCustomForces(sim)
+      sim = this.itemCb(this.simCb, sim)
       return sim
     },
     setCustomForces (sim) {

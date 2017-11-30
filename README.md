@@ -93,6 +93,8 @@ See: [package.json](https://github.com/emiliorizzo/vue-d3-network/blob/master/pa
  **nodeCb**: Function(node) -> node, *node formatter*
  
  **linkCb**: Function(link) -> link, *node link formatter*
+
+  **simCb**: Function(sim) -> sim, *d3 simulation formatter*
  
  **customForces**: Object: { [d3Function]:args }
 
