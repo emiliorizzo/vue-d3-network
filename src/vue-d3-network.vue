@@ -31,6 +31,9 @@ export default {
     linkCb: {
       type: Function
     },
+    simCb: {
+      type: Function
+    },
     customForces: {
       type: Object
     },
@@ -272,7 +275,6 @@ export default {
       let sim = d3.forceSimulation()
         .stop()
         .alpha(0.5)
-        // .alphaMin(0.05)
         .nodes(nodes)
 
       if (forces.Center !== false) sim.force('center', d3.forceCenter(this.center.x, this.center.y))
@@ -291,6 +293,8 @@ export default {
       sim = this.setCustomForces(sim)
       sim.on('tick', this.simTick);
       sim.on('end', this.simEnd);
+
+      sim = this.itemCb(this.simCb, sim)
       return sim
     },
 

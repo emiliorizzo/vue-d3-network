@@ -146,6 +146,9 @@ export default {
       return node
     }
 
+    data.linkCb = undefined;
+    data.simCb = undefined;
+
     data.simStatus = "";
     data.mouseStatus = "";
 
