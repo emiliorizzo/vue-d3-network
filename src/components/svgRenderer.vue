@@ -13,14 +13,12 @@
     //-> links  
     g.links#l-links
         path(v-for="link in links"
-          :d="linkPath(link)"
-          :id="link.id"
           @click='emit("linkClick",[$event,link])'
           @touchstart.passive='emit("linkClick",[$event,link])'
           @mouseenter='emit("mouseEnterLink",[$event,link])'
           @mouseleave='emit("mouseLeaveLink",[$event,link])'
           :id='"link-"+link.id'
-          :d="curve(link)"
+          :d="linkPath(link)"
           :stroke-width='linkWidth'
           :class='linkClass(link.id)'
           :style='linkStyle(link)'

@@ -471,7 +471,6 @@ export default {
     fill $dark
   .link-label
     fill $dark
-    transform translate(0, -0.5em)
-    text-anchor middle
+
 </style>  
 
