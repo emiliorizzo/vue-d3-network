@@ -7,6 +7,7 @@
     :net-links="links"
     :selection="{nodes: selected, links: linksSelected}"
     :options="options"
+    :linkCb="linkCb"
     :node-sym='nodeSym'
     @sim-start='simStart'
     @sim-end='simEnd'
@@ -167,7 +168,6 @@ export default {
     }
   },
   methods: {
-
     simStart() {
       this.simStatus = "Start";
     },
@@ -195,7 +195,10 @@ export default {
     mouseLeaveLink(event, link) {
       this.mouseStatus = 'Leave Link:'+link.id;
     },
-
+    linkCb (link) {
+      link.name = 'Link ' + link.id
+      return link
+    },
     screenShot () {
       if (this.options.canvas) this.takeScreenShot(false)
       else this.svgChoice = true

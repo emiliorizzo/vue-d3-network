@@ -47,13 +47,15 @@
         input(type="range" v-model.number="opts.linkWidth" @input="change" min="1" max="15" step="1")
       li
         input(type="checkbox" v-model="opts.nodeLabels" @change="change")
-        label Show node names
+        label Show node names   
       li
         input(type="checkbox" v-model="opts.linkLabels" @change="change")
         label Show link names
-      li(v-if="opts.nodeLabels")
-        label Font Size:
-          span {{ opts.fontSize }}
+
+      li(v-if="opts.nodeLabels || opts.linkLabels")
+        label Font Size: 
+          span {{ opts.fontSize }} 
+
         input(type="range" v-model.number="opts.fontSize" @input="change" min="1" max="30" step="1")
       li
         input(type="checkbox" v-model="opts.strLinks" @change="change")

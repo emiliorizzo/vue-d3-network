@@ -1,30 +1,20 @@
 <template lang="pug">
-  svg(ref="svg"
-    :width="size.w"
+  svg(
+    xmlns="http://www.w3.org/2000/svg" 
+    xmlns:xlink= "http://www.w3.org/1999/xlink"
+    ref="svg" 
+    :width="size.w" 
     :height="size.h"
     class="net-svg"
     @mouseup='emit("dragEnd",[$event])'
     @touchend.passive='emit("dragEnd",[$event])'
     @touchstart.passive=''
     )
-
-    //-> links
-    g.links#l-links( v-if='strLinks')
-        path( v-for="link,index in links"          
-          @click='emit("linkClick",[$event,link])'
-          @touchstart.passive='emit("linkClick",[$event,link])'
-          @mouseenter='emit("mouseEnterLink",[$event,link])'
-          @mouseleave='emit("mouseLeaveLink",[$event,link])'
-          :id='"link-"+link.id'
-          :d='line(link)'
-          :stroke-width='linkWidth'
-          :class='linkClass(link.id)'
-          :style='linkStyle(link)'
-          v-bind='link._svgAttrs'
-          )
-
-    g.links#l-links(v-else)
+    //-> links  
+    g.links#l-links
         path(v-for="link in links"
+          :d="linkPath(link)"
+          :id="link.id"
           @click='emit("linkClick",[$event,link])'
           @touchstart.passive='emit("linkClick",[$event,link])'
           @mouseenter='emit("mouseEnterLink",[$event,link])'
@@ -32,11 +22,9 @@
           :id='"link-"+link.id'
           :d="curve(link)"
           :stroke-width='linkWidth'
-          :class='linkClass(link.id) + " curve"'
+          :class='linkClass(link.id)'
           :style='linkStyle(link)'
           v-bind='link._svgAttrs')
-
-
           
     //- -> nodes
     g.nodes#l-nodes(v-if='!noNodes')
@@ -79,7 +67,6 @@
         v-bind='node._svgAttrs'
         )
 
-    //- -> Labels
     g.labels#node-labels( v-if="nodeLabels")
       text.node-label(v-for="node in nodes"
         :x='node.x + (getNodeSize(node) / 2) + (fontSize / 2)'
@@ -89,6 +76,7 @@
         :stroke-width='fontSize / 8'
       ) {{ node.name }}
 
+    //-> Links Labels
     g.labels#link-labels(v-if="linkLabels")
       template(v-for="link,index in links")
         template(v-if='!Array.isArray(link.name)')
@@ -211,24 +199,24 @@ export default {
       if (this.linksSelected.hasOwnProperty(linkId)) {
         cssClass += 'selected'
       }
+      if (!this.strLinks) {
+        cssClass += 'curve'
+      }
       return cssClass
     },
-
-    curve (link) {
+    
+    linkPath (link) {
       let d = {
-        M: [link.source.x, link.source.y],
-        Q: [link.source.x, link.target.y],
-        X: [link.target.x, link.target.y]
+        M: [link.source.x | 0, link.source.y | 0],
+        X: [link.target.x | 0, link.target.y | 0]
       }
-      return 'M ' + d.M + ' Q ' + d.Q.join(' ') + ' ' + d.X
-    },
-
-    line (link) {
-      let d = {
-        M:  [link.source.x ? link.source.x : 0, link.source.y ? link.source.y : 0],
-        L:  [link.target.x ? link.target.x : 0, link.target.y ? link.target.y : 0]
+      if (this.strLinks) {
+        return 'M ' + d.M.join(' ') + ' L' + d.X.join(' ')
       }
-      return 'M ' + d.M.join(' ') + ' L ' + d.L.join(' ');
+      else {
+        d.Q = [link.source.x, link.target.y]
+        return 'M ' + d.M + ' Q ' + d.Q.join(' ') + ' ' + d.X
+      }
     },
 
     nodeStyle (node) {

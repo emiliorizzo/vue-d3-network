@@ -256,12 +256,14 @@ export default {
     },
 
     buildLinks (links) {
-      return links.concat().map((link) => {
+      let vm = this
+      return links.concat().map((link, index) => {
         // link formatter option
         link = this.itemCb(this.linkCb, link)
         // source and target for d3
         link.source = link.sid
         link.target = link.tid
+        if (!link.id) vm.$set(link, 'id', 'link-' + index)
         return link
       })
     },
@@ -293,7 +295,6 @@ export default {
       sim = this.setCustomForces(sim)
       sim.on('tick', this.simTick);
       sim.on('end', this.simEnd);
-
       sim = this.itemCb(this.simCb, sim)
       return sim
     },

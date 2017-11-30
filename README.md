@@ -77,6 +77,7 @@ See: [package.json](https://github.com/emiliorizzo/vue-d3-network/blob/master/pa
  **net-links**: Array *of links objects*: 
     
   - **id**: link id. *If not provided uses array index*
+  - **name**: node name. *If not provided uses: 'link [link_id]'*
   - **tid**: id of target node
   - **sid**: id of source node
   - **_color**: link color, e.g. *red*, *#aa00bb*,
@@ -92,6 +93,8 @@ See: [package.json](https://github.com/emiliorizzo/vue-d3-network/blob/master/pa
  **nodeCb**: Function(node) -> node, *node formatter*
  
  **linkCb**: Function(link) -> link, *node link formatter*
+
+  **simCb**: Function(sim) -> sim, *d3 simulation formatter*
  
  **customForces**: Object: { [d3Function]:args }
 
@@ -119,6 +122,7 @@ See: [package.json](https://github.com/emiliorizzo/vue-d3-network/blob/master/pa
 - **nodeSize**: Number, *node radius | size in px* 
 - **linkWidth**: Number, *link thickness in px*
   - **nodeLabels**: Boolean, *show nodes names*
+  - **linkLabels**: Boolean, *show links names*
   - **fontSize**: Number, *for node labels, px*
   - **strLinks**: Boolean, *draw links as rect lines* 
   - **resizeListener**:Boolean, defaults: true ,add listener to window.resize event
@@ -165,3 +169,9 @@ see: [src/canvasStyles.js](https://github.com/emiliorizzo/vue-d3-network/blob/ma
   - []   Zoom
   - [x]  Canvas Render
   - [x]  Nodes sprites
+
+## More Examples
+
+- [svg marks on links](https://codepen.io/emilio/pen/QOaQjP)
+- [links labels](https://codepen.io/emilio/pen/ZampZb)
+- [no-link forces](https://jsfiddle.net/emii/4odfweq9/13/)
