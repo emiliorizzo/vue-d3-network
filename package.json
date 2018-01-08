@@ -1,6 +1,6 @@
 {
   "name": "vue-d3-network",
-  "version": "0.1.25",
+  "version": "0.1.26",
   "description": "Vue component to graph networks using d3-force",
   "main": "dist/vue-d3-network.js",
   "scripts": {
