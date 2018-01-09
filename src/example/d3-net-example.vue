@@ -3,6 +3,7 @@
     //-> Network
     d3-network(
     ref='net'
+    id='my-graph'
     :net-nodes="nodes"
     :net-links="links"
     :selection="{nodes: selected, links: linksSelected}"

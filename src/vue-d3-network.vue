@@ -5,6 +5,8 @@ import svgRenderer from './components/svgRenderer.vue'
 import canvasRenderer from './components/canvasRenderer.vue'
 import saveImage from './lib/saveImage.js'
 import svgExport from './lib/svgExport.js'
+import uuidv1 from 'uuid/v1';
+import panzoom from 'panzoom';
 
 export default {
   name: 'd3-network',
@@ -37,6 +39,12 @@ export default {
     customForces: {
       type: Object
     },
+    id: {
+      type: String,
+      default: () => {
+        return uuidv1();
+      }
+    },
     selection: {
       type: Object,
       default: () => {
@@ -45,7 +53,14 @@ export default {
           links: {}
         }
       }
-    }
+    },
+
+    panzoomOptions: {
+      type: Object,
+      default: () => {
+        return {};
+      }
+    },
   },
   data () {
     return {
@@ -72,6 +87,8 @@ export default {
         ManyBody: true,
         Link: true
       },
+      panzoom: undefined,
+      panzoomModel: undefined,
       noNodes: false,
       strLinks: true,
       fontSize: 10,
@@ -113,7 +130,8 @@ export default {
       'offset',
       'padding',
       'nodeSize',
-      'noNodes'
+      'noNodes',
+      'id',
     ]
 
     for (let prop of bindProps) {
@@ -147,10 +165,12 @@ export default {
     this.$nextTick(() => {
       this.animate()
     })
-    if (this.resizeListener) window.addEventListener('resize', this.onResize)
+    if (this.resizeListener) window.addEventListener('resize', this.onResize);
+
+    this.startPanZoom();
   },
   beforeDestroy () {
-    if (this.resizeListener) window.removeEventListener('resize', this.onResize)
+    if (this.resizeListener) window.removeEventListener('resize', this.onResize);
   },
   computed: {
     selected () {
@@ -195,6 +215,41 @@ export default {
     }
   },
   methods: {
+
+    startPanZoom () {
+      if(this.panzoom)
+      {
+        return;
+      }
+
+      if(this.id)
+      {
+        const graph = document.getElementById(this.id);
+        if(graph)
+        {
+          if(this.panzoomModel)
+          {
+            this.panzoomOptions.autocenter = false;
+          }
+          this.panzoom = panzoom(graph, this.panzoomOptions);
+          if(this.panzoomModel) {
+            this.panzoom.zoomAbs(0, 0, this.panzoomModel.scale);
+            this.panzoom.moveTo(this.panzoomModel.x, this.panzoomModel.y);
+          }
+        }
+      }
+    },
+
+    stopPanZoom() {
+      if(this.panzoom)
+      {
+        this.panzoomModel =  this.panzoom.getTransform();
+        console.log(this.panzoomModel);
+        this.panzoom.dispose();
+        this.panzoom = undefined;
+      }
+    },
+
     updateNodeSvg () {
       let svg = null
       if (this.nodeSym) {
@@ -364,6 +419,12 @@ export default {
       return { x, y }
     },
     dragStart (event, nodeKey) {
+      if(event)
+      {
+        this.stopPanZoom();
+        this.$emit('drag-start');
+      }
+
       this.dragging = (nodeKey === false) ? false : nodeKey
       this.setMouseOffset(event, this.nodes[nodeKey])
       if (this.dragging === false) {
@@ -379,7 +440,9 @@ export default {
         node.fx = null
         node.fy = null
       }
-      this.dragStart(false)
+      this.dragStart(false);
+      this.startPanZoom();
+      this.$emit('drag-end');
     },
     // -- Render helpers
     nodeClick (event, node) {

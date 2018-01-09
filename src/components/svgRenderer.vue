@@ -10,7 +10,7 @@
     @touchend.passive='emit("dragEnd",[$event])'
     @touchstart.passive=''
     )
-    g()
+    g(:id='id')
       //-> links  
       g.links#l-links
           path(v-for="link in links"
@@ -139,11 +139,13 @@
         
 </template>
 <script>
-import svgExport from '../lib/svgExport.js'
+import svgExport from '../lib/svgExport.js';
+
 
 export default {
   name: 'svg-renderer',
   props: ['size',
+    'id',
     'nodes',
     'noNodes',
     'selected',
@@ -158,6 +160,10 @@ export default {
     'linkLabels',
     'labelOffset',
     'nodeSym'],
+  
+  mounted() {
+    
+  },
 
   computed: {
     nodeSvg () {
@@ -179,6 +185,7 @@ export default {
     emit (e, args) {
       this.$emit('action', e, args)
     },
+
     svgScreenShot (cb, toSvg, background, allCss) {
       let svg = svgExport.export(this.$refs.svg, allCss)
       if (!toSvg) {
