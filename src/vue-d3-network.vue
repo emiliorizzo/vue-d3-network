@@ -217,7 +217,8 @@ export default {
   methods: {
 
     startPanZoom () {
-      if(this.panzoom)
+
+      if(this.canvas || this.panzoom)
       {
         return;
       }
@@ -241,6 +242,10 @@ export default {
     },
 
     stopPanZoom() {
+      if(this.canvas )
+      {
+        return;
+      }
       if(this.panzoom)
       {
         this.panzoomModel =  this.panzoom.getTransform();
