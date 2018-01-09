@@ -426,12 +426,13 @@ export default {
     },
     dragStart (event, nodeKey) {
       this.dragging = (nodeKey === false) ? false : nodeKey
+      this.stopPanZoom();
       this.setMouseOffset(event, this.nodes[nodeKey])
       if (this.dragging === false) {
         this.simulation.alpha(0.1)
         this.simulation.restart()
         this.setMouseOffset()
-        this.stopPanZoom()
+        
         this.$emit('drag-start', this.nodes[nodeKey])
         this.nodeClickIsAllowed = false
       }
