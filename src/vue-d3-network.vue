@@ -5,6 +5,8 @@ import svgRenderer from './components/svgRenderer.vue'
 import canvasRenderer from './components/canvasRenderer.vue'
 import saveImage from './lib/saveImage.js'
 import svgExport from './lib/svgExport.js'
+import uuidv1 from 'uuid/v1';
+import panzoom from 'panzoom';
 
 export default {
   name: 'd3-network',
@@ -37,6 +39,12 @@ export default {
     customForces: {
       type: Object
     },
+    id: {
+      type: String,
+      default: () => {
+        return uuidv1();
+      }
+    },
     selection: {
       type: Object,
       default: () => {
@@ -45,7 +53,14 @@ export default {
           links: {}
         }
       }
-    }
+    },
+
+    panzoomOptions: {
+      type: Object,
+      default: () => {
+        return {};
+      }
+    },
   },
   data () {
     return {
@@ -72,6 +87,8 @@ export default {
         ManyBody: true,
         Link: true
       },
+      panzoom: undefined,
+      panzoomModel: undefined,
       noNodes: false,
       strLinks: true,
       fontSize: 10,
@@ -88,6 +105,7 @@ export default {
         x: 0,
         y: 0
       },
+      simStart: false,
       simulation: null,
       nodeSvg: null,
       resizeListener: true
@@ -112,7 +130,8 @@ export default {
       'offset',
       'padding',
       'nodeSize',
-      'noNodes'
+      'noNodes',
+      'id',
     ]
 
     for (let prop of bindProps) {
@@ -146,10 +165,12 @@ export default {
     this.$nextTick(() => {
       this.animate()
     })
-    if (this.resizeListener) window.addEventListener('resize', this.onResize)
+    if (this.resizeListener) window.addEventListener('resize', this.onResize);
+
+    this.startPanZoom();
   },
   beforeDestroy () {
-    if (this.resizeListener) window.removeEventListener('resize', this.onResize)
+    if (this.resizeListener) window.removeEventListener('resize', this.onResize);
   },
   computed: {
     selected () {
@@ -194,6 +215,46 @@ export default {
     }
   },
   methods: {
+
+    startPanZoom () {
+
+      if(this.canvas || this.panzoom)
+      {
+        return;
+      }
+
+      if(this.id)
+      {
+        const graph = document.getElementById(this.id);
+        if(graph)
+        {
+          if(this.panzoomModel)
+          {
+            this.panzoomOptions.autocenter = false;
+          }
+          this.panzoom = panzoom(graph, this.panzoomOptions);
+          if(this.panzoomModel) {
+            this.panzoom.zoomAbs(0, 0, this.panzoomModel.scale);
+            this.panzoom.moveTo(this.panzoomModel.x, this.panzoomModel.y);
+          }
+        }
+      }
+    },
+
+    stopPanZoom() {
+      if(this.canvas )
+      {
+        return;
+      }
+      if(this.panzoom)
+      {
+        this.panzoomModel =  this.panzoom.getTransform();
+        console.log(this.panzoomModel);
+        this.panzoom.dispose();
+        this.panzoom = undefined;
+      }
+    },
+
     updateNodeSvg () {
       let svg = null
       if (this.nodeSym) {
@@ -243,6 +304,7 @@ export default {
         // initialize node coords
         if (!node.x) vm.$set(node, 'x', 0)
         if (!node.y) vm.$set(node, 'y', 0)
+
         // node default name
         if (!node.name) vm.$set(node, 'name', 'node ' + node.id)
         if (node.svgSym) {
@@ -275,7 +337,6 @@ export default {
       let sim = d3.forceSimulation()
         .stop()
         .alpha(0.5)
-        // .alphaMin(0.05)
         .nodes(nodes)
 
       if (forces.Center !== false) sim.force('center', d3.forceCenter(this.center.x, this.center.y))
@@ -292,9 +353,28 @@ export default {
         sim.force('link', d3.forceLink(links).id(function (d) { return d.id }))
       }
       sim = this.setCustomForces(sim)
+      sim.on('tick', this.simTick);
+      sim.on('end', this.simEnd);
       sim = this.itemCb(this.simCb, sim)
       return sim
     },
+
+    simTick() {
+      if(this.simStart) {
+        this.$emit('sim-tick');
+      }
+      else {
+        this.$emit('sim-start');
+      }
+
+      this.simStart = true;
+    },
+
+    simEnd() {
+      this.simStart = false;
+      this.$emit('sim-end');
+    },
+
     setCustomForces (sim) {
       let forces = this.customForces
       if (forces) {
@@ -344,6 +424,12 @@ export default {
       return { x, y }
     },
     dragStart (event, nodeKey) {
+      if(event)
+      {
+        this.stopPanZoom();
+        this.$emit('drag-start', this.nodes[nodeKey]);
+      }
+
       this.dragging = (nodeKey === false) ? false : nodeKey
       this.setMouseOffset(event, this.nodes[nodeKey])
       if (this.dragging === false) {
@@ -359,7 +445,9 @@ export default {
         node.fx = null
         node.fy = null
       }
-      this.dragStart(false)
+      this.dragStart(false);
+      this.startPanZoom();
+      this.$emit('drag-end', node);
     },
     // -- Render helpers
     nodeClick (event, node) {
@@ -368,6 +456,23 @@ export default {
     linkClick (event, link) {
       this.$emit('link-click', event, link)
     },
+
+    mouseEnterNode(event, node) {
+      this.$emit('node-mouse-enter', event, node);
+    },
+
+    mouseLeaveNode(event, node) {
+      this.$emit('node-mouse-leave', event, node);
+    },
+
+    mouseEnterLink(event, link) {
+      this.$emit('link-mouse-enter', event, link);
+    },
+
+    mouseLeaveLink(event, link) {
+      this.$emit('link-mouse-leave', event, link);
+    },
+
     setMouseOffset (event, node) {
       let x = 0
       let y = 0
@@ -405,48 +510,35 @@ export default {
 
 <style lang="stylus">
   @import 'vars.styl'
-
   .net
     height 100%
     margin 0
-
   .net-svg
     // fill: white // background color to export as image
-
   .node
     stroke alpha($dark, 0.7)
     stroke-width 3px
     transition fill 0.5s ease
     fill $white
-
   .node.selected
     stroke $color2
-
   .node.pinned
     stroke alpha($warn, 0.6)
-
   .link
     stroke alpha($dark, 0.3)
-
   .node, .link
     stroke-linecap round
-
     &:hover
       stroke $warn
       stroke-width 5px
-
   .link.selected
     stroke alpha($color2, 0.6)
-
   .curve
     fill none
-
   .node-label
     fill $dark
-
   .link-label
     fill $dark
-    transform translate(0, -0.5em)
-    text-anchor middle
+
 </style>  
 

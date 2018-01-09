@@ -1,6 +1,6 @@
 {
   "name": "vue-d3-network",
-  "version": "0.1.25",
+  "version": "0.1.26",
   "description": "Vue component to graph networks using d3-force",
   "main": "dist/vue-d3-network.js",
   "scripts": {
@@ -46,11 +46,13 @@
     "source-map": "^0.5.6",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.1",
-    "vue-cli": "^2.8.2",
+    "vue-cli": "2.8.2",
     "vue-style-loader": "^3.0.1",
     "webpack": "^3.2.0"
   },
   "dependencies": {
-    "d3-force": "^1.0.6"
+    "d3-force": "^1.0.6",
+    "panzoom": "^4.1.0",
+    "uuid": "^3.1.0"
   }
 }

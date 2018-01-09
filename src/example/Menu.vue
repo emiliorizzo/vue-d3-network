@@ -2,48 +2,48 @@
   #menu
     ul.test-menu(v-if="setts")
       li
-        label Nodes: 
+        label Nodes:
           span {{ setts.maxNodes }}
         input(type="range" v-model.number="setts.maxNodes" @input="change" min="1" :max='(opts.canvas) ? 3000: 1010' step="10")
       li
-        label Max Links per Node: 
+        label Max Links per Node:
           span {{ setts.maxLinks }}
-        input(type="range" v-model.number="setts.maxLinks" @input="change" min="1" max="10" step="1")  
+        input(type="range" v-model.number="setts.maxLinks" @input="change" min="1" max="10" step="1")
       li
         label Render type
-      li  
+      li
         input(type='radio' :value='false' v-model='opts.canvas' id='svg-rad' @change="change")
         label(for='svg-rad') svg
-        input(type='radio' :value='true' v-model='opts.canvas' id='canvas-rad' @change="change") 
+        input(type='radio' :value='true' v-model='opts.canvas' id='canvas-rad' @change="change")
         label(for='canvas-rad') canvas
       li
         button.btn(@click="$emit('simulate')") Simulate
-    
+
     ul.test-menu
       li
         label Force:
           span {{ opts.force }}
-        input(type="range" v-model.number="opts.force" @input="change" min="1" max="5000" step="1")  
+        input(type="range" v-model.number="opts.force" @input="change" min="1" max="5000" step="1")
       li
-        label Offset X: 
+        label Offset X:
           span {{ opts.offset.x }}
-        input(type="range" v-model.number="opts.offset.x" @input="change" min="-1000" max="1000" step="1") 
+        input(type="range" v-model.number="opts.offset.x" @input="change" min="-1000" max="1000" step="1")
       li
-        label Offset Y: 
+        label Offset Y:
           span {{ opts.offset.y }}
-        input(type="range" v-model.number="opts.offset.y" @input="change" min="-1000" max="1000" step="1") 
+        input(type="range" v-model.number="opts.offset.y" @input="change" min="-1000" max="1000" step="1")
       li
         input(type="checkbox" v-model="opts.icon" @change="change")
-        label Node Sprite 
+        label Node Sprite
 
     ul.test-menu
       li
-        label Node Size: 
+        label Node Size:
           span {{ opts.nodeSize }}
         input(type="range" v-model.number="opts.nodeSize" @input="change" min="3" max="100" step="1")
       li
-        label Link Thickness: 
-          span {{ opts.linkWidth }} 
+        label Link Thickness:
+          span {{ opts.linkWidth }}
         input(type="range" v-model.number="opts.linkWidth" @input="change" min="1" max="15" step="1")
       li
         input(type="checkbox" v-model="opts.nodeLabels" @change="change")
@@ -55,24 +55,33 @@
       li(v-if="opts.nodeLabels || opts.linkLabels")
         label Font Size: 
           span {{ opts.fontSize }} 
+
         input(type="range" v-model.number="opts.fontSize" @input="change" min="1" max="30" step="1")
       li
         input(type="checkbox" v-model="opts.strLinks" @change="change")
         label Straight Links
-    
-      li  
+
+      li
         button.btn(@click="reset" title="reset options")
           span(class="icon-reset")
           small &nbsp;Reset
 
-    
+    ul.test-menu
+      li
+        label Simulation Status
+        label {{ status }}
+      li
+        label Mouse Status
+        label {{ mouseStatus }}
+
+
 
 </template>
 <script>
 import defaultData from './data.js'
 export default {
   name: 'd3-net-example-menu',
-  props: ['links', 'nodes', 'settings', 'options'],
+  props: ['links', 'nodes', 'settings', 'options', 'status', 'mouseStatus'],
   data () {
     let data = Object.assign({}, defaultData)
     return {
@@ -105,7 +114,7 @@ export default {
 <style src="../assets/css/icons.css"></style>
 <style lang="stylus" scoped>
  @import '../vars.styl'
-.debug 
+.debug
   font-size: 0.5em
   list-style: none
 
@@ -127,5 +136,5 @@ export default {
 ul.test-menu + ul.test-menu
   border-left: none
 
-</style>  
+</style>
 
