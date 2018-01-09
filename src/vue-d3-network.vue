@@ -407,7 +407,6 @@ export default {
     },
     // -- Mouse Interaction
     move (event) {
-      console.log(event);
       let pos = this.clientPos(event)
       if (this.dragging !== false) {
         
@@ -429,7 +428,7 @@ export default {
         }
       }
     },
-    
+
     clientPos (event) {
       let x = (event.touches) ? event.touches[0].clientX : event.clientX
       let y = (event.touches) ? event.touches[0].clientY : event.clientY
