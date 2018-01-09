@@ -21,6 +21,7 @@
 - **svg <-> canvas** shared styles via css
 - **Screenshots**, *export as svg or png (svg renderer), export as png (canvas renderer)* 
 - **Touch support**
+- **Pan and Zoom**
 
 
 ## Installation
@@ -36,7 +37,7 @@ npm install vue-d3-network --save
 
 ```xml
   ...  
-  <d3-network :net-nodes="nodes" :net-links="links" :options="options" />
+  <d3-network id='my-graph' :net-nodes="nodes" :net-links="links" :options="options" />
   ...
 
 ```
@@ -85,8 +86,8 @@ See: [package.json](https://github.com/emiliorizzo/vue-d3-network/blob/master/pa
 
  **selection** : Object, *links and nodes selected*
   
-  - **links**: Object with node.ids as keys, node objects as values
-  - **nodes**: Object  with link.ids as keys, links objects as values
+  - **links**: Object  with link.ids as keys, links objects as values
+  - **nodes**: Object with node.ids as keys, node objects as values
 
  **nodeSym**: String, *node sprite svg doc*
  
@@ -98,7 +99,7 @@ See: [package.json](https://github.com/emiliorizzo/vue-d3-network/blob/master/pa
  
  **customForces**: Object: { [d3Function]:args }
 
-
+ **panZoomOptions**: Object, refers to [panzoom documentation](https://github.com/anvaka/panzoom) to configure the panning and zoom. (Only works for SVG rendering)
 
  **options**:
   
@@ -134,6 +135,11 @@ See: [package.json](https://github.com/emiliorizzo/vue-d3-network/blob/master/pa
 
 - **node-click**:  *fired when click on node*, emits **(event,node-object)**
 - **link-click**:  *fired when click on link*, emits **(event, link-object)**
+- **sim-start**:  *fired when the simulation starts*, emits **(event)**
+- **sim-tick**:  *fired when the simulation ticks*, emits **(event)**
+- **sim-end**:  *fired when the simulation ends*, emits **(event)**
+- **drag-start**:  *fired when a node starts to be dragged*, emits **(event, node-object)**
+- **drag-end**:  *fired when a node finishes to be dragged*, emits **(event, node-object)**
 - **screen-shot**: *fired when screenshot creation is done*, emits **(error)**
 
 ## Methods
@@ -166,7 +172,8 @@ see: [src/canvasStyles.js](https://github.com/emiliorizzo/vue-d3-network/blob/ma
 
   - [x]  Touch support
   - []   Optimization
-  - []   Zoom
+  - [x]  Zoom
+  - [x]  Pan
   - [x]  Canvas Render
   - [x]  Nodes sprites
 

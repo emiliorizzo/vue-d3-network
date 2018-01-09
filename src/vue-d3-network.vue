@@ -427,7 +427,7 @@ export default {
       if(event)
       {
         this.stopPanZoom();
-        this.$emit('drag-start');
+        this.$emit('drag-start', this.nodes[nodeKey]);
       }
 
       this.dragging = (nodeKey === false) ? false : nodeKey
@@ -447,7 +447,7 @@ export default {
       }
       this.dragStart(false);
       this.startPanZoom();
-      this.$emit('drag-end');
+      this.$emit('drag-end', node);
     },
     // -- Render helpers
     nodeClick (event, node) {
