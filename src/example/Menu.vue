@@ -73,6 +73,10 @@
       li
         label Mouse Status
         label {{ mouseStatus }}
+      li
+        label Drag Status
+        label(v-if='isDragging') Dragging
+        label(v-else) Nothing is dragged
 
 
 
@@ -81,7 +85,7 @@
 import defaultData from './data.js'
 export default {
   name: 'd3-net-example-menu',
-  props: ['links', 'nodes', 'settings', 'options', 'status', 'mouseStatus'],
+  props: ['links', 'nodes', 'settings', 'options', 'status', 'mouseStatus', 'isDragging'],
   data () {
     let data = Object.assign({}, defaultData)
     return {

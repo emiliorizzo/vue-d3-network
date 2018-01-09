@@ -20,6 +20,8 @@
     @node-click="nodeClick"
     @link-click="linkClick"
     @screen-shot='screenShotDone'
+    @drag-start='dragStart'
+    @drag-end='dragEnd'
     )
 
 
@@ -65,6 +67,7 @@
           :options="options"
           :status='simStatus'
           :mouseStatus='mouseStatus'
+          :isDragging='isDragging'
           @options="changeOptions"
           @simulate="reset"
           @reset="resetOptions"
@@ -134,6 +137,7 @@ export default {
     data.toSvg = false
     data.options.icon = false
     data.nodeSym = null
+    data.isDragging = false;
     // to test
     data.nodeCb = function (node) {
       if (undefined !== node.index) {
@@ -169,6 +173,15 @@ export default {
     }
   },
   methods: {
+
+    dragStart() {
+      this.isDragging = true;
+    },
+
+    dragEnd() {
+      this.isDragging = false;
+    },
+
     simStart() {
       this.simStatus = "Start";
     },

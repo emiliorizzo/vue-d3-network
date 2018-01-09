@@ -407,9 +407,21 @@ export default {
     },
     // -- Mouse Interaction
     move (event) {
+      console.log(event);
       let pos = this.clientPos(event)
       if (this.dragging !== false) {
-        if (this.nodes[this.dragging]) {
+        
+        const node = this.nodes[this.dragging];
+        
+
+        if (node) {
+          
+          if(this.nodeClickIsAllowed)
+          {
+            this.$emit('drag-start', node)
+            this.nodeClickIsAllowed = false;
+          }
+
           this.simulation.restart()
           this.simulation.alpha(0.5)
           this.nodes[this.dragging].fx = pos.x - this.mouseOfst.x
@@ -417,6 +429,7 @@ export default {
         }
       }
     },
+    
     clientPos (event) {
       let x = (event.touches) ? event.touches[0].clientX : event.clientX
       let y = (event.touches) ? event.touches[0].clientY : event.clientY
@@ -424,7 +437,9 @@ export default {
       y = y || 0
       return { x, y }
     },
+
     dragStart (event, nodeKey) {
+      
       this.dragging = (nodeKey === false) ? false : nodeKey
       this.stopPanZoom();
       this.setMouseOffset(event, this.nodes[nodeKey])
@@ -432,11 +447,9 @@ export default {
         this.simulation.alpha(0.1)
         this.simulation.restart()
         this.setMouseOffset()
-        
-        this.$emit('drag-start', this.nodes[nodeKey])
-        this.nodeClickIsAllowed = false
       }
     },
+
     dragEnd () {
       let node = this.nodes[this.dragging]
       if (node && !node.pinned) {
