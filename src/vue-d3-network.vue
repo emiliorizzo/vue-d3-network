@@ -93,6 +93,7 @@ export default {
       strLinks: true,
       fontSize: 10,
       dragging: false,
+      nodeClickIsAllowed: true,
       linkWidth: 1,
       nodeLabels: false,
       linkLabels: false,
@@ -249,7 +250,7 @@ export default {
       if(this.panzoom)
       {
         this.panzoomModel =  this.panzoom.getTransform();
-        console.log(this.panzoomModel);
+
         this.panzoom.dispose();
         this.panzoom = undefined;
       }
@@ -424,18 +425,15 @@ export default {
       return { x, y }
     },
     dragStart (event, nodeKey) {
-      if(event)
-      {
-        this.stopPanZoom();
-        this.$emit('drag-start', this.nodes[nodeKey]);
-      }
-
       this.dragging = (nodeKey === false) ? false : nodeKey
       this.setMouseOffset(event, this.nodes[nodeKey])
       if (this.dragging === false) {
         this.simulation.alpha(0.1)
         this.simulation.restart()
         this.setMouseOffset()
+        this.stopPanZoom()
+        this.$emit('drag-start', this.nodes[nodeKey])
+        this.nodeClickIsAllowed = false
       }
     },
     dragEnd () {
@@ -451,7 +449,13 @@ export default {
     },
     // -- Render helpers
     nodeClick (event, node) {
-      this.$emit('node-click', event, node)
+      if(!this.nodeClickIsAllowed)
+      {
+        this.nodeClickIsAllowed = true;
+        return;
+      }
+
+      this.$emit('node-click', event, node);
     },
     linkClick (event, link) {
       this.$emit('link-click', event, link)
