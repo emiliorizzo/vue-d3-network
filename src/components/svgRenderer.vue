@@ -71,7 +71,7 @@
           :x='node.x + (getNodeSize(node) / 2) + (fontSize / 2)'
           :y='node.y + labelOffset.y'
           :font-size="fontSize"
-          :class='(node._labelClass) ? node._labelClass : "node-label"'
+          :class='nodeLabelClass(node)'
           :stroke-width='fontSize / 8'
         ) {{ node.name }}
 
@@ -81,7 +81,7 @@
           template(v-if='!Array.isArray(link.name)')
             text.link-label(
               :key='index'
-              :class='(link._labelClass) ? link._labelClass : "link-label"'
+              :class='linkLabelClass(link)'
               :font-size="fontSize"
               :stroke-width='fontSize / 8'
               text-anchor="middle"
@@ -91,7 +91,7 @@
             text.link-label(
               v-if='link.name[0] && link.name.length > 1'
               :key='index'
-              :class='(link._labelClass) ? link._labelClass : "link-label"'
+              :class='linkLabelClass(link)'
               :font-size="fontSize"
               :stroke-width='fontSize / 8'
               text-anchor="start"
@@ -210,6 +210,13 @@ export default {
       }
       return cssClass
     },
+    linkLabelClass(link)
+    {
+      var cssClass = (link._labelClass) ? link._labelClass : "link-label";
+      if (this.linksSelected[link.id]) cssClass += ' selected';
+
+      return cssClass;
+    },
     
     linkPath (link) {
       let d = {
@@ -237,6 +244,13 @@ export default {
       if (this.selected[node.id]) cssClass += ' selected'
       if (node.fx || node.fy) cssClass += ' pinned'
       return cssClass
+    },
+    nodeLabelClass(node)
+    {
+      var cssClass = (node._labelClass) ? node._labelClass : "node-label";
+      if (this.selected[node.id]) cssClass += ' selected';
+
+      return cssClass;
     },
     searchBackground () {
       let vm = this

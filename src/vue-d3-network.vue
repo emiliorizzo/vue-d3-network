@@ -411,7 +411,6 @@ export default {
       if (this.dragging !== false) {
         
         const node = this.nodes[this.dragging];
-        
 
         if (node) {
           
@@ -537,7 +536,7 @@ export default {
     stroke-width 3px
     transition fill 0.5s ease
     fill $white
-  .node.selected
+  .node.selected, .node-label.selected
     stroke $color2
   .node.pinned
     stroke alpha($warn, 0.6)
@@ -548,7 +547,7 @@ export default {
     &:hover
       stroke $warn
       stroke-width 5px
-  .link.selected
+  .link.selected, .link-label.selected
     stroke alpha($color2, 0.6)
   .curve
     fill none
