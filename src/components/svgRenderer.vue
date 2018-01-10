@@ -100,7 +100,7 @@
             text.link-label(
               v-else-if='link.name[0] && link.name.length == 1'
               :key='index'
-              :class='(link._labelClass) ? link._labelClass : "link-label"'
+              :class='linkLabelClass(link)'
               :font-size="fontSize"
               :stroke-width='fontSize / 8'
               text-anchor="middle"
@@ -110,7 +110,7 @@
             text.link-label(
               v-if='link.name[1] && link.name.length == 2'
               :key='index'
-              :class='(link._labelClass) ? link._labelClass : "link-label"'
+              :class='linkLabelClass(link)'
               :font-size="fontSize"
               :stroke-width='fontSize / 8'
               text-anchor="end"
