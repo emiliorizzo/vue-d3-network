@@ -11,6 +11,73 @@
     @touchstart.passive=''
     )
     g(:id='id')
+    
+      //-> Links Labels
+      g.labels#link-labels(v-if="linkLabels")
+        template(v-for="link,index in links")
+          template(v-if='!Array.isArray(link.name)')
+            text.link-label(
+              :key='index'
+              :class='linkLabelClass(link)'
+              :font-size="fontSize"
+              :stroke-width='fontSize / 8'
+              text-anchor="middle"
+              dy="-1"
+            ) 
+              textPath(:xlink:href='"#link-"+link.id' startOffset="50%") {{ link.name }}
+          template(v-else)
+            text.link-label(
+              v-if='link.name[0] && link.name.length > 1'
+              :key='index'
+              :class='linkLabelClass(link)'
+              :font-size="fontSize"
+              :stroke-width='fontSize / 8'
+              text-anchor="start"
+              dy="-1"
+            ) 
+              textPath(:xlink:href='"#link-"+link.id' startOffset="10%") {{ link.name[0] }}
+            text.link-label(
+              v-else-if='link.name[0] && link.name.length == 1'
+              :key='index'
+              :class='linkLabelClass(link)'
+              :font-size="fontSize"
+              :stroke-width='fontSize / 8'
+              text-anchor="middle"
+              dy="-1"
+            ) 
+              textPath(:xlink:href='"#link-"+link.id' startOffset="50%") {{ link.name[0] }}
+              
+            text.link-label(
+              v-if='link.name[1] && link.name.length == 2'
+              :key='index'
+              :class='linkLabelClass(link)'
+              :font-size="fontSize"
+              :stroke-width='fontSize / 8'
+              text-anchor="end"
+              dy="-1"
+            ) 
+              textPath(:xlink:href='"#link-"+link.id' startOffset="90%") {{ link.name[1] }}
+            text.link-label(
+              v-else-if='link.name[1] && link.name.length == 3'
+              :key='index'
+              :class='(link._labelClass) ? link._labelClass : "link-label"'
+              :font-size="fontSize"
+              :stroke-width='fontSize / 8'
+              text-anchor="middle"
+              dy="-1"
+            ) 
+              textPath(:xlink:href='"#link-"+link.id' startOffset="50%") {{ link.name[1] }}
+            
+            text.link-label(
+              v-if='link.name[2]'
+              :key='index'
+              :class='(link._labelClass) ? link._labelClass : "link-label"'
+              :font-size="fontSize"
+              :stroke-width='fontSize / 8'
+              text-anchor="end"
+              dy="-1"
+            ) 
+              textPath(:xlink:href='"#link-"+link.id' startOffset="90%") {{ link.name[2] }}
       //-> links  
       g.links#l-links
           path(v-for="link in links"
@@ -75,66 +142,7 @@
           :stroke-width='fontSize / 8'
         ) {{ node.name }}
 
-      //-> Links Labels
-      g.labels#link-labels(v-if="linkLabels")
-        template(v-for="link,index in links")
-          template(v-if='!Array.isArray(link.name)')
-            text.link-label(
-              :key='index'
-              :class='linkLabelClass(link)'
-              :font-size="fontSize"
-              :stroke-width='fontSize / 8'
-              text-anchor="middle"
-            ) 
-              textPath(:xlink:href='"#link-"+link.id' startOffset="50%") {{ link.name }}
-          template(v-else)
-            text.link-label(
-              v-if='link.name[0] && link.name.length > 1'
-              :key='index'
-              :class='linkLabelClass(link)'
-              :font-size="fontSize"
-              :stroke-width='fontSize / 8'
-              text-anchor="start"
-            ) 
-              textPath(:xlink:href='"#link-"+link.id' startOffset="10%") {{ link.name[0] }}
-            text.link-label(
-              v-else-if='link.name[0] && link.name.length == 1'
-              :key='index'
-              :class='linkLabelClass(link)'
-              :font-size="fontSize"
-              :stroke-width='fontSize / 8'
-              text-anchor="middle"
-            ) 
-              textPath(:xlink:href='"#link-"+link.id' startOffset="50%") {{ link.name[0] }}
-              
-            text.link-label(
-              v-if='link.name[1] && link.name.length == 2'
-              :key='index'
-              :class='linkLabelClass(link)'
-              :font-size="fontSize"
-              :stroke-width='fontSize / 8'
-              text-anchor="end"
-            ) 
-              textPath(:xlink:href='"#link-"+link.id' startOffset="90%") {{ link.name[1] }}
-            text.link-label(
-              v-else-if='link.name[1] && link.name.length == 3'
-              :key='index'
-              :class='(link._labelClass) ? link._labelClass : "link-label"'
-              :font-size="fontSize"
-              :stroke-width='fontSize / 8'
-              text-anchor="middle"
-            ) 
-              textPath(:xlink:href='"#link-"+link.id' startOffset="50%") {{ link.name[1] }}
-            
-            text.link-label(
-              v-if='link.name[2]'
-              :key='index'
-              :class='(link._labelClass) ? link._labelClass : "link-label"'
-              :font-size="fontSize"
-              :stroke-width='fontSize / 8'
-              text-anchor="end"
-            ) 
-              textPath(:xlink:href='"#link-"+link.id' startOffset="90%") {{ link.name[2] }}
+      
       
         
 </template>
