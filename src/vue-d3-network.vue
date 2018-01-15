@@ -55,6 +55,16 @@ export default {
       }
     },
 
+    linkLabelOffset: {
+      type: Object,
+      default: () => {
+        return {
+          x: 0,
+          y: -2
+        }
+      },
+    },
+
     panzoomOptions: {
       type: Object,
       default: () => {
@@ -128,6 +138,7 @@ export default {
       'linkLabels',
       'fontSize',
       'labelOffset',
+      'linkLabelOffset',
       'offset',
       'padding',
       'nodeSize',

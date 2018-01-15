@@ -112,22 +112,30 @@ See: [package.json](https://github.com/emiliorizzo/vue-d3-network/blob/master/pa
       - **x**: Number
       - **y**: Number
 
-  - **force**: Number
-  - **forces** Object:
-      - **Center**: *Boolean*, use d3.forceCenter
-      - **X**: *strength*, use d3.forceX
-      - **Y**: *strength*, use d3.forceY
-      - **ManyBody**: *Boolean*, use d3.forceManyBody, *takes the negative value of 'force'  option*
-      - **Link**: *Boolean*, use  d3.forceLink
+**linkLabelOffset**: Object, *link label offset* 
+  - **x**: Number
+  - **y**: Number
+
+**labelOffset**: Object, *node label offset* 
+  - **x**: Number
+  - **y**: Number
+
+- **force**: Number
+- **forces** Object:
+    - **Center**: *Boolean*, use d3.forceCenter
+    - **X**: *strength*, use d3.forceX
+    - **Y**: *strength*, use d3.forceY
+    - **ManyBody**: *Boolean*, use d3.forceManyBody, *takes the negative value of 'force'  option*
+    - **Link**: *Boolean*, use  d3.forceLink
   - 
 - **nodeSize**: Number, *node radius | size in px* 
 - **linkWidth**: Number, *link thickness in px*
-  - **nodeLabels**: Boolean, *show nodes names*
-  - **linkLabels**: Boolean, *show links names*
-  - **fontSize**: Number, *for node labels, px*
-  - **strLinks**: Boolean, *draw links as rect lines* 
-  - **resizeListener**:Boolean, defaults: true ,add listener to window.resize event
-  - **noNodes**: Boolean, *no render nodes*
+- **nodeLabels**: Boolean, *show nodes names*
+- **linkLabels**: Boolean, *show links names*
+- **fontSize**: Number, *for node labels, px*
+- **strLinks**: Boolean, *draw links as rect lines* 
+- **resizeListener**:Boolean, defaults: true ,add listener to window.resize event
+- **noNodes**: Boolean, *no render nodes*
 - **canvasStyles**: Object
 
 

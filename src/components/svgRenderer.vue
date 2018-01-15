@@ -22,7 +22,8 @@
               :font-size="fontSize"
               :stroke-width='fontSize / 8'
               text-anchor="middle"
-              dy="-1"
+              :dy="linkLabelOffset.y"
+              :dx="linkLabelOffset.x"
             ) 
               textPath(:xlink:href='"#link-"+link.id' startOffset="50%") {{ link.name }}
           template(v-else)
@@ -33,7 +34,8 @@
               :font-size="fontSize"
               :stroke-width='fontSize / 8'
               text-anchor="start"
-              dy="-1"
+              :dy="linkLabelOffset.y"
+              :dx="linkLabelOffset.x"
             ) 
               textPath(:xlink:href='"#link-"+link.id' startOffset="10%") {{ link.name[0] }}
             text.link-label(
@@ -43,7 +45,8 @@
               :font-size="fontSize"
               :stroke-width='fontSize / 8'
               text-anchor="middle"
-              dy="-1"
+              :dy="linkLabelOffset.y"
+              :dx="linkLabelOffset.x"
             ) 
               textPath(:xlink:href='"#link-"+link.id' startOffset="50%") {{ link.name[0] }}
               
@@ -54,7 +57,8 @@
               :font-size="fontSize"
               :stroke-width='fontSize / 8'
               text-anchor="end"
-              dy="-1"
+              :dy="linkLabelOffset.y"
+              :dx="linkLabelOffset.x"
             ) 
               textPath(:xlink:href='"#link-"+link.id' startOffset="90%") {{ link.name[1] }}
             text.link-label(
@@ -64,7 +68,8 @@
               :font-size="fontSize"
               :stroke-width='fontSize / 8'
               text-anchor="middle"
-              dy="-1"
+              :dy="linkLabelOffset.y"
+              :dx="linkLabelOffset.x"
             ) 
               textPath(:xlink:href='"#link-"+link.id' startOffset="50%") {{ link.name[1] }}
             
@@ -75,7 +80,8 @@
               :font-size="fontSize"
               :stroke-width='fontSize / 8'
               text-anchor="end"
-              dy="-1"
+              :dy="linkLabelOffset.y"
+              :dx="linkLabelOffset.x"
             ) 
               textPath(:xlink:href='"#link-"+link.id' startOffset="90%") {{ link.name[2] }}
       //-> links  
@@ -167,6 +173,7 @@ export default {
     'nodeLabels',
     'linkLabels',
     'labelOffset',
+    'linkLabelOffset',
     'nodeSym'],
   
   mounted() {
