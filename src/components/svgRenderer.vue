@@ -5,83 +5,161 @@
     ref="svg" 
     :width="size.w" 
     :height="size.h"
-    class="net-svg" 
+    class="net-svg"
     @mouseup='emit("dragEnd",[$event])'
     @touchend.passive='emit("dragEnd",[$event])'
     @touchstart.passive=''
     )
-   
-    //-> links  
-    g.links#l-links
-        path(v-for="link in links"
-          :d="linkPath(link)"
-          :id="link.id"
-          @click='emit("linkClick",[$event,link])'
-          @touchstart.passive='emit("linkClick",[$event,link])'
-          :stroke-width='linkWidth'
-          :class='linkClass(link.id)'
-          :style='linkStyle(link)'
-          v-bind='link._svgAttrs')
+    g(:id='id')
+    
+      //-> Links Labels
+      g.labels#link-labels(v-if="linkLabels")
+        template(v-for="link,index in links")
+          template(v-if='!Array.isArray(link.name)')
+            text.link-label(
+              :key='index'
+              :class='linkLabelClass(link)'
+              :font-size="fontSize"
+              :stroke-width='fontSize / 8'
+              text-anchor="middle"
+              :dy="linkLabelOffset.y"
+              :dx="linkLabelOffset.x"
+            ) 
+              textPath(:xlink:href='"#link-"+link.id' startOffset="50%") {{ link.name }}
+          template(v-else)
+            text.link-label(
+              v-if='link.name[0] && link.name.length > 1'
+              :key='index'
+              :class='linkLabelClass(link)'
+              :font-size="fontSize"
+              :stroke-width='fontSize / 8'
+              text-anchor="start"
+              :dy="linkLabelOffset.y"
+              :dx="linkLabelOffset.x"
+            ) 
+              textPath(:xlink:href='"#link-"+link.id' startOffset="10%") {{ link.name[0] }}
+            text.link-label(
+              v-else-if='link.name[0] && link.name.length == 1'
+              :key='index'
+              :class='linkLabelClass(link)'
+              :font-size="fontSize"
+              :stroke-width='fontSize / 8'
+              text-anchor="middle"
+              :dy="linkLabelOffset.y"
+              :dx="linkLabelOffset.x"
+            ) 
+              textPath(:xlink:href='"#link-"+link.id' startOffset="50%") {{ link.name[0] }}
+              
+            text.link-label(
+              v-if='link.name[1] && link.name.length == 2'
+              :key='index'
+              :class='linkLabelClass(link)'
+              :font-size="fontSize"
+              :stroke-width='fontSize / 8'
+              text-anchor="end"
+              :dy="linkLabelOffset.y"
+              :dx="linkLabelOffset.x"
+            ) 
+              textPath(:xlink:href='"#link-"+link.id' startOffset="90%") {{ link.name[1] }}
+            text.link-label(
+              v-else-if='link.name[1] && link.name.length == 3'
+              :key='index'
+              :class='(link._labelClass) ? link._labelClass : "link-label"'
+              :font-size="fontSize"
+              :stroke-width='fontSize / 8'
+              text-anchor="middle"
+              :dy="linkLabelOffset.y"
+              :dx="linkLabelOffset.x"
+            ) 
+              textPath(:xlink:href='"#link-"+link.id' startOffset="50%") {{ link.name[1] }}
             
-    //- -> nodes
-    g.nodes#l-nodes(v-if='!noNodes')
-      template(v-for='(node,key) in nodes')
-        svg(v-if='svgIcon(node)' 
+            text.link-label(
+              v-if='link.name[2]'
+              :key='index'
+              :class='(link._labelClass) ? link._labelClass : "link-label"'
+              :font-size="fontSize"
+              :stroke-width='fontSize / 8'
+              text-anchor="end"
+              :dy="linkLabelOffset.y"
+              :dx="linkLabelOffset.x"
+            ) 
+              textPath(:xlink:href='"#link-"+link.id' startOffset="90%") {{ link.name[2] }}
+      //-> links  
+      g.links#l-links
+          path(v-for="link in links"
+            @click='emit("linkClick",[$event,link])'
+            @touchstart.passive='emit("linkClick",[$event,link])'
+            @mouseenter='emit("mouseEnterLink",[$event,link])'
+            @mouseleave='emit("mouseLeaveLink",[$event,link])'
+            :id='"link-"+link.id'
+            :d="linkPath(link)"
+            :stroke-width='linkWidth'
+            :class='linkClass(link.id)'
+            :style='linkStyle(link)'
+            v-bind='link._svgAttrs')
+            
+      //- -> nodes
+      g.nodes#l-nodes(v-if='!noNodes')
+        template(v-for='(node,key) in nodes')
+          svg(v-if='svgIcon(node)'
+            :key='key'
+            :viewBox='svgIcon(node).attrs.viewBox'
+            :width='getNodeSize(node, "width")'
+            :height='getNodeSize(node, "height")'
+            @click='emit("nodeClick",[$event,node])'
+            @mouseenter='emit("mouseEnterNode",[$event,node])'
+            @mouseleave='emit("mouseLeaveNode",[$event,node])'
+            @touchend.passive='emit("nodeClick",[$event,node])'
+            @mousedown.prevent='emit("dragStart",[$event,key])'
+            @touchstart.passive='emit("dragStart",[$event,key])'
+            :x='node.x - getNodeSize(node, "width") / 2'
+            :y='node.y - getNodeSize(node, "height") / 2'
+            :style='nodeStyle(node)'
+            :title="node.name"
+            :class='"node-svg " + nodeClass(node)'
+            v-html='svgIcon(node).data'
+            v-bind='node._svgAttrs'
+            )
+
+          //- default circle nodes
+          circle(v-else
           :key='key'
-          :viewBox='svgIcon(node).attrs.viewBox'
-          :width='getNodeSize(node, "width")'
-          :height='getNodeSize(node, "height")' 
+          :r="getNodeSize(node) / 2"
           @click='emit("nodeClick",[$event,node])'
+          @mouseenter='emit("mouseEnterNode",[$event,node])'
+          @mouseleave='emit("mouseLeaveNode",[$event,node])'
           @touchend.passive='emit("nodeClick",[$event,node])'
           @mousedown.prevent='emit("dragStart",[$event,key])'
           @touchstart.passive='emit("dragStart",[$event,key])'
-          :x='node.x - getNodeSize(node, "width") / 2'
-          :y='node.y - getNodeSize(node, "height") / 2' 
+          :cx="node.x"
+          :cy="node.y"
           :style='nodeStyle(node)'
           :title="node.name"
-          :class='"node-svg " + nodeClass(node)'
-          v-html='svgIcon(node).data'
+          :class="nodeClass(node)"
           v-bind='node._svgAttrs'
           )
 
-        //- default circle nodes
-        circle(v-else
-        :key='key'
-        :r="getNodeSize(node) / 2" 
-        @click='emit("nodeClick",[$event,node])'
-        @touchend.passive='emit("nodeClick",[$event,node])'
-        @mousedown.prevent='emit("dragStart",[$event,key])'
-        @touchstart.passive='emit("dragStart",[$event,key])'
-        :cx="node.x" 
-        :cy="node.y" 
-        :style='nodeStyle(node)'
-        :title="node.name"
-        :class="nodeClass(node)"
-        v-bind='node._svgAttrs'
-        )
+      g.labels#node-labels( v-if="nodeLabels")
+        text.node-label(v-for="node in nodes"
+          :x='node.x + (getNodeSize(node) / 2) + (fontSize / 2)'
+          :y='node.y + labelOffset.y'
+          :font-size="fontSize"
+          :class='nodeLabelClass(node)'
+          :stroke-width='fontSize / 8'
+        ) {{ node.name }}
 
-
-    //-> Links Labels
-    g.labels#link-labels(v-if='linkLabels')
-      text.link-label(v-for="link in links" :font-size="fontSize" )
-        textPath(v-bind:xlink:href="'#' + link.id" startOffset= "50%") {{ link.name }}
-    
-    //- -> Node Labels  
-    g.labels#node-labels( v-if="nodeLabels")
-      text.node-label(v-for="node in nodes"
-        :x='node.x + (getNodeSize(node) / 2) + (fontSize / 2)'
-        :y='node.y + labelOffset.y'
-        :font-size="fontSize"
-        :class='(node._labelClass) ? node._labelClass : ""'
-        :stroke-width='fontSize / 8'  
-      ) {{ node.name }}
+      
+      
+        
 </template>
 <script>
-import svgExport from '../lib/svgExport.js'
+import svgExport from '../lib/svgExport.js';
+
 
 export default {
   name: 'svg-renderer',
   props: ['size',
+    'id',
     'nodes',
     'noNodes',
     'selected',
@@ -95,7 +173,12 @@ export default {
     'nodeLabels',
     'linkLabels',
     'labelOffset',
+    'linkLabelOffset',
     'nodeSym'],
+  
+  mounted() {
+    
+  },
 
   computed: {
     nodeSvg () {
@@ -117,6 +200,7 @@ export default {
     emit (e, args) {
       this.$emit('action', e, args)
     },
+
     svgScreenShot (cb, toSvg, background, allCss) {
       let svg = svgExport.export(this.$refs.svg, allCss)
       if (!toSvg) {
@@ -130,6 +214,7 @@ export default {
         cb(null, svgExport.save(svg))
       }
     },
+
     linkClass (linkId) {
       let cssClass = 'link '
       if (this.linksSelected.hasOwnProperty(linkId)) {
@@ -140,6 +225,14 @@ export default {
       }
       return cssClass
     },
+    linkLabelClass(link)
+    {
+      var cssClass = (link._labelClass) ? link._labelClass : "link-label";
+      if (this.linksSelected[link.id]) cssClass += ' selected';
+
+      return cssClass;
+    },
+    
     linkPath (link) {
       let d = {
         M: [link.source.x | 0, link.source.y | 0],
@@ -153,6 +246,7 @@ export default {
         return 'M ' + d.M + ' Q ' + d.Q.join(' ') + ' ' + d.X
       }
     },
+
     nodeStyle (node) {
       return (node._color) ? 'fill: ' + node._color : ''
     },
@@ -165,6 +259,13 @@ export default {
       if (this.selected[node.id]) cssClass += ' selected'
       if (node.fx || node.fy) cssClass += ' pinned'
       return cssClass
+    },
+    nodeLabelClass(node)
+    {
+      var cssClass = (node._labelClass) ? node._labelClass : "node-label";
+      if (this.selected[node.id]) cssClass += ' selected';
+
+      return cssClass;
     },
     searchBackground () {
       let vm = this
@@ -183,8 +284,28 @@ export default {
       if (svg) {
         return svgExport.toSymbol(svg)
       }
-    }
+    },
+
+    xCoordForLink(d) {
+      if (d.target.x > d.source.x) {
+        return (d.source.x + (d.target.x - d.source.x)/2); 
+      }
+      else {
+        return (d.target.x + (d.source.x - d.target.x)/2); 
+      }
+    },
+
+    yCoordForLink(d) {
+      if (d.target.y > d.source.y) {
+        return (d.source.y + (d.target.y - d.source.y)/2); 
+      }
+      else {
+        return (d.target.y + (d.source.y - d.target.y)/2); 
+      }
+    },
   }
 }
 </script>
+<style>
 
+</style>

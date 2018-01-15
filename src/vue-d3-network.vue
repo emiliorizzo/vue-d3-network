@@ -5,6 +5,8 @@ import svgRenderer from './components/svgRenderer.vue'
 import canvasRenderer from './components/canvasRenderer.vue'
 import saveImage from './lib/saveImage.js'
 import svgExport from './lib/svgExport.js'
+import uuidv1 from 'uuid/v1';
+import panzoom from 'panzoom';
 
 export default {
   name: 'd3-network',
@@ -37,6 +39,12 @@ export default {
     customForces: {
       type: Object
     },
+    id: {
+      type: String,
+      default: () => {
+        return uuidv1();
+      }
+    },
     selection: {
       type: Object,
       default: () => {
@@ -45,7 +53,24 @@ export default {
           links: {}
         }
       }
-    }
+    },
+
+    linkLabelOffset: {
+      type: Object,
+      default: () => {
+        return {
+          x: 0,
+          y: -2
+        }
+      },
+    },
+
+    panzoomOptions: {
+      type: Object,
+      default: () => {
+        return {};
+      }
+    },
   },
   data () {
     return {
@@ -72,10 +97,13 @@ export default {
         ManyBody: true,
         Link: true
       },
+      panzoom: undefined,
+      panzoomModel: undefined,
       noNodes: false,
       strLinks: true,
       fontSize: 10,
       dragging: false,
+      nodeClickIsAllowed: true,
       linkWidth: 1,
       nodeLabels: false,
       linkLabels: false,
@@ -88,6 +116,7 @@ export default {
         x: 0,
         y: 0
       },
+      simStart: false,
       simulation: null,
       nodeSvg: null,
       resizeListener: true
@@ -109,10 +138,12 @@ export default {
       'linkLabels',
       'fontSize',
       'labelOffset',
+      'linkLabelOffset',
       'offset',
       'padding',
       'nodeSize',
-      'noNodes'
+      'noNodes',
+      'id',
     ]
 
     for (let prop of bindProps) {
@@ -146,10 +177,12 @@ export default {
     this.$nextTick(() => {
       this.animate()
     })
-    if (this.resizeListener) window.addEventListener('resize', this.onResize)
+    if (this.resizeListener) window.addEventListener('resize', this.onResize);
+
+    this.startPanZoom();
   },
   beforeDestroy () {
-    if (this.resizeListener) window.removeEventListener('resize', this.onResize)
+    if (this.resizeListener) window.removeEventListener('resize', this.onResize);
   },
   computed: {
     selected () {
@@ -194,6 +227,46 @@ export default {
     }
   },
   methods: {
+
+    startPanZoom () {
+
+      if(this.canvas || this.panzoom)
+      {
+        return;
+      }
+
+      if(this.id)
+      {
+        const graph = document.getElementById(this.id);
+        if(graph)
+        {
+          if(this.panzoomModel)
+          {
+            this.panzoomOptions.autocenter = false;
+          }
+          this.panzoom = panzoom(graph, this.panzoomOptions);
+          if(this.panzoomModel) {
+            this.panzoom.zoomAbs(0, 0, this.panzoomModel.scale);
+            this.panzoom.moveTo(this.panzoomModel.x, this.panzoomModel.y);
+          }
+        }
+      }
+    },
+
+    stopPanZoom() {
+      if(this.canvas )
+      {
+        return;
+      }
+      if(this.panzoom)
+      {
+        this.panzoomModel =  this.panzoom.getTransform();
+
+        this.panzoom.dispose();
+        this.panzoom = undefined;
+      }
+    },
+
     updateNodeSvg () {
       let svg = null
       if (this.nodeSym) {
@@ -243,6 +316,7 @@ export default {
         // initialize node coords
         if (!node.x) vm.$set(node, 'x', 0)
         if (!node.y) vm.$set(node, 'y', 0)
+
         // node default name
         if (!node.name) vm.$set(node, 'name', 'node ' + node.id)
         if (node.svgSym) {
@@ -275,7 +349,6 @@ export default {
       let sim = d3.forceSimulation()
         .stop()
         .alpha(0.5)
-        // .alphaMin(0.05)
         .nodes(nodes)
 
       if (forces.Center !== false) sim.force('center', d3.forceCenter(this.center.x, this.center.y))
@@ -292,9 +365,28 @@ export default {
         sim.force('link', d3.forceLink(links).id(function (d) { return d.id }))
       }
       sim = this.setCustomForces(sim)
+      sim.on('tick', this.simTick);
+      sim.on('end', this.simEnd);
       sim = this.itemCb(this.simCb, sim)
       return sim
     },
+
+    simTick() {
+      if(this.simStart) {
+        this.$emit('sim-tick');
+      }
+      else {
+        this.$emit('sim-start');
+      }
+
+      this.simStart = true;
+    },
+
+    simEnd() {
+      this.simStart = false;
+      this.$emit('sim-end');
+    },
+
     setCustomForces (sim) {
       let forces = this.customForces
       if (forces) {
@@ -328,7 +420,17 @@ export default {
     move (event) {
       let pos = this.clientPos(event)
       if (this.dragging !== false) {
-        if (this.nodes[this.dragging]) {
+        
+        const node = this.nodes[this.dragging];
+
+        if (node) {
+          
+          if(this.nodeClickIsAllowed)
+          {
+            this.$emit('drag-start', node)
+            this.nodeClickIsAllowed = false;
+          }
+
           this.simulation.restart()
           this.simulation.alpha(0.5)
           this.nodes[this.dragging].fx = pos.x - this.mouseOfst.x
@@ -336,6 +438,7 @@ export default {
         }
       }
     },
+
     clientPos (event) {
       let x = (event.touches) ? event.touches[0].clientX : event.clientX
       let y = (event.touches) ? event.touches[0].clientY : event.clientY
@@ -343,8 +446,11 @@ export default {
       y = y || 0
       return { x, y }
     },
+
     dragStart (event, nodeKey) {
+      
       this.dragging = (nodeKey === false) ? false : nodeKey
+      this.stopPanZoom();
       this.setMouseOffset(event, this.nodes[nodeKey])
       if (this.dragging === false) {
         this.simulation.alpha(0.1)
@@ -352,6 +458,7 @@ export default {
         this.setMouseOffset()
       }
     },
+
     dragEnd () {
       let node = this.nodes[this.dragging]
       if (node && !node.pinned) {
@@ -359,15 +466,40 @@ export default {
         node.fx = null
         node.fy = null
       }
-      this.dragStart(false)
+      this.dragStart(false);
+      this.startPanZoom();
+      this.$emit('drag-end', node);
     },
     // -- Render helpers
     nodeClick (event, node) {
-      this.$emit('node-click', event, node)
+      if(!this.nodeClickIsAllowed)
+      {
+        this.nodeClickIsAllowed = true;
+        return;
+      }
+
+      this.$emit('node-click', event, node);
     },
     linkClick (event, link) {
       this.$emit('link-click', event, link)
     },
+
+    mouseEnterNode(event, node) {
+      this.$emit('node-mouse-enter', event, node);
+    },
+
+    mouseLeaveNode(event, node) {
+      this.$emit('node-mouse-leave', event, node);
+    },
+
+    mouseEnterLink(event, link) {
+      this.$emit('link-mouse-enter', event, link);
+    },
+
+    mouseLeaveLink(event, link) {
+      this.$emit('link-mouse-leave', event, link);
+    },
+
     setMouseOffset (event, node) {
       let x = 0
       let y = 0
@@ -405,48 +537,35 @@ export default {
 
 <style lang="stylus">
   @import 'vars.styl'
-
   .net
     height 100%
     margin 0
-
   .net-svg
     // fill: white // background color to export as image
-
   .node
     stroke alpha($dark, 0.7)
     stroke-width 3px
     transition fill 0.5s ease
     fill $white
-
-  .node.selected
+  .node.selected, .node-label.selected
     stroke $color2
-
   .node.pinned
     stroke alpha($warn, 0.6)
-
   .link
     stroke alpha($dark, 0.3)
-
   .node, .link
     stroke-linecap round
-
     &:hover
       stroke $warn
       stroke-width 5px
-
-  .link.selected
+  .link.selected, .link-label.selected
     stroke alpha($color2, 0.6)
-
   .curve
     fill none
-
   .node-label
     fill $dark
-
   .link-label
     fill $dark
-    transform translate(0, -0.5em)
-    text-anchor middle
+
 </style>  
 
