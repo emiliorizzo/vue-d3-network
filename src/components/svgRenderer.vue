@@ -52,8 +52,8 @@
         @touchend.passive='emit("nodeClick",[$event,node])'
         @mousedown.prevent='emit("dragStart",[$event,key])'
         @touchstart.passive='emit("dragStart",[$event,key])'
-        :cx="node.x" 
-        :cy="node.y" 
+        :cx="node.x"
+        :cy="node.y"
         :style='nodeStyle(node)'
         :title="node.name"
         :class="nodeClass(node)"
@@ -75,6 +75,7 @@
         :class='(node._labelClass) ? node._labelClass : ""'
         :stroke-width='fontSize / 8'  
       ) {{ node.name }}
+
 </template>
 <script>
 import svgExport from '../lib/svgExport.js'
@@ -141,15 +142,18 @@ export default {
       return cssClass
     },
     linkPath (link) {
+      const isLTR = link.source.x < link.target.x
+      const left = isLTR ? link.source : link.target
+      const right = isLTR ? link.target : link.source
       let d = {
-        M: [link.source.x | 0, link.source.y | 0],
-        X: [link.target.x | 0, link.target.y | 0]
+        M: [left.x | 0, left.y | 0],
+        X: [right.x | 0, right.y | 0]
       }
       if (this.strLinks) {
         return 'M ' + d.M.join(' ') + ' L' + d.X.join(' ')
       }
       else {
-        d.Q = [link.source.x, link.target.y]
+        d.Q = [left.x, right.y]
         return 'M ' + d.M + ' Q ' + d.Q.join(' ') + ' ' + d.X
       }
     },
