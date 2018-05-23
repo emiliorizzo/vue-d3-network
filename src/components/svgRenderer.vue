@@ -63,23 +63,21 @@
           )
 
 
-      //-> Links Labels
-      g.labels#link-labels(v-if='linkLabels')
-        text.link-label(v-for="link in links" :font-size="fontSize" )
-          textPath(v-bind:xlink:href="'#' + link.id" startOffset= "50%") {{ link.name }}
-
-      //- -> Node Labels
-      g.labels#node-labels( v-if="nodeLabels")
-        text.node-label(v-for="node in nodes"
-          :x='node.x + (getNodeSize(node) / 2) + (fontSize / 2)'
-          :y='node.y + labelOffset.y'
-          :font-size="fontSize"
-          :class='(node._labelClass) ? node._labelClass : ""'
-          :stroke-width='fontSize / 8'
-        )
-          tspan(v-if="typeof node.name === 'string'") {{ node.name }}
-          tspan(v-else v-for="(n, i) in node.name" :x="node.x + (getNodeSize(node) / 2) + (fontSize / 2)" :dy="i ? '1em':-fontSize / 2") {{ n }}
-
+    //-> Links Labels
+    g.labels#link-labels(v-if='linkLabels')
+      text.link-label(v-for="link in links" :font-size="fontSize" )
+        textPath(v-bind:xlink:href="'#' + link.id" startOffset= "50%") {{ link.name }}
+    
+    //- -> Node Labels  
+    g.labels#node-labels( v-if="nodeLabels")
+      text.node-label(v-for="node in nodes"
+        :x='node.x + (getNodeSize(node) / 2) + (fontSize / 2)'
+        :y='node.y + labelOffset.y'
+        :font-size="fontSize"
+        :class='(node._labelClass) ? node._labelClass : ""'
+        :stroke-width='fontSize / 8'  
+      ) tspan(v-if="typeof node.name === 'string'") {{ node.name }}
+          tspan(v-else v-for="(n, i) in node.name " :x="node.x + (getNodeSize(node) / 2) + (fontSize / 2)" :dy="i ? '1em':-fontSize / 2") {{ n }}
 </template>
 <script>
 import svgExport from '../lib/svgExport.js'
