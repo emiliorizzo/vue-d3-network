@@ -241,8 +241,8 @@ export default {
         // index as default node id
         if (!node.id) vm.$set(node, 'id', index)
         // initialize node coords
-        if (!node.x) vm.$set(node, 'x', 0)
-        if (!node.y) vm.$set(node, 'y', 0)
+        if (!node.x) vm.$set(node, 'x')
+        if (!node.y) vm.$set(node, 'y')
         // node default name
         if (!node.name) vm.$set(node, 'name', 'node ' + node.id)
         if (node.svgSym) {
