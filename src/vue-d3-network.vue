@@ -237,12 +237,12 @@ export default {
         // node formatter option
         node = this.itemCb(this.nodeCb, node)
         // index as default node id
-        if (!node.id) vm.$set(node, 'id', index)
+        if (!node.id && node.id !== 0) vm.$set(node, 'id', index)
         // initialize node coords
         if (!node.x) vm.$set(node, 'x', 0)
         if (!node.y) vm.$set(node, 'y', 0)
-        // node default name
-        if (!node.name) vm.$set(node, 'name', 'node ' + node.id)
+        // node default name, allow string 0 as name
+        if (!node.name && node.name !== '0') vm.$set(node, 'name', 'node ' + node.id)
         if (node.svgSym) {
           node.svgIcon = svgExport.svgElFromString(node.svgSym)
           if (!this.canvas && node.svgIcon && !node.svgObj) node.svgObj = svgExport.toObject(node.svgIcon)
