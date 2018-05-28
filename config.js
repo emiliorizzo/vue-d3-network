@@ -1,10 +1,10 @@
 var path = require('path')
-var pkg = require("./package.json")
+var pkg = require('./package.json')
 module.exports = {
   html: {
     title: pkg.name,
     des: pkg.description,
-    template: path.join(__dirname, './src/example/template.html'),
+    template: path.join(__dirname, './src/example/template.html')
   },
   webpack (webpackConfig, options, webpack) {
     webpackConfig.plugins.push(new webpack.DefinePlugin({
@@ -15,7 +15,7 @@ module.exports = {
         repo: JSON.stringify(pkg.repository.url)
       }
     }))
-    webpackConfig.output.publicPath = ""
+    webpackConfig.output.publicPath = ''
     return webpackConfig
   }
 }
