@@ -5,7 +5,7 @@
     :style='canvasStyle'
     @mouseup.prevent='canvasClick'
     @mousedown.prevent='canvasClick'
-    @touchstart.passive='canvasClick'
+    @touchstart.prevent='canvasClick'
     @touchend.passive='canvasClick'
     v-render-canvas='{links, nodes}'
     )
