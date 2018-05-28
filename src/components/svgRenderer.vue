@@ -34,7 +34,7 @@
           @click='emit("nodeClick",[$event,node])'
           @touchend.passive='emit("nodeClick",[$event,node])'
           @mousedown.prevent='emit("dragStart",[$event,key])'
-          @touchstart.passive='emit("dragStart",[$event,key])'
+          @touchstart.prevent='emit("dragStart",[$event,key])'
           :x='node.x - getNodeSize(node, "width") / 2'
           :y='node.y - getNodeSize(node, "height") / 2' 
           :style='nodeStyle(node)'
@@ -51,7 +51,7 @@
         @click='emit("nodeClick",[$event,node])'
         @touchend.passive='emit("nodeClick",[$event,node])'
         @mousedown.prevent='emit("dragStart",[$event,key])'
-        @touchstart.passive='emit("dragStart",[$event,key])'
+        @touchstart.prevent='emit("dragStart",[$event,key])'
         :cx="node.x" 
         :cy="node.y" 
         :style='nodeStyle(node)'
