@@ -237,12 +237,12 @@ export default {
         // node formatter option
         node = this.itemCb(this.nodeCb, node)
         // index as default node id
-        if (!node.id) vm.$set(node, 'id', index)
+        if (node.id == undefined) vm.$set(node, 'id', index)
         // initialize node coords
-        if (!node.x) vm.$set(node, 'x', 0)
-        if (!node.y) vm.$set(node, 'y', 0)
+        if (node.x == undefined) vm.$set(node, 'x', 0)
+        if (node.y == undefined) vm.$set(node, 'y', 0)
         // node default name
-        if (!node.name) vm.$set(node, 'name', 'node ' + node.id)
+        if (node.name == undefined) vm.$set(node, 'name', 'node ' + node.id)
         if (node.svgSym) {
           node.svgIcon = svgExport.svgElFromString(node.svgSym)
           if (!this.canvas && node.svgIcon && !node.svgObj) node.svgObj = svgExport.toObject(node.svgIcon)
@@ -259,7 +259,7 @@ export default {
         // source and target for d3
         link.source = link.sid
         link.target = link.tid
-        if (!link.id) vm.$set(link, 'id', 'link-' + index)
+        if (link.id == undefined) vm.$set(link, 'id', 'link-' + index)
         return link
       })
     },
