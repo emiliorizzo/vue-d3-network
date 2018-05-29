@@ -133,12 +133,12 @@ export default {
       }
     },
     linkClass (linkId) {
-      let cssClass = 'link '
+      let cssClass = ['link']
       if (this.linksSelected.hasOwnProperty(linkId)) {
-        cssClass += 'selected'
+        cssClass.push('selected')
       }
       if (!this.strLinks) {
-        cssClass += 'curve'
+        cssClass.push('curve')
       }
       return cssClass
     },
@@ -161,10 +161,10 @@ export default {
       return (link._color) ? 'stroke: ' + link._color : ''
     },
     nodeClass (node) {
-      let cssClass = node._cssClass || ''
-      cssClass += ' node'
-      if (this.selected[node.id]) cssClass += ' selected'
-      if (node.fx || node.fy) cssClass += ' pinned'
+      let cssClass = (node._cssClass) ? [node._cssClass] : []
+      cssClass.push('node')
+      if (this.selected[node.id]) cssClass.push('selected')
+      if (node.fx || node.fy) cssClass.push('pinned')
       return cssClass
     },
     searchBackground () {
