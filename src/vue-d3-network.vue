@@ -1,5 +1,6 @@
 <script>
 import * as forceSimulation from 'd3-force'
+
 const d3 = Object.assign({}, forceSimulation)
 import svgRenderer from './components/svgRenderer.vue'
 import canvasRenderer from './components/canvasRenderer.vue'
@@ -129,10 +130,10 @@ export default {
     }
 
     return createElement('div', {
-      attrs: { class: 'net' },
-      on: { 'mousemove': this.move, '&touchmove': this.move }
+      attrs: {class: 'net'},
+      on: {'mousemove': this.move, '&touchmove': this.move}
     }, [createElement(renderer, {
-      props, ref, on: { action: this.methodCall }
+      props, ref, on: {action: this.methodCall}
     })])
   },
   created () {
@@ -243,8 +244,8 @@ export default {
           vm.$set(node, 'x', coords[0])
           vm.$set(node, 'y', coords[1])
         }
-        // node default name, allow string 0 as name
-        if (!node.name && node.name !== '0') vm.$set(node, 'name', 'node ' + node.id)
+        // node default name
+        if (!node.name) vm.$set(node, 'name', 'node ' + node.id)
         if (node.svgSym) {
           node.svgIcon = svgExport.svgElFromString(node.svgSym)
           if (!this.canvas && node.svgIcon && !node.svgObj) node.svgObj = svgExport.toObject(node.svgIcon)
@@ -289,7 +290,9 @@ export default {
         sim.force('charge', d3.forceManyBody().strength(-this.force))
       }
       if (forces.Link !== false) {
-        sim.force('link', d3.forceLink(links).id(function (d) { return d.id }))
+        sim.force('link', d3.forceLink(links).id(function (d) {
+          return d.id
+        }))
       }
       sim = this.setCustomForces(sim)
       sim = this.itemCb(this.simCb, sim)
@@ -329,7 +332,7 @@ export default {
       let pos = this.clientPos(event)
       if (this.dragging !== false) {
         if (this.nodes[this.dragging]) {
-          const zoom = this.$refs.svg.getZoom()
+          const zoom = this.canvas ? 1 : this.$refs.svg.getZoom()
           this.simulation.restart()
           this.simulation.alpha(0.5)
           this.nodes[this.dragging].fx += (pos.x - this.mouseOffset.x) / zoom
@@ -343,7 +346,7 @@ export default {
       let y = (event.touches) ? event.touches[0].clientY : event.clientY
       x = x || 0
       y = y || 0
-      return { x, y }
+      return {x, y}
     },
     dragStart (event, nodeKey) {
       this.panDisable = true
@@ -412,7 +415,6 @@ export default {
 
   .net-svg
     // fill: white // background color to export as image
-
   .node
     stroke alpha($dark, 0.7)
     stroke-width 3px

@@ -196,7 +196,7 @@ export default {
         return svgExport.toSymbol(svg)
       }
     },
-    getZoom() {
+    getZoom () {
       return this.$refs.zoom.getZoom()
     }
   }
