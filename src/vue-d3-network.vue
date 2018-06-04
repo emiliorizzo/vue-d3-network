@@ -5,7 +5,9 @@ import svgRenderer from './components/svgRenderer.vue'
 import canvasRenderer from './components/canvasRenderer.vue'
 import saveImage from './lib/saveImage.js'
 import svgExport from './lib/svgExport.js'
+import {phyllotaxis} from './lib/util.js'
 
+const phyl = phyllotaxis(10)
 export default {
   name: 'd3-network',
   components: {
@@ -66,7 +68,7 @@ export default {
       },
       force: 500,
       forces: {
-        Center: false,
+        Center: true,
         X: 0.5,
         Y: 0.5,
         ManyBody: true,
@@ -80,17 +82,15 @@ export default {
       nodeLabels: false,
       linkLabels: false,
       nodeSize: 5,
-      mouseOfst: {
-        x: 0,
-        y: 0
-      },
       padding: {
         x: 0,
         y: 0
       },
       simulation: null,
       nodeSvg: null,
-      resizeListener: true
+      resizeListener: true,
+      panDisable: false,
+      panZoomOptions: null
     }
   },
   render (createElement) {
@@ -112,7 +112,9 @@ export default {
       'offset',
       'padding',
       'nodeSize',
-      'noNodes'
+      'noNodes',
+      'panDisable',
+      'panZoomOptions'
     ]
 
     for (let prop of bindProps) {
@@ -143,9 +145,6 @@ export default {
   },
   mounted () {
     this.onResize()
-    this.$nextTick(() => {
-      this.animate()
-    })
     if (this.resizeListener) window.addEventListener('resize', this.onResize)
   },
   beforeDestroy () {
@@ -241,8 +240,11 @@ export default {
         // index as default node id
         if (!node.id) vm.$set(node, 'id', index)
         // initialize node coords
-        if (!node.x) vm.$set(node, 'x')
-        if (!node.y) vm.$set(node, 'y')
+        if (!node.x || !node.y) {
+          const coords = phyl(index)
+          vm.$set(node, 'x', coords[0])
+          vm.$set(node, 'y', coords[1])
+        }
         // node default name
         if (!node.name) vm.$set(node, 'name', 'node ' + node.id)
         if (node.svgSym) {
@@ -329,10 +331,12 @@ export default {
       let pos = this.clientPos(event)
       if (this.dragging !== false) {
         if (this.nodes[this.dragging]) {
+          const zoom = this.$refs.svg.getZoom()
           this.simulation.restart()
           this.simulation.alpha(0.5)
-          this.nodes[this.dragging].fx = pos.x - this.mouseOfst.x
-          this.nodes[this.dragging].fy = pos.y - this.mouseOfst.y
+          this.nodes[this.dragging].fx += (pos.x - this.mouseOffset.x) / zoom
+          this.nodes[this.dragging].fy += (pos.y - this.mouseOffset.y) / zoom
+          this.mouseOffset = pos
         }
       }
     },
@@ -344,8 +348,15 @@ export default {
       return { x, y }
     },
     dragStart (event, nodeKey) {
+      this.panDisable = true
       this.dragging = (nodeKey === false) ? false : nodeKey
-      this.setMouseOffset(event, this.nodes[nodeKey])
+      const node = this.nodes[nodeKey]
+      if (node) {
+        const pos = this.clientPos(event)
+        this.mouseOffset = pos
+        node.fx = node.x
+        node.fy = node.y
+      }
       if (this.dragging === false) {
         this.simulation.alpha(0.1)
         this.simulation.restart()
@@ -360,6 +371,7 @@ export default {
         node.fy = null
       }
       this.dragStart(false)
+      this.panDisable = false
     },
     // -- Render helpers
     nodeClick (event, node) {
@@ -367,16 +379,6 @@ export default {
     },
     linkClick (event, link) {
       this.$emit('link-click', event, link)
-    },
-    setMouseOffset (event, node) {
-      let x = 0
-      let y = 0
-      if (event && node) {
-        let pos = this.clientPos(event)
-        x = (pos.x) ? pos.x - node.x : node.x
-        y = (pos.y) ? pos.y - node.y : node.y
-      }
-      this.mouseOfst = { x, y }
     },
     screenShot (name, bgColor, toSVG, svgAllCss) {
       let exportFunc
