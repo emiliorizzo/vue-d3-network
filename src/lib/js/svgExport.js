@@ -107,7 +107,6 @@ export default {
       }
       let data = svg.innerHTML
       if (data) return { attrs, data }
-      else console.log('error parsing svg data')
     }
     return null
   },

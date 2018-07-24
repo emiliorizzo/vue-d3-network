@@ -1,6 +1,6 @@
 <template lang="pug">
-  canvas(id='canvas' ref='canvas' 
-    :width='size.w' 
+  canvas(id='canvas' ref='canvas'
+    :width='size.w'
     :height='size.h'
     :style='canvasStyle'
     @mouseup.prevent='canvasClick'
@@ -11,9 +11,9 @@
     )
 </template>
 <script>
-import canvasStyles from '../lib/canvasStyles.js'
-import stylePicker from '../lib/stylePicker.js'
-import svgExport from '../lib/svgExport.js'
+import canvasStyles from '../lib/js/canvasStyles.js'
+import stylePicker from '../lib/js/stylePicker.js'
+import svgExport from '../lib/js/svgExport.js'
 export default {
   name: 'canvas-renderer',
   props: [
@@ -101,7 +101,7 @@ export default {
       ctx.drawImage(graph, 0, 0)
       let img = canvas.toDataURL('image/png')
       if (img) cb(null, img)
-      else cb('error generating canvas image')
+      else cb(new Error('error generating canvas image'))
     },
     // emits events as 'action'
     emit (e, args) {
@@ -282,6 +282,7 @@ export default {
             URL.revokeObjectURL(url)
           }
           img.onerror = (error) => {
+            // eslint-disable-next-line
             console.log('error creating node image', error)
           }
           img.src = url

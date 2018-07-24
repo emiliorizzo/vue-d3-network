@@ -1,17 +1,17 @@
 <template lang="pug">
   svg(
-    xmlns="http://www.w3.org/2000/svg" 
+    xmlns="http://www.w3.org/2000/svg"
     xmlns:xlink= "http://www.w3.org/1999/xlink"
-    ref="svg" 
-    :width="size.w" 
+    ref="svg"
+    :width="size.w"
     :height="size.h"
-    class="net-svg" 
+    class="net-svg"
     @mouseup='emit("dragEnd",[$event])'
     @touchend.passive='emit("dragEnd",[$event])'
     @touchstart.passive=''
     )
-   
-    //-> links  
+
+    //-> links
     g.links#l-links
         path(v-for="link in links"
           :d="linkPath(link)"
@@ -22,24 +22,24 @@
           :class='linkClass(link.id)'
           :style='linkStyle(link)'
           v-bind='link._svgAttrs')
-            
+
     //- -> nodes
     g.nodes#l-nodes(v-if='!noNodes')
       template(v-for='(node,key) in nodes')
-        svg(v-if='svgIcon(node)' 
+        svg(v-if='svgIcon(node)'
           :key='key'
           :viewBox='svgIcon(node).attrs.viewBox'
           :width='getNodeSize(node, "width")'
-          :height='getNodeSize(node, "height")' 
+          :height='getNodeSize(node, "height")'
           @click='emit("nodeClick",[$event,node])'
           @touchend.passive='emit("nodeClick",[$event,node])'
           @mousedown.prevent='emit("dragStart",[$event,key])'
           @touchstart.prevent='emit("dragStart",[$event,key])'
           :x='node.x - getNodeSize(node, "width") / 2'
-          :y='node.y - getNodeSize(node, "height") / 2' 
+          :y='node.y - getNodeSize(node, "height") / 2'
           :style='nodeStyle(node)'
           :title="node.name"
-          :class='"node-svg " + nodeClass(node)'
+          :class='nodeClass(node,["node-svg"])'
           v-html='svgIcon(node).data'
           v-bind='node._svgAttrs'
           )
@@ -47,37 +47,36 @@
         //- default circle nodes
         circle(v-else
         :key='key'
-        :r="getNodeSize(node) / 2" 
+        :r="getNodeSize(node) / 2"
         @click='emit("nodeClick",[$event,node])'
         @touchend.passive='emit("nodeClick",[$event,node])'
         @mousedown.prevent='emit("dragStart",[$event,key])'
         @touchstart.prevent='emit("dragStart",[$event,key])'
-        :cx="node.x" 
-        :cy="node.y" 
+        :cx="node.x"
+        :cy="node.y"
         :style='nodeStyle(node)'
         :title="node.name"
         :class="nodeClass(node)"
         v-bind='node._svgAttrs'
         )
 
-
     //-> Links Labels
     g.labels#link-labels(v-if='linkLabels')
       text.link-label(v-for="link in links" :font-size="fontSize" )
         textPath(v-bind:xlink:href="'#' + link.id" startOffset= "50%") {{ link.name }}
-    
-    //- -> Node Labels  
+
+    //- -> Node Labels
     g.labels#node-labels( v-if="nodeLabels")
       text.node-label(v-for="node in nodes"
         :x='node.x + (getNodeSize(node) / 2) + (fontSize / 2)'
         :y='node.y + labelOffset.y'
         :font-size="fontSize"
         :class='(node._labelClass) ? node._labelClass : ""'
-        :stroke-width='fontSize / 8'  
+        :stroke-width='fontSize / 8'
       ) {{ node.name }}
 </template>
 <script>
-import svgExport from '../lib/svgExport.js'
+import svgExport from '../lib/js/svgExport.js'
 
 export default {
   name: 'svg-renderer',
@@ -160,9 +159,10 @@ export default {
     linkStyle (link) {
       return (link._color) ? 'stroke: ' + link._color : ''
     },
-    nodeClass (node) {
+    nodeClass (node, classes = []) {
       let cssClass = (node._cssClass) ? [node._cssClass] : []
       cssClass.push('node')
+      classes.forEach(c => cssClass.push(c))
       if (this.selected[node.id]) cssClass.push('selected')
       if (node.fx || node.fy) cssClass.push('pinned')
       return cssClass
@@ -188,4 +188,3 @@ export default {
   }
 }
 </script>
-

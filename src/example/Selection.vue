@@ -1,7 +1,7 @@
 <template lang="pug">
   #selection.notification
     .close(@click='emit("clearSelection")')
-    h4 Selected 
+    h4 Selected
     .mini-list
       table.mini
         tr
@@ -12,15 +12,15 @@
         tr(v-for="value,key in nodes")
           td {{ value.id }}
           td {{ value.name }}
-          td 
+          td
             button.icon(@click='emit("removeNode",[value.id])' title="delete")
               span(class="icon-delete")
-          td 
-            button.icon(@click='emit("unSelectNode",[value.id])' title="unselect") ❌ 
+          td
+            button.icon(@click='emit("unSelectNode",[value.id])' title="unselect") ❌
     ul.list
-      li Nodes: 
+      li Nodes:
         strong {{ Object.keys(nodes).length }}
-      li Links: 
+      li Links:
         strong {{ Object.keys(links).length }}
 </template>
 <script>
@@ -43,7 +43,7 @@ export default {
 }
 </script>
 <style lang="stylus">
-@import '../vars.styl'
+@import '../lib/styl/vars.styl'
   $btn-size = 1.5em
 
 button.icon
@@ -58,17 +58,17 @@ button.icon
   margin:0
   color:$color
 
-button.big 
+button.big
   margin-bottom: 1em
-  span 
+  span
     font-size: 2em
 
 .mini
   font-size: 0.75em
- 
+
  .title
     color: $color
-    font-weight: bold 
+    font-weight: bold
 table
   border-collapse: collapse
 tr
@@ -76,7 +76,7 @@ tr
 th
   border-bottom: solid 2px lightgrey
 th
-td 
+td
   padding: 0 .5em
   text-align: left
 
@@ -97,7 +97,7 @@ ul.list
   border: $border
   background-color: white
   box-shadow: $hard-sh
-  
+
   .mini-list
     max-height: 10em
     overflow-y: scroll
