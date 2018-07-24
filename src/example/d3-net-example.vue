@@ -2,8 +2,8 @@
   #example(@keyup.esc='setTool("pointer")')
     //-> Network
     d3-network(
-    ref='net'  
-    :net-nodes="nodes" 
+    ref='net'
+    :net-nodes="nodes"
     :net-links="links"
     :selection="{nodes: selected, links: linksSelected}"
     :options="options"
@@ -13,7 +13,6 @@
     @link-click="linkClick"
     @screen-shot='screenShotDone'
     )
-     //- :node-cb='nodeCb'
     //-> toaster
     .toaster(v-if='toaster')
       p {{toaster}}
@@ -24,45 +23,45 @@
         input(id='to-svg' type='radio' :value='true' v-model='toSvg')
         label(for='to-svg') svg
         input(id='to-png' type='radio' :value='false' v-model='toSvg')
-        label(for='to-png') png 
+        label(for='to-png') png
         .buttons
           button.btn(@click='takeScreenShot') Export
-          button.btn(@click='svgChoice=false') Cancel  
+          button.btn(@click='svgChoice=false') Cancel
     //-> Tools
     .tools
       ul
-        li(v-for='t,to in tools') 
+        li(v-for='t,to in tools')
           button.circle(@click='setTool(to)' :class='buttonClass(to)')
             span(:class='t.class' )
         li
           button.circle(@click='screenShot')
             span.icon-camera
       .tip {{ tools[tool].tip }}
-    
+
     //-> Selection
     selection( v-if='showSelection'
-      @action="selectionEvent" 
+      @action="selectionEvent"
       :data="selection()")
     //-> Menu
     .over
       .menu-net(v-if="showMenu")
         .close(@click="setShowMenu(false)")
         d3-net-example-menu(
-          :nodes="nodes" 
-          :links="links" 
+          :nodes="nodes"
+          :links="links"
           :settings="settings"
-          :options="options" 
-          @options="changeOptions" 
+          :options="options"
+          @options="changeOptions"
           @simulate="reset"
           @reset="resetOptions"
           )
-      
+
       .options.menu(v-else)
         button.menu(@click="setShowMenu(true)" :class='(showHint) ? "anim-button" :""')
           span(class="icon-equalizerh")
-        h2.hint(v-if='showHint') 
+        h2.hint(v-if='showHint')
           span.icon ☜
-          span menu  
+          span menu
         .title
           h1 {{app.name}}
         ul.inline
@@ -70,7 +69,7 @@
             small nodes: {{ nodes.length }}
           li
             small links: {{ links.length }}
-           
+
 </template>
 <script>
 import * as utils from './utils.js'
@@ -78,7 +77,7 @@ import defaultData from './data.js'
 import D3Network from '../vue-d3-network.vue'
 import D3NetExampleMenu from './Menu.vue'
 import Selection from './Selection.vue'
-import nodeIcon from '!!raw-loader!../assets/node.svg'
+import nodeIcon from '../assets/node.svg?raw'
 export default {
   name: 'd3-net-example',
   components: {
@@ -107,7 +106,7 @@ export default {
       }
     }
 
-    data.app = APP
+    data.app = process.env.APP
     data.tool = 'pointer'
     data.lastNodeId = 0
     data.lastLinkId = 0
@@ -121,19 +120,6 @@ export default {
     data.toSvg = false
     data.options.icon = false
     data.nodeSym = null
-    // to test
-    data.nodeCb = function (node) {
-      if (undefined !== node.index) {
-        if (node.index % 2) {
-          node._cssClass = 'nodeodd'
-          node._labelClass = 'odd'
-        } else {
-          console.log(node.index)
-          node._color = 'blue'
-        }
-      }
-      return node
-    }
     return data
   },
   mounted () {
@@ -331,8 +317,8 @@ export default {
 }
 </script>
 <style lang="stylus">
-  @import '../vars.styl'
-  @import '../lib/node-style.styl'
+  @import '../lib/styl/vars.styl'
+  @import '../lib/styl/node-style.styl'
 
   body
     overflow-x hidden

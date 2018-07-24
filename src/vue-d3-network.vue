@@ -1,10 +1,10 @@
 <script>
 import * as forceSimulation from 'd3-force'
-const d3 = Object.assign({}, forceSimulation)
 import svgRenderer from './components/svgRenderer.vue'
 import canvasRenderer from './components/canvasRenderer.vue'
-import saveImage from './lib/saveImage.js'
-import svgExport from './lib/svgExport.js'
+import saveImage from './lib/js/saveImage.js'
+import svgExport from './lib/js/svgExport.js'
+const d3 = Object.assign({}, forceSimulation)
 
 export default {
   name: 'd3-network',
@@ -204,8 +204,6 @@ export default {
       if (method && typeof (method) === 'function') {
         if (args) method(...args)
         else method()
-      } else {
-        console.error('Call to undefined method:', action)
       }
     },
     onResize () {
@@ -402,7 +400,7 @@ export default {
 </script>
 
 <style lang="stylus">
-  @import 'vars.styl'
+  @import 'lib/styl/vars.styl'
 
   .net
     height 100%
@@ -446,5 +444,4 @@ export default {
     fill $dark
     transform translate(0, -0.5em)
     text-anchor middle
-</style>  
-
+</style>
