@@ -160,7 +160,8 @@ export default {
       return (link._color) ? 'stroke: ' + link._color : ''
     },
     nodeClass (node, classes = []) {
-      let cssClass = (node._cssClass) ? [node._cssClass] : []
+      let cssClass = (node._cssClass) ? node._cssClass : []
+      if (!Array.isArray(cssClass)) cssClass = [cssClass]
       cssClass.push('node')
       classes.forEach(c => cssClass.push(c))
       if (this.selected[node.id]) cssClass.push('selected')
