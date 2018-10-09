@@ -173,5 +173,7 @@ see: [src/canvasStyles.js](https://github.com/emiliorizzo/vue-d3-network/blob/ma
 ## More Examples
 
 - [svg marks on links](https://codepen.io/emilio/pen/QOaQjP)
-- [links labels](https://codepen.io/emilio/pen/ZampZb)
+- [Links labels](https://codepen.io/emilio/pen/ZampZb)
 - [no-link forces](https://jsfiddle.net/emii/4odfweq9)
+- [Change node icon on the fly](https://codepen.io/emilio/pen/YOeaWN)
+
