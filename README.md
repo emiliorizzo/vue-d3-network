@@ -174,4 +174,4 @@ see: [src/canvasStyles.js](https://github.com/emiliorizzo/vue-d3-network/blob/ma
 
 - [svg marks on links](https://codepen.io/emilio/pen/QOaQjP)
 - [links labels](https://codepen.io/emilio/pen/ZampZb)
-- [no-link forces](https://jsfiddle.net/emii/4odfweq9/13/)
+- [no-link forces](https://jsfiddle.net/emii/4odfweq9)
