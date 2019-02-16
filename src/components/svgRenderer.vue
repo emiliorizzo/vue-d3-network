@@ -18,10 +18,10 @@
           :id="link.id"
           @click='emit("linkClick",[$event,link])'
           @touchstart.passive='emit("linkClick",[$event,link])'
-          :stroke-width='linkWidth'
+          v-bind='linkAttrs(link)'
           :class='linkClass(link.id)'
           :style='linkStyle(link)'
-          v-bind='link._svgAttrs')
+          )
 
     //- -> nodes
     g.nodes#l-nodes(v-if='!noNodes')
@@ -157,7 +157,9 @@ export default {
       return (node._color) ? 'fill: ' + node._color : ''
     },
     linkStyle (link) {
-      return (link._color) ? 'stroke: ' + link._color : ''
+      let style = {}
+      if (link._color) style.stroke = link._color
+      return style
     },
     nodeClass (node, classes = []) {
       let cssClass = (node._cssClass) ? node._cssClass : []
@@ -185,6 +187,11 @@ export default {
       if (svg) {
         return svgExport.toSymbol(svg)
       }
+    },
+    linkAttrs (link) {
+      let attrs = link._svgAttrs || {}
+      attrs['stroke-width'] = attrs['stroke-width'] || this.linkWidth
+      return attrs
     }
   }
 }
