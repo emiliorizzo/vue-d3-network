@@ -33,9 +33,9 @@
     "d3-force": "^1.0.6"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.0.0-rc.5",
-    "@vue/cli-plugin-eslint": "^3.0.0-rc.5",
-    "@vue/cli-service": "^3.0.0-rc.5",
+    "@vue/cli-plugin-babel": "^3.4.0",
+    "@vue/cli-plugin-eslint": "^3.4.0",
+    "@vue/cli-service": "^3.4.0",
     "@vue/eslint-config-standard": "^3.0.0-rc.5",
     "pug": "^2.0.3",
     "pug-plain-loader": "^1.0.0",

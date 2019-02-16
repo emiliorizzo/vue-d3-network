@@ -1,7 +1,7 @@
 
 const pkg = require('./package.json')
 module.exports = {
-  baseUrl: '',
+  publicPath: '',
   chainWebpack: config => {
     config
       .plugin('define')
