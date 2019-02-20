@@ -68,7 +68,7 @@ See: [package.json](https://github.com/emiliorizzo/vue-d3-network/blob/master/pa
   - **_cssClass**: node css class name
   - **_labelClass**: node label css class name
   - **svgSym**: node icon, svg document (only works in svg renderer)
-  - -**_size** : node size *(svg renderer only)*
+  - **_size** : node size *(svg renderer only)*
   - **_width**: node width *(svg renderer only)*
   - **_height**: node height *(svg renderer only)*
   - **_svgAttrs**: Object, svg node attributes
