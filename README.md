@@ -161,8 +161,8 @@ see: [src/canvasStyles.js](https://github.com/emiliorizzo/vue-d3-network/blob/ma
 ## TODO
 
 - [x]  Touch support
-- []   Optimization
-- []   Zoom
+- [ ]   Optimization
+- [ ]   Zoom
 - [x]  Canvas Render
 - [x]  Nodes sprites
 
