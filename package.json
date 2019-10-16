@@ -30,7 +30,10 @@
     "component"
   ],
   "dependencies": {
-    "d3-force": "^1.0.6"
+    "d3-force": "^1.2.1",
+    "d3-drag": "^1.2.3",
+    "d3-selection": "^1.4.0",
+    "d3-zoom": "^1.7.3"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.4.0",

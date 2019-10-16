@@ -1,10 +1,14 @@
 <script>
+import * as select from 'd3-selection'
+import * as drag from 'd3-drag'
+import * as zoom from 'd3-zoom'
 import * as forceSimulation from 'd3-force'
 import svgRenderer from './components/svgRenderer.vue'
 import canvasRenderer from './components/canvasRenderer.vue'
 import saveImage from './lib/js/saveImage.js'
 import svgExport from './lib/js/svgExport.js'
-const d3 = Object.assign({}, forceSimulation)
+const getEvent = () => select.event
+const d3 = Object.assign({getEvent}, forceSimulation, select, drag, zoom)
 
 export default {
   name: 'd3-network',
@@ -90,7 +94,9 @@ export default {
       },
       simulation: null,
       nodeSvg: null,
-      resizeListener: true
+      resizeListener: true,
+      transform: d3.zoomIdentity,
+      nodeClicked: null
     }
   },
   render (createElement) {
@@ -112,7 +118,8 @@ export default {
       'offset',
       'padding',
       'nodeSize',
-      'noNodes'
+      'noNodes',
+      'transform'
     ]
 
     for (let prop of bindProps) {
@@ -128,9 +135,9 @@ export default {
 
     return createElement('div', {
       attrs: { class: 'net' },
-      on: { 'mousemove': this.move, '&touchmove': this.move }
+      on: { }
     }, [createElement(renderer, {
-      props, ref, on: { action: this.methodCall }
+      props, ref, on: { rendererMounted: this.rendererMounted, action: this.methodCall }
     })])
   },
   created () {
@@ -189,9 +196,13 @@ export default {
         }
       }
       this.animate()
+      this.registerInteractions()
     }
   },
   methods: {
+    rendererMounted () {
+      this.registerInteractions()
+    },
     updateNodeSvg () {
       let svg = null
       if (this.nodeSym) {
@@ -248,7 +259,6 @@ export default {
         return node
       })
     },
-
     buildLinks (links) {
       let vm = this
       return links.concat().map((link, index) => {
@@ -321,41 +331,59 @@ export default {
       if (this.forces.links) this.links = this.simulation.force('link').links()
     },
     // -- Mouse Interaction
-    move (event) {
-      let pos = this.clientPos(event)
-      if (this.dragging !== false) {
-        if (this.nodes[this.dragging]) {
-          this.simulation.restart()
-          this.simulation.alpha(0.5)
-          this.nodes[this.dragging].fx = pos.x - this.mouseOfst.x
-          this.nodes[this.dragging].fy = pos.y - this.mouseOfst.y
+    registerInteractions () {
+      const selector = this.canvas ? 'canvas' : 'svg'
+      const surface = d3.select(this.$el.querySelector(selector))
+      surface.call(d3.drag().subject(this.dragsubject).on('start', this.dragstarted).on('drag', this.dragged).on('end', this.dragended))
+      surface.call(d3.zoom().on('zoom', this.zoomActions))
+      surface.on('click', this.dragClick)
+    },
+    zoomActions () {
+      this.transform = d3.getEvent().transform
+    },
+    dragsubject () {
+      const transform = this.transform
+      const event = d3.getEvent()
+      let i
+      let x = transform.invertX(event.x)
+      let y = transform.invertY(event.y)
+      let dx, dy
+      for (i = this.nodes.length - 1; i >= 0; --i) {
+        const node = this.nodes[i]
+        dx = x - node.x
+        dy = y - node.y
+        if (dx * dx + dy * dy < this.nodeSize * this.nodeSize) {
+          node.x = transform.applyX(node.x)
+          node.y = transform.applyY(node.y)
+          this.nodeClicked = node
+          return node
         }
       }
+      this.nodeClicked = null
     },
-    clientPos (event) {
-      let x = (event.touches) ? event.touches[0].clientX : event.clientX
-      let y = (event.touches) ? event.touches[0].clientY : event.clientY
-      x = x || 0
-      y = y || 0
-      return { x, y }
+    dragClick () {
+      const event = d3.getEvent()
+      if (event.defaultPrevented || this.nodeClicked === null) return
+      this.nodeClick(event, this.nodeClicked)
     },
-    dragStart (event, nodeKey) {
-      this.dragging = (nodeKey === false) ? false : nodeKey
-      this.setMouseOffset(event, this.nodes[nodeKey])
-      if (this.dragging === false) {
-        this.simulation.alpha(0.1)
-        this.simulation.restart()
-        this.setMouseOffset()
-      }
+    dragstarted () {
+      const event = d3.getEvent()
+      if (!event.active) this.simulation.alphaTarget(0.3).restart()
+      const transform = this.transform
+      event.subject.fx = transform.invertX(event.x)
+      event.subject.fy = transform.invertY(event.y)
     },
-    dragEnd () {
-      let node = this.nodes[this.dragging]
-      if (node && !node.pinned) {
-        // unfix node position
-        node.fx = null
-        node.fy = null
-      }
-      this.dragStart(false)
+    dragged () {
+      const event = d3.getEvent()
+      const transform = this.transform
+      event.subject.fx = transform.invertX(event.x)
+      event.subject.fy = transform.invertY(event.y)
+    },
+    dragended () {
+      const event = d3.getEvent()
+      if (!event.active) this.simulation.alphaTarget(0)
+      event.subject.fx = null
+      event.subject.fy = null
     },
     // -- Render helpers
     nodeClick (event, node) {

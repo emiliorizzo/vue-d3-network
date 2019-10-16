@@ -11,3 +11,4 @@ yarn-error.log*
 *.njsproj
 *.sln
 .vscode
+.vs
