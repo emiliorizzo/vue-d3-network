@@ -1,8 +1,8 @@
 {
-  "name": "vue-d3-network-plus",
-  "version": "0.1.0",
+  "name": "vue-d3-network",
+  "version": "0.1.1",
   "description": "Vue component to graph networks using d3-force with additional features",
-  "main": "dist/vue-d3-network-plus.umd.js",
+  "main": "dist/vue-d3-network.umd.js",
   "scripts": {
     "example": "vue-cli-service build --dest example",
     "dev": "vue-cli-service serve",

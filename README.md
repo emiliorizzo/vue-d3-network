@@ -2,7 +2,7 @@
 
 [![GitHub issues](https://img.shields.io/github/issues/arcaster42/vue-d3-network-plus.svg)](https://github.com/emiliorizzo/vue-d3-network/issues) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/arcaster42/vue-d3-network-plus/master/LICENSE) [![npm](https://img.shields.io/npm/v/vue-d3-network.svg)](https://www.npmjs.com/package/vue-d3-network-plus)
 
-# vue-d3-network-plus
+# vue-d3-netgraph
 
 > This is a continuation of work originally done by [emiliorizzo](https://github.com/emiliorizzo) forked from [his repository](https://github.com/emiliorizzo/vue-d3-network). As the repository had little changes and stale PR's, this project was started to continue the work and provide a more active development. All credit goes to the original author for the foundational work. 
 
@@ -20,7 +20,7 @@
 ## Installation
 
 ``` bash
-npm install vue-d3-network-plus --save
+npm install vue-d3-netgraph --save
 
 ```
 
@@ -35,7 +35,7 @@ npm install vue-d3-network-plus --save
 ```
 
 ``` javascript  
-import D3Network from 'vue-d3-network-plus'
+import D3Network from 'vue-d3-netgraph'
   components: {
     D3Network
   }
@@ -43,7 +43,7 @@ import D3Network from 'vue-d3-network-plus'
 
 ``` html
 
-<style src="vue-d3-network-plus/dist/vue-d3-network.css"></style>
+<style src="vue-d3-netgraph/dist/vue-d3-network.css"></style>
 
 ```
 
