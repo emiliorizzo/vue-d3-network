@@ -10,6 +10,7 @@
     :linkCb="linkCb"
     :node-sym='nodeSym'
     @node-click="nodeClick"
+    @node-hover="nodeHover"
     @link-click="linkClick"
     @screen-shot='screenShotDone'
     )
@@ -263,6 +264,9 @@ export default {
           break
       }
       this.updateSelection()
+    },
+    nodeHover (event, node) {
+      console.log(node)
     },
     linkClick (event, link) {
       if (this.tool === 'killer') {
