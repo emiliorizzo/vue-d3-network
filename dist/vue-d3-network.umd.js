@@ -8504,6 +8504,9 @@ var d3 = Object.assign({}, d3_force_src_namespaceObject);
     nodeClick: function nodeClick(event, node) {
       this.$emit('node-click', event, node);
     },
+    nodeLabelClick: function nodeLabelClick(event, node) {
+      this.$emit('node-label-click', event, node);
+    },
     linkClick: function linkClick(event, link) {
       this.$emit('link-click', event, link);
     },
