@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.1.8-fazendadosoftware
+## 0.1.29
 
   - added 'node-label-click' event
 
