@@ -1,6 +1,6 @@
 {
   "name": "vue-d3-network",
-  "version": "0.1.28",
+  "version": "0.1.8-fazendadosoftware",
   "description": "Vue component to graph networks using d3-force",
   "main": "dist/vue-d3-network.umd.js",
   "scripts": {
@@ -11,14 +11,14 @@
     "lint": "vue-cli-service lint",
     "clean-dist": "rm dist/demo.html"
   },
-  "author": "emi",
+  "author": "Paulo dos Santos",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/emiliorizzo/vue-d3-network"
+    "url": "https://github.com/fazendadosoftware/vue-d3-network"
   },
   "bugs": {
-    "url": "https://github.com/emiliorizzo/vue-d3-network/issues"
+    "url": "https://github.com/fazendadosoftware/vue-d3-network/issues"
   },
   "keywords": [
     "vue",

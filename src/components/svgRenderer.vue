@@ -73,6 +73,8 @@
         :font-size="fontSize"
         :class='(node._labelClass) ? node._labelClass : ""'
         :stroke-width='fontSize / 8'
+        @click='emit("nodeLabelClick",[$event,node])'
+        @touchstart.passive='emit("nodeLabelClick",[$event,node])'
       ) {{ node.name }}
 </template>
 <script>

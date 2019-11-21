@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.8-fazendadosoftware
+
+  - added 'node-label-click' event
+
 ## 0.1.8
 
   - Add prefix to props:

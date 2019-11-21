@@ -108,6 +108,7 @@ import D3Network from 'vue-d3-network'
 ## Events
 
 - **node-click**:  *fired when click on node*, emits **(event,node-object)**
+- **node-label-click**:  *fired when click on node label*, emits **(event,node-object)**
 - **link-click**:  *fired when click on link*, emits **(event, link-object)**
 - **screen-shot**: *fired when screenshot creation is done*, emits **(error)**
 
