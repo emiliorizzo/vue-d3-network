@@ -151,13 +151,8 @@ export default {
       if (this.strLinks) {
         return 'M ' + d.M.join(' ') + ' L' + d.X.join(' ')
       } else {
-        const dx = link.target.x - link.source.x
-        const dy = link.target.y - link.source.y
-        const dr = Math.sqrt(dx * dx + dy * dy)
-        //"M" + d.source.x + "," + d.source.y + "A" + dr + "," + dr + " 0 0,1 " + d.target.x + "," + d.target.y
-        return `M${link.source.x},${link.source.y}A${dr},${dr} 0 0,1 ${link.target.x},${link.target.y}`
-        // d.Q = [link.source.x, link.target.y]
-        // return 'M ' + d.M + ' Q ' + d.Q.join(' ') + ' ' + d.X
+        d.Q = [link.source.x, link.target.y]
+        return 'M ' + d.M + ' Q ' + d.Q.join(' ') + ' ' + d.X
       }
     },
     nodeStyle (node) {
