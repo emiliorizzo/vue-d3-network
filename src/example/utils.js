@@ -112,6 +112,7 @@ export const methodCall = (vm, action, args) => {
     if (args) method(...args)
     else method()
   } else {
+    // eslint-disable-next-line
     console.error('Call to undefined method:', action)
   }
 }

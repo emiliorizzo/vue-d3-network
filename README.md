@@ -18,7 +18,7 @@
 - **Canvas** render
 - Links and nodes selection
 - **svg <-> canvas** shared styles via css
-- **Screenshots**, *export as svg or png (svg renderer), export as png (canvas renderer)* 
+- **Screenshots**, *export as svg or png (svg renderer), export as png (canvas renderer)*
 - **Touch support**
 
 ## Installation
@@ -38,7 +38,7 @@ npm install vue-d3-network --save
 
 ```
 
-``` javascript  
+``` javascript
 import D3Network from 'vue-d3-network'
   components: {
     D3Network
@@ -83,7 +83,7 @@ import D3Network from 'vue-d3-network'
   - **w**: Number
   - **h**: Number
 
-- **offset**: Object, *graph center offset* 
+- **offset**: Object, *graph center offset*
   - **x**: Number
   - **y**: Number
 
@@ -95,15 +95,16 @@ import D3Network from 'vue-d3-network'
   - **ManyBody**: *Boolean*, use d3.forceManyBody, *takes the negative value of 'force'  option*
   - **Link**: *Boolean*, use  d3.forceLink
 
-- **nodeSize**: Number, *node radius | size in px* 
+- **nodeSize**: Number, *node radius | size in px*
 - **linkWidth**: Number, *link thickness in px*
 - **nodeLabels**: Boolean, *show nodes names*
 - **linkLabels**: Boolean, *show links names*
 - **fontSize**: Number, *for node labels, px*
-- **strLinks**: Boolean, *draw links as rect lines* 
+- **strLinks**: Boolean, *draw links as rect lines*
 - **resizeListener**:Boolean, defaults: true ,add listener to window.resize event
 - **noNodes**: Boolean, *no render nodes*
-- **canvasStyles**: Object
+- **pinNodes**: Boolean, *After dragging any node, fix all other nodes without rerunning the simulation*
+- ****: Object
 
 ## Events
 
