@@ -313,6 +313,7 @@ export default {
       if (this.simulation) this.simulation.stop()
       if (this.forces.Link !== false) this.simulation = this.simulate(this.nodes, this.links)
       else this.simulation = this.simulate(this.nodes)
+      this.simulation.tick(300)
       this.simulation.restart()
     },
     reset () {
@@ -326,7 +327,7 @@ export default {
       if (this.dragging !== false) {
         if (this.nodes[this.dragging]) {
           this.simulation.restart()
-          this.simulation.alpha(0.5)
+          this.simulation.alpha(0)
           this.nodes[this.dragging].fx = pos.x - this.mouseOfst.x
           this.nodes[this.dragging].fy = pos.y - this.mouseOfst.y
         }
@@ -343,14 +344,14 @@ export default {
       this.dragging = (nodeKey === false) ? false : nodeKey
       this.setMouseOffset(event, this.nodes[nodeKey])
       if (this.dragging === false) {
-        this.simulation.alpha(0.1)
+        this.simulation.alpha(0)
         this.simulation.restart()
         this.setMouseOffset()
       }
     },
     dragEnd () {
       let node = this.nodes[this.dragging]
-      if (node && !node.pinned) {
+      if (!this.options.pinNodes && node && !node.pinned) {
         // unfix node position
         node.fx = null
         node.fy = null
