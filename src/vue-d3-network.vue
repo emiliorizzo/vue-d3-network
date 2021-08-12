@@ -342,14 +342,32 @@ export default {
     dragStart (event, nodeKey) {
       this.dragging = (nodeKey === false) ? false : nodeKey
       this.setMouseOffset(event, this.nodes[nodeKey])
+      
+      // --> Used to differentiate drag from click
+      this.startX = event.pageX;
+      this.startY = event.pageY;
+      // <--
+      
       if (this.dragging === false) {
         this.simulation.alpha(0.1)
         this.simulation.restart()
         this.setMouseOffset()
       }
     },
-    dragEnd () {
+    dragEnd (event) {
       let node = this.nodes[this.dragging]
+      
+      // --> Used to differentiate drag from click
+      const diffX = Math.abs(event.pageX - this.startX);
+      const diffY = Math.abs(event.pageY - this.startY);
+
+      if(diffX < 6 && diffY < 6) {
+        this.was_dragged = false;
+      } else {
+        this.was_dragged = true;
+      }
+      // <--
+      
       if (node && !node.pinned) {
         // unfix node position
         node.fx = null
@@ -359,7 +377,10 @@ export default {
     },
     // -- Render helpers
     nodeClick (event, node) {
-      this.$emit('node-click', event, node)
+      // --> Used to differentiate drag from click
+      if(!this.was_dragged)
+      // <--
+        this.$emit('node-click', event, node)
     },
     linkClick (event, link) {
       this.$emit('link-click', event, link)
